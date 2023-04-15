@@ -1,0 +1,116 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+:root {
+    --color-police: #193590;
+    --color-ambulance: #a90000;
+    --color-background: #191919;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    overflow: hidden;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+.dispatch-container {
+    width: 50vh;
+    height: 87.5vh;
+    margin: auto;
+    margin-top: 9.75vh;
+    margin-right: 0vh;
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+}
+
+.dispatch-call {
+    margin: 0vh 0vh .5vh auto;
+    background-color: #191919cc;
+    width: 35vh;
+    height: fit-content;
+    border-bottom-left-radius: 2vh;
+    border-top-left-radius: 2vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.top-bar {
+    align-items: center;
+    padding: 0.75vh 3vh 0.75vh 0.75vh;
+    padding-right: 3vh;
+    border-top-left-radius: 2vh;
+    display: flex;
+    flex-direction: row;
+    background-color: var(--color-background);
+    color: white;
+    font-size: 1.25vh;
+    font-weight: bold;
+    text-align: center;
+}
+
+.top-bar-id {
+    background-color: #333333;
+    padding: .35vh 1vh .4vh 1vh;
+    margin: auto .4vh auto 0vh;
+    border-radius: .75vh;
+}
+
+.top-bar-code {
+    /* default police call color */
+    background-color: var(--color-police);
+    padding: .35vh 1vh .4vh 1vh;
+    margin: auto .5vh auto 0vh;
+    border-radius: .75vh;
+    white-space: nowrap;
+}
+
+.top-bar-name {
+    margin: auto auto auto 0vh;
+    text-align: left;
+    font-size: 1.75vh;
+    width: 22vh;
+    overflow:break-word;
+}
+
+.informations-holder {
+    width: 95%;
+    height: fit-content;
+    margin: .75vh auto .6vh auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-bottom: 3px solid #bbbbbbb3;
+    padding-bottom: 0.5vh;
+}
+
+.information {
+    margin: auto auto .5vh 0vh;
+    color: white;
+    font-size: 1.3vh;
+    text-align: left;
+    font-weight: 600;
+    overflow:wrap;
+    white-space:normal;
+}
+
+/* Priority emergency (i.e code 99) */
+.type-1 {
+    background: linear-gradient(90deg, #a90000, #0000aa);
+	background-size: 400% 400%;
+	animation: gradients 2s ease infinite;
+}
+
+/* Ambulance */
+.type-2 {
+    background-color: var(--color-ambulance);
+}
+
+/*  */
+@keyframes gradients {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
