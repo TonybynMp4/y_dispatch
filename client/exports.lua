@@ -2,7 +2,7 @@ local automatics = {
     -95776620,
     970310034,
     1159398588,
-
+    584646201,
 }
 
 local function VehicleTheft(vehicle)
@@ -17,15 +17,15 @@ local function VehicleTheft(vehicle)
         color = vehdata.color,
         heading = GetHeading(),
         coords = GetEntityCoords(vehicle),
-        title = Lang:t('title.vehicletheft'),
-        jobs = { "police", "sheriff" }
+        title = Config.TenCodes["vehicletheft"].title,
+        jobs = Config.TenCodes["vehicletheft"].jobs
     }
     TriggerServerEvent("qbx-dispatch:server:AddCall", data)
 end
 exports('VehicleTheft', VehicleTheft)
 
 local function CarJacking(vehicle)
-    local vehdata = vehicleData(vehicle)
+    local vehdata = GetVehicleData(vehicle)
     local data = {
         tencodeid = "carjack",
         tencode = Config.TenCodes["carjack"].tencode,
@@ -36,8 +36,8 @@ local function CarJacking(vehicle)
         color = vehdata.color,
         heading = GetHeading(),
         coords = GetEntityCoords(cache.vehicle),
-        title = Lang:t('title.carjack'),
-        jobs = {"police", "sheriff"}
+        title = Config.TenCodes["carjack"].title,
+        jobs = Config.TenCodes["carjack"].jobs
     }
     TriggerServerEvent("qbx-dispatch:server:AddCall", data)
 end
@@ -56,13 +56,14 @@ local function speedradar(vehicle)
         heading = GetHeading(),
         coords = GetEntityCoords(cache.ped),
         title = Config.TenCodes["speedradar"].title,
-        jobs = {"police", "sheriff"}
+        jobs = Config.TenCodes["speedradar"].jobs
     }
     TriggerServerEvent("qbx-dispatch:server:AddCall", data)
 end exports('speedradar', speedradar)
 
-local function DriveBy()
-    local vehdata = vehicleData(cache.vehicle)
+local function DriveBy(vehicle)
+    local vehicle  = vehicle or cache.vehicle
+    local vehdata = GetVehicleData(vehicle)
     local data =  {
         tencodeid = "driveby",
         tencode = Config.TenCodes["driveby"].tencode,
@@ -72,14 +73,14 @@ local function DriveBy()
         gender = GetGender(),
         weapon = GetWeapontypeModel(GetSelectedPedWeapon(cache.ped)) or GetSelectedPedWeapon(cache.ped) or Lang:t('general.unknown'),
         weaponclass = GetWeapontypeGroup(GetSelectedPedWeapon(cache.ped)) or nil,
-        automatic = math.random() <= 0.5 and automatics[GetWeapontypeGroup(GetSelectedPedWeapon(cache.ped))] or false,
+        automatic = math.random() <= 0.5 and (automatics[GetWeapontypeGroup(GetSelectedPedWeapon(cache.ped))] or automatics[GetSelectedPedWeapon(cache.ped)])or false,
         doors = vehdata.doors,
         type = 0,
         color = vehdata.color,
         heading = GetHeading(),
         coords = GetEntityCoords(vehicle),
-        title = Lang:t('title.driveby'),
-        jobs = {"police", "sheriff"}
+        title = Config.TenCodes["driveby"].title,
+        jobs = Config.TenCodes["driveby"].jobs
     }
     TriggerServerEvent("qbx-dispatch:server:AddCall", data)
 end
@@ -89,15 +90,15 @@ local function Shooting()
     local data = {
         tencodeid = "shooting",
         tencode = Config.TenCodes["shooting"].tencode,
-        location = GetEntityCoords(cache.ped),
+        location = GetLocation(GetEntityCoords(cache.ped)),
         gender = GetGender(),
         weapon = GetWeapontypeModel(GetSelectedPedWeapon(cache.ped)) or GetSelectedPedWeapon(cache.ped) or Lang:t('general.unknown'),
         weaponclass = GetWeapontypeGroup(GetSelectedPedWeapon(cache.ped)) or nil,
         type = 0,
         automatic = math.random() <= 0.5 and automatics[GetWeapontypeGroup(GetSelectedPedWeapon(cache.ped))] or false,
         coords = GetEntityCoords(cache.ped),
-        title = Lang:t('dispatch.shooting'),
-        jobs = {"police", "sheriff"}
+        title = Config.TenCodes["shooting"].title,
+        jobs = Config.TenCodes["shooting"].jobs
     }
     TriggerServerEvent("qbx-dispatch:server:AddCall", data)
 end
@@ -111,8 +112,8 @@ local function Fight()
         gender = GetGender(),
         type = 0,
         coords = GetEntityCoords(cache.ped),
-        title = Lang:t('title.fight'),
-        jobs = {"police", "sheriff"}
+        title = Config.TenCodes["fight"].title,
+        jobs = Config.TenCodes["fight"].jobs
     }
     TriggerServerEvent("qbx-dispatch:server:AddCall", data)
 end
@@ -122,16 +123,35 @@ local function InjuriedPerson()
     local data = {
         tencodeid = "death",
         tencode = Config.TenCodes["death"].tencode,
-        location = GetEntityCoords(cache.ped),
+        location = GetLocation(GetEntityCoords(cache.ped)),
         gender = GetGender(),
         type = 2,
         coords = GetEntityCoords(cache.ped),
-        title = Lang:t('title.death'),
-        jobs = {"ambulance", "ambulancebc"}
+        title = Config.TenCodes["death"].title,
+        jobs = Config.TenCodes["death"].jobs
     }
     TriggerServerEvent("qbx-dispatch:server:AddCall", data)
 end
 exports('InjuriedPerson', InjuriedPerson)
+
+local function EmergencyCall(message, phonenumber)
+    local PlayerData = QBCore.Functions.GetPlayerData()
+    local data = {
+        tencodeid = phonenumber.."call",
+        tencode = Config.TenCodes[phonenumber.."call"].tencode,
+        location = GetLocation(GetEntityCoords(cache.ped)),
+        gender = GetGender(),
+        type = 0,
+        coords = GetEntityCoords(cache.ped),
+        name = PlayerData.charinfo.lastname .. " " .. PlayerData.charinfo.firstname,
+        number = PlayerData.charinfo.phone,
+        information = message,
+        title = Config.TenCodes[phonenumber.."call"].title,
+        jobs = Config.TenCodes[phonenumber.."call"].jobs
+    }
+    TriggerServerEvent("qbx-dispatch:server:AddCall", data)
+end
+exports('EmergencyCall', EmergencyCall)
 
 local function Code99(servicetype)
     local service
@@ -150,8 +170,8 @@ local function Code99(servicetype)
         callsign = PlayerData.metadata.callsign,
         type = 1,
         coords = GetEntityCoords(cache.ped),
-        title = Lang:t('title.'..service),
-        jobs = {"police", "sheriff", "ambulance", "ambulancebc"}
+        title = Config.TenCodes[service].title,
+        jobs = Config.TenCodes[service].jobs
     }
     TriggerServerEvent("qbx-dispatch:server:AddCall", data)
 end
@@ -170,7 +190,7 @@ local function DrugRun(vehicle)
         color = vehdata.color,
         coords = GetEntityCoords(cache.ped),
         title = Config.TenCodes["DrugRun"].title,
-        jobs = {"police", "sheriff"}
+        jobs = Config.TenCodes["DrugRun"].jobs
     }
     TriggerServerEvent("qbx-dispatch:server:AddCall", data)
 end exports('DrugRun', DrugRun)
@@ -183,8 +203,8 @@ local function CornerSelling()
         gender = GetGender(),
         type = 0,
         coords = GetEntityCoords(PlayerPedId()),
-        title = Lang:t('title.suspicioushandoff'),
-        jobs = {"police", "sheriff"}
+        title = Config.TenCodes["suspicioushandoff"].title,
+        jobs = Config.TenCodes["suspicioushandoff"].jobs
     }
     TriggerServerEvent("qbx-dispatch:server:AddCall", data)
 end
@@ -194,13 +214,13 @@ local function StoreRobbery(camId)
     local data = {
         tencodeid = "storerobbery",
         tencode = Config.TenCodes["storerobbery"].tencode,
-        location = GetEntityCoords(cache.ped),
+        location = GetLocation(GetEntityCoords(cache.ped)),
         gender = GetGender(),
         camId = camId,
         type = 0,
         coords = GetEntityCoords(cache.ped),
-        title = Lang:t('title.storerobbery'),
-        jobs = {"police", "sheriff"}
+        title = Config.TenCodes["storerobbery"].title,
+        jobs = Config.TenCodes["storerobbery"].jobs
     }
     TriggerServerEvent("qbx-dispatch:server:AddCall", data)
 end
@@ -215,22 +235,23 @@ local function TruckRobbery(coords)
         type = 0,
         coords = coords,
         title = Config.TenCodes["TruckRobbery"].title,
-        jobs = {"police", "sheriff"}
+        jobs = Config.TenCodes["TruckRobbery"].jobs
     }
     TriggerServerEvent("qbx-dispatch:server:AddCall", data)
 end exports('TruckRobbery', TruckRobbery)
 
-local function FleecaBankRobbery(camId)
+local function FleecaBankRobbery(coords, camId)
+    print('HEY')
     local data = {
         tencodeid = "bankrobbery",
         tencode = Config.TenCodes["bankrobbery"].tencode,
-        location = GetEntityCoords(cache.ped),
+        location = GetLocation(coords),
         gender = GetGender(),
-        camId = camId,
+        camId = camId or nil,
         type = 0,
-        coords = GetEntityCoords(cache.ped),
-        title = Lang:t('title.bankrobbery'),
-        jobs = {"police", "sheriff"}
+        coords = coords,
+        title = Config.TenCodes["bankrobbery"].title,
+        jobs = Config.TenCodes["bankrobbery"].jobs
     }
     TriggerServerEvent("qbx-dispatch:server:AddCall", data)
 end
@@ -240,13 +261,13 @@ local function PaletoBankRobbery(camId)
     TriggerServerEvent("qbx-dispatch:server:AddCall",{
         tencodeid = "paletobankrobbery",
         tencode = Config.TenCodes["paletobankrobbery"].tencode,
-        location = GetEntityCoords(cache.ped),
+        location = GetLocation(GetEntityCoords(cache.ped)),
         gender = GetGender(),
         camId = camId,
         type = 0,
         coords = GetEntityCoords(cache.ped),
-        title = Lang:t('title.paletobankrobbery'),
-        jobs = {"police", "sheriff"}
+        title = Config.TenCodes["paletobankrobbery"].title,
+        jobs = Config.TenCodes["paletobankrobbery"].jobs
     })
 end
 exports('PaletoBankRobbery', PaletoBankRobbery)
@@ -260,8 +281,8 @@ local function PacificBankRobbery(camId)
         camId = camId,
         type = 0,
         coords = GetEntityCoords(cache.ped),
-        title = Lang:t('title.pacificbankrobbery'),
-        jobs = {"police", "sheriff"}
+        title = Config.TenCodes["pacificbankrobbery"].title,
+        jobs = Config.TenCodes["pacificbankrobbery"].jobs
     }
     TriggerServerEvent("qbx-dispatch:server:AddCall", data)
 end
@@ -276,8 +297,8 @@ local function JewelryRobbery(camId)
         camId = camId,
         type = 0,
         coords = GetEntityCoords(cache.ped),
-        title = Lang:t('title.jewelryrobbery'),
-        jobs = {"police", "sheriff"}
+        title = Config.TenCodes["JewelryRobbery"].title,
+        jobs = Config.TenCodes["JewelryRobbery"].jobs
     }
     TriggerServerEvent("qbx-dispatch:server:AddCall", data)
 end
@@ -291,8 +312,8 @@ local function HouseRobbery()
         gender = GetGender(),
         type = 0,
         coords = GetEntityCoords(cache.ped),
-        title = Lang:t('title.houserobbery'),
-        jobs = {"police", "sheriff"}
+        title = Config.TenCodes["houserobbery"].title,
+        jobs = Config.TenCodes["houserobbery"].jobs
     }
     TriggerServerEvent("qbx-dispatch:server:AddCall", data)
 end
@@ -306,7 +327,7 @@ local function Explosion(coords)
         type = 0,
         coords = coords,
         title = Config.TenCodes["explosion"].title,
-        jobs = {"police", "sheriff", "ambulance", "ambulancebc"}
+        jobs = Config.TenCodes["explosion"].jobs
     })
 end
 exports('Explosion', Explosion)
@@ -326,7 +347,7 @@ local function CarBoosting(vehicle)
         color = vehData.color,
         coords = GetEntityCoords(cache.ped),
         title = Config.TenCodes["carboosting"].title,
-        jobs = {"police", "sheriff"}
+        jobs = Config.TenCodes["carboosting"].jobs
     }
     TriggerServerEvent("qbx-dispatch:server:AddCall", Data)
 end
