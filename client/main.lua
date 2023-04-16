@@ -51,11 +51,11 @@ function GetHeading()
     if (heading >= 315 or heading < 45) then
         return Lang:t('general.north')
     elseif (heading >= 45 and heading < 135) then
-        return Lang:t('general.east')
+        return Lang:t('general.west')
     elseif (heading >= 135 and heading < 225) then
         return Lang:t('general.south')
     else
-        return Lang:t('general.west')
+        return Lang:t('general.east')
     end
 end
 
@@ -121,20 +121,21 @@ RegisterNetEvent("qbx-dispatch:client:AddBlip", function(coords, data, CallId)
     local alpha = 255
     local radiusAlpha = 128
     local blip, radius
-    local sprite, colour, scale = data.sprite or 161, data.color or 84, data.scale or 1.0
-    if data.offset then
-        radius = data.radius and AddBlipForRadius(coords.x + math.random(data.offset.min, data.offset.max), coords.y + math.random(data.offset.min, data.offset.max), coords.z, data.radius)
-        blip = AddBlipForCoord(coords.x + math.random(data.offset.min, data.offset.max), coords.y + math.random(data.offset.min, data.offset.max), coords.z)
+    local sprite, colour, scale = data.blip.sprite or 161, data.blip.color or 84, data.blip.scale or 1.0
+    if data.blip.offset then
+        local offsetx, offsety = math.random(data.blip.offset.min, data.blip.offset.max), math.random(data.blip.offset.min, data.blip.offset.max)
+        radius = data.blip.radius and AddBlipForRadius(coords.x + offsetx, coords.y + offsety, coords.z, data.blip.radius)
+        blip = AddBlipForCoord(coords.x + offsetx, coords.y + offsety, coords.z)
         blips[CallId] = blip
         radiuses[CallId] = radius
     else
-        radius = data.radius and AddBlipForRadius(coords.x, coords.y, coords.z, data.radius)
+        radius = data.blip.radius and AddBlipForRadius(coords.x, coords.y, coords.z, data.radius)
         blip = AddBlipForCoord(coords.x, coords.y, coords.z)
         blips[CallId] = blip
         radiuses[CallId] = radius
     end
 
-    SetBlipFlashes(blip, data.flash or false)
+    SetBlipFlashes(blip, data.blip.flash or false)
     SetBlipSprite(blip, sprite)
     SetBlipHighDetail(blip, true)
     SetBlipScale(blip, scale)
@@ -148,7 +149,7 @@ RegisterNetEvent("qbx-dispatch:client:AddBlip", function(coords, data, CallId)
     AddTextComponentString(data.tencode .. ' - ' .. data.description)
     EndTextCommandSetBlipName(blip)
     while radiusAlpha ~= 0 do
-        Wait(((data.length and data.length or 10) * 1000)/128)
+        Wait(((data.blip.length and data.blip.length or 10) * 1000)/128)
         radiusAlpha = radiusAlpha - 1
         alpha = alpha - 1
         SetBlipAlpha(radius, radiusAlpha)
