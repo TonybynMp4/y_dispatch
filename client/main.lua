@@ -42,7 +42,7 @@ end
 ---@return string
 function GetGender()
     local PlayerData = QBCore.Functions.GetPlayerData()
-    return PlayerData.charinfo.gender and Lang:t('general.genderF') or Lang:t('general.genderM')
+    return PlayerData.charinfo.gender
 end
 
 ---@return string
