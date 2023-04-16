@@ -17,7 +17,7 @@ function GetVehicleData(vehicle)
     Data.plate = GetVehicleNumberPlateText(vehicle)
     Data.name = GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(vehicle)))
     Data.id = NetworkGetNetworkIdFromEntity(vehicle)
-    if name == 'NULL' then name = QBCore.Shared.Vehicles[model].name end
+    if Data.name == 'NULL' then Data.name = QBCore.Shared.Vehicles[model].name end
     local color1, color2 = GetVehicleColours(vehicle)
     local color = Lang:t('general.unknown')
     if color1 then
