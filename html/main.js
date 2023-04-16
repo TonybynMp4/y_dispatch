@@ -94,7 +94,7 @@ function NewCall(Id, length, data) {
         if (data.weaponclass) {
             Call += `<span class="fas fa-paperclip" style="margin-left: 2vh; margin-right: .5vh;"></span>${data.weaponclass}`
         }
-        if (data.automatic == true) {
+        if (data.automatic) {
             Call += `<span class="fab fa-blackberry" style="margin-left: 2vh; margin-right: .5vh;"></span>Automatic Gunfire`
         }
         Call += `</div>`
@@ -108,10 +108,10 @@ function NewCall(Id, length, data) {
         if (data.plate) {
             Call += `<span class="fas fa-keyboard" style="margin-left: 2vh; margin-right: .5vh;"></span>${data.plate}`
         }
-        if (data.doors) {
-            Call += `<span class="fas fa-door-open" style="margin-left: 2vh; margin-right: .5vh;"></span>${data.doors}`
-        }
         Call += `</div>`
+        if (data.doors) {
+            Call += `<div class="information"><span class="fas fa-door-open" style="margin-right: .5vh;"></span>${data.doors}</div>`
+        }
         if (data.color) {
             Call += `<div class="information"><span class="fas fa-palette" style="margin-right: .5vh;"></span>${data.color}</div>`
         }
@@ -135,7 +135,7 @@ function NewCall(Id, length, data) {
     if (typeof data.gender == 'number') {
         icon = "fas fa-mars"
         gender = 'Male'
-        if (data.gender === 0){
+        if (data.gender === 1){
             icon = "fas fa-venus"
             gender = 'Female'
         }
