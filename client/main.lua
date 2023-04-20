@@ -1,7 +1,6 @@
-local QBCore = exports['qbx-core']:GetCoreObject()
-local blips = {}
-local radiuses = {}
+QBCore = exports['qbx-core']:GetCoreObject()
 
+local blips, radiuses, DispatchDisabled = {}, {}, false
 --#region Functions
 --#region Getter Functions
 
@@ -92,8 +91,8 @@ end
 ---@param Data table
 ---@param CallId number
 RegisterNetEvent('qbx-dispatch:client:AddCall', function(Data, CallId)
+    if DispatchDisabled then return end
     if not Data or not LocalPlayer.state.isLoggedIn then return end
-    if IsDispatchDisabled then return end
     local PlayerData = QBCore.Functions.GetPlayerData()
     if Data.jobs and not CheckJob(Data.jobs, PlayerData.job.name) then return end
     if not Config.OnlyOnDuty or PlayerData.job.onduty then
@@ -104,9 +103,9 @@ RegisterNetEvent('qbx-dispatch:client:AddCall', function(Data, CallId)
                 data = Data,
             })
             local sound = Config.TenCodes[Data.tencodeid].sound
-            if not sound then return end
-            if not sound.custom then PlaySound(-1, sound.name, sound.ref, false, false, true) return end
-            TriggerServerEvent("InteractSound_SV:PlayOnSource", sound.name, sound.volume or 0.25) -- For Custom Sounds
+    if PlayerData.metadata.mutedispatch or not sound then return end
+    if not sound.custom then PlaySound(-1, sound.name, sound.ref, false, false, true) return end
+    TriggerServerEvent("InteractSound_SV:PlayOnSource", sound.name, sound.volume or 0.25) -- For Custom Sounds
         end
     end
 end)
@@ -115,6 +114,7 @@ end)
 ---@param data table
 ---@param CallId number
 RegisterNetEvent("qbx-dispatch:client:AddBlip", function(coords, data, CallId)
+    if DispatchDisabled then return end
     local PlayerData = QBCore.Functions.GetPlayerData()
     if not data.jobs and not CheckJob(data.jobs, PlayerData.job.name) then return end
     if not (not Config.OnlyOnDuty or PlayerData.job.onduty) then return end
@@ -181,5 +181,10 @@ RegisterNetEvent("qbx-dispatch:client:ClearBlips", function()
     radiuses = {}
     blips = {}
 	QBCore.Functions.Notify(Lang:t('success.clearedblips'), "success")
+end)
+
+RegisterNetEvent("qbx-dispatch:client:DisableDispatch", function()
+    DispatchDisabled = not DispatchDisabled
+    TriggerClientEvent('QBCore:Notify', source, DispatchDisabled and Lang:t('success.disableddispatch') or Lang:t('success.enableddispatch'), "success")
 end)
 --#endregion Events

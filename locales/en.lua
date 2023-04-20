@@ -56,8 +56,8 @@ local Translations = {
         clearedblips = 'All calls have been cleared',
         mutedispatch = 'You have muted the dispatch',
         unmutedispatch = 'You have unmuted the dispatch',
-        disabledispatch = 'You have disabled the dispatch',
-        enabledispatch = 'You have enabled the dispatch',
+        disableddispatch = 'You have disabled the dispatch',
+        enableddispatch = 'You have enabled the dispatch',
     },
     general = {
         unknown = 'Unknown',
