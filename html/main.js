@@ -95,7 +95,7 @@ function NewCall(Id, length, data) {
             Call += `<span class="fas fa-paperclip" style="margin-left: 2vh; margin-right: .5vh;"></span>${data.weaponclass}`
         }
         if (data.automatic) {
-            Call += `<span class="fab fa-blackberry" style="margin-left: 2vh; margin-right: .5vh;"></span>Automatic Gunfire`
+            Call += `<span class="fab fa-blackberry" style="margin-left: 2vh; margin-right: .5vh;"></span>${data.automatic}`
         }
         Call += `</div>`
     }

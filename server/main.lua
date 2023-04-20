@@ -14,6 +14,7 @@ RegisterServerEvent("qbx-dispatch:server:AddCall", function(info)
     }
 	calls[callId] = call
     table.insert( calls[callId], data )
+    if data.automatic then data.automatic = Lang:t('general.automatic') end
     TriggerClientEvent('qbx-dispatch:client:AddCall', -1, data, callId)
     if not info.TenCode then
         TriggerClientEvent("qbx-dispatch:client:AddBlip", -1, data.coords, Config.TenCodes[data.tencodeid], callId)

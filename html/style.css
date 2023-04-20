@@ -84,6 +84,7 @@ body {
     align-items: center;
     border-bottom: 3px solid #bbbbbbb3;
     padding-bottom: 0.5vh;
+    border-radius: .75vh;
 }
 
 .information {

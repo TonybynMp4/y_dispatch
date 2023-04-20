@@ -1,4 +1,7 @@
 local Translations = {
+    commands = {
+        mutedispatch = 'Activate or deactivate the dispatch',
+    },
     tencodes = {
         driveby = 'Drive-By',
         shooting = 'Shooting',
@@ -51,6 +54,10 @@ local Translations = {
     },
     success = {
         clearedblips = 'All calls have been cleared',
+        mutedispatch = 'You have muted the dispatch',
+        unmutedispatch = 'You have unmuted the dispatch',
+        disabledispatch = 'You have disabled the dispatch',
+        enabledispatch = 'You have enabled the dispatch',
     },
     general = {
         unknown = 'Unknown',
@@ -63,6 +70,7 @@ local Translations = {
         ['2_door'] = '2 Door',
         ['3_door'] = '3 Door',
         ['4_door'] = '4 Door',
+        automatic = 'Automatic gunfire',
     },
     classes = {
         compact = 'Compact',
