@@ -95,19 +95,18 @@ RegisterNetEvent('qbx-dispatch:client:AddCall', function(Data, CallId)
     if not Data or not LocalPlayer.state.isLoggedIn then return end
     local PlayerData = QBCore.Functions.GetPlayerData()
     if Data.jobs and not CheckJob(Data.jobs, PlayerData.job.name) then return end
-    if not Config.OnlyOnDuty or PlayerData.job.onduty then
-        if Data.coords then
-            SendNUIMessage({
-                type = "AddCall",
-                id = CallId,
-                data = Data,
-            })
-            local sound = Config.TenCodes[Data.tencodeid].sound
+    if Config.OnlyOnDuty and not PlayerData.job.onduty then return end
+    if not Data.coords then return end
+
+    SendNUIMessage({
+        type = "AddCall",
+        id = CallId,
+        data = Data,
+    })
+    local sound = Config.TenCodes[Data.tencodeid].sound
     if PlayerData.metadata.mutedispatch or not sound then return end
     if not sound.custom then PlaySound(-1, sound.name, sound.ref, false, false, true) return end
     TriggerServerEvent("InteractSound_SV:PlayOnSource", sound.name, sound.volume or 0.25) -- For Custom Sounds
-        end
-    end
 end)
 
 ---@param coords vector3
