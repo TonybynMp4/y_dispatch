@@ -2,6 +2,12 @@ Config = {}
 
 Config.OnlyOnDuty = true -- Only display calls when on duty
 
+Config.DisptachJobs = { -- Jobs that uses the dispatch system
+    'police',
+    'sheriff',
+    'ambulance',
+}
+
 Config.TenCodes = {
     --[[
         ["TenCodeId"] = {
@@ -95,7 +101,7 @@ Config.TenCodes = {
         jobs = { 'police', 'sheriff' },
         blip = {
             sprite = 119,
-            radius = 60.0,
+            radius = 120.0,
             color = 1,
             scale = 0,
             length = 60 * 2,
@@ -145,7 +151,7 @@ Config.TenCodes = {
             sprite = 685,
             offset = {
                 min = 20,
-                max = 100
+                max = 50
             },
             flash = false
         },
@@ -167,7 +173,7 @@ Config.TenCodes = {
             length = 60 * 2,
             offset = {
                 min = 20,
-                max = 100
+                max = 50
             },
             flash = false
         },
@@ -189,7 +195,7 @@ Config.TenCodes = {
             length = 60 * 2,
             offset = {
                 min = 20,
-                max = 100
+                max = 50
             },
             flash = false
         },
@@ -212,7 +218,7 @@ Config.TenCodes = {
             length = 60 * 2,
             offset = {
                 min = 20,
-                max = 100
+                max = 50
             },
             flash = false
         },
@@ -399,7 +405,7 @@ Config.TenCodes = {
         description = Lang:t('tencodes.suspicioushandoff'),
         jobs = { 'police', 'sheriff' },
         blip = {
-            radius = 50.0,
+            radius = 250.0,
             sprite = 469,
             color = 52,
             scale = 0,
