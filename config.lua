@@ -3,9 +3,9 @@ Config = {}
 Config.OnlyOnDuty = true -- Only display calls when on duty
 
 Config.DisptachJobs = { -- Jobs that uses the dispatch system
-    'police',
-    'sheriff',
-    'ambulance',
+    ['police'] = true,
+    ['sheriff'] = true,
+    ['ambulance'] = true,
 }
 
 Config.TenCodes = {
@@ -87,11 +87,6 @@ Config.TenCodes = {
             offset = false,
             flash = true
         },
-        sound = {
-            name = "speedcamera", -- Comes with qbox's Interact-Sound
-            custom = true,
-            volume = 0.3
-        }
     },
     ["driveby"] = {
         tencode = '10-31',
