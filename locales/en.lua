@@ -1,6 +1,7 @@
 local Translations = {
     commands = {
-        mutedispatch = 'Activate or deactivate the dispatch',
+        mutedispatch = 'mute or unmute the dispatch alerts',
+        disabledispatch = 'Activate or deactivate the dispatch',
     },
     tencodes = {
         driveby = 'Drive-By',
