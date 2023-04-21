@@ -72,12 +72,14 @@ function NewCall(Id, length, data) {
     }
 
     if (data.location || data.heading){
+        let style = "margin-right: .5vh;"
         Call += `<div class="position information">`
         if (data.location) {
-            Call += `<span class="fas fa-map-pin" style="margin-right: .5vh;"></span>${data.location}`
+            Call += `<span class="fas fa-map-pin" style=${style}></span>${data.location}`
         }
         if (data.heading) {
-            Call += `<span class="fas fa-compass" style="margin-left: 2vh;  margin-right: .5vh;"></span>${data.heading}`
+            if (data.location) { style += " margin-left: 2vh;" }
+            Call += `<span class="fas fa-compass" style=${style}></span>${data.heading}`
         }
         Call += `</div>`
     }
@@ -87,30 +89,31 @@ function NewCall(Id, length, data) {
     }
 
     if (data.weapon || data.automatic || data.weaponclass) {
+        let style = "margin-right: .5vh;"
         Call += `<div class="weapon information">`
         if (data.weapon) {
-            Call += `<span class="fas fa-gun" style="margin-right: .5vh;"></span>${data.weapon}`
+            Call += `<span class="fas fa-gun" style=${style}></span>${data.weapon}`
         }
         if (data.weaponclass) {
-            Call += `<span class="fas fa-paperclip" style="margin-left: 2vh; margin-right: .5vh;"></span>${data.weaponclass}`
+            if (data.weapon) { style += " margin-left: 2vh;" }
+            Call += `<span class="fas fa-paperclip" style=${style}></span>${data.weaponclass}`
         }
         if (data.automatic) {
-            Call += `<span class="fab fa-blackberry" style="margin-left: 2vh; margin-right: .5vh;"></span>${data.automatic}`
+            if (data.weapon || data.weaponclass) { style += " margin-left: 2vh;" }
+            Call += `<span class="fab fa-blackberry" style=${style}></span>${data.automatic}`
         }
         Call += `</div>`
     }
 
     if (data.model || data.color || data.plate || data.doors) {
+        let style = "margin-right: .5vh;"
         Call += `<div class="vehicle information">`
         if (data.model) {
-            Call += `<span class="fas fa-car" style="margin-right: .5vh;"></span>${data.model}`
-            if (data.plate) {
-                Call += `<span class="fas fa-keyboard" style="margin-left: 2vh; margin-right: .5vh;"></span>${data.plate}`
-            }
-        } else {
-            if (data.plate) {
-                Call += `<span class="fas fa-keyboard" style="margin-right: .5vh;"></span>${data.plate}`
-            }
+            Call += `<span class="fas fa-car" style=${style}></span>${data.model}`
+        }
+        if (data.plate) {
+            if (data.model) { style += " margin-left: 2vh;" }
+            Call += `<span class="fas fa-keyboard" style=${style}></span>${data.plate}`
         }
         Call += `</div>`
         if (data.doors) {
@@ -126,16 +129,14 @@ function NewCall(Id, length, data) {
     }
 
     if (data.name || data.number) {
+        let style = "margin-right: .5vh;"
         Call += `<div class="person information">`
         if (data.number) {
-            Call += `<span class="fas fa-mobile-alt" style="margin-right: .5vh;"></span>${data.number}`
-            if (data.name) {
-                Call += `<span class="far fa-id-badge" style="margin-left: 2vh; margin-right: .5vh;"></span>${data.name}`
-            }
-        } else{
-            if (data.name) {
-                Call += `<span class="far fa-id-badge" style="margin-right: .5vh;"></span>${data.name}`
-            }
+            Call += `<span class="fas fa-mobile-alt" style=${style}></span>${data.number}`
+        }
+        if (data.name) {
+            if (data.number) { style += " margin-left: 2vh;" }
+            Call += `<span class="far fa-id-badge" style=${style}></span>${data.name}`
         }
         Call += `</div>`
     }
