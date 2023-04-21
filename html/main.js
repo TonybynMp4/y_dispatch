@@ -104,9 +104,13 @@ function NewCall(Id, length, data) {
         Call += `<div class="vehicle information">`
         if (data.model) {
             Call += `<span class="fas fa-car" style="margin-right: .5vh;"></span>${data.model}`
-        }
-        if (data.plate) {
-            Call += `<span class="fas fa-keyboard" style="margin-left: 2vh; margin-right: .5vh;"></span>${data.plate}`
+            if (data.plate) {
+                Call += `<span class="fas fa-keyboard" style="margin-left: 2vh; margin-right: .5vh;"></span>${data.plate}`
+            }
+        } else {
+            if (data.plate) {
+                Call += `<span class="fas fa-keyboard" style="margin-right: .5vh;"></span>${data.plate}`
+            }
         }
         Call += `</div>`
         if (data.doors) {
@@ -125,9 +129,13 @@ function NewCall(Id, length, data) {
         Call += `<div class="person information">`
         if (data.number) {
             Call += `<span class="fas fa-mobile-alt" style="margin-right: .5vh;"></span>${data.number}`
-        }
-        if (data.name) {
-            Call += `<span class="far fa-id-badge" style="margin-left: 2vh; margin-right: .5vh;"></span>${data.name}`
+            if (data.name) {
+                Call += `<span class="far fa-id-badge" style="margin-left: 2vh; margin-right: .5vh;"></span>${data.name}`
+            }
+        } else{
+            if (data.name) {
+                Call += `<span class="far fa-id-badge" style="margin-right: .5vh;"></span>${data.name}`
+            }
         }
         Call += `</div>`
     }
