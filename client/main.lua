@@ -89,7 +89,7 @@ RegisterNetEvent('qbx-dispatch:client:AddCall', function(Data, CallId)
     if Config.OnlyOnDuty and not PlayerData.job.onduty then return end
     if not Data.coords then return end
 
-    if Data.speed then Data.speed = (Config.UseMPH and Data.speed * 2.236936 .. " Mph") or (Data.speed * 3.6 .. " Km/h") end
+    if Data.speed then Data.speed = (Config.UseMPH and math.ceil(Data.speed * 2.236936) .. " Mph") or (math.ceil(Data.speed * 3.6) .. " Km/h") end
 
     SendNUIMessage({
         type = "AddCall",
