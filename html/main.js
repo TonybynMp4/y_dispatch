@@ -6,54 +6,6 @@ $(document).ready(() => {
     });
 });
 
-function GetTime(time) {
-    let date = new Date(time);
-
-    let hours = date.getHours();
-    let minutes = date.getMinutes();
-
-    if (hours < 10) {
-        hours = "0" + hours;
-    }
-
-    if (minutes < 10) {
-        minutes = "0" + minutes;
-    }
-
-    let nowDate = new Date();
-    let nowHours = nowDate.getHours();
-    let nowMinutes = nowDate.getMinutes();
-
-    if (nowHours < 10) {
-        nowHours = "0" + nowHours;
-    }
-
-    if (nowMinutes < 10) {
-        nowMinutes = "0" + nowMinutes;
-    }
-
-    let now = Date.now();
-    let difference = now - time;
-
-    if (difference < 60000) {
-        let seconds = Math.floor(difference / 1000);
-        if (seconds < 1) {
-            return `just now`;
-        } else {
-            return `${seconds} seconds ago`;
-        }
-    } else if (difference < 3600000) {
-        let minutes = Math.floor(difference / 60000);
-        return `${minutes} minutes ago`;
-    } else if (difference < 43200000) {
-        return `today at ${hours}:${minutes}`;
-    } else if (difference < 86400000) {
-        return `yesterday at ${hours}:${minutes}`;
-    } else {
-        return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} at ${hours}:${minutes}`;
-    }
-}
-
 function NewCall(Id, length, data) {
     let Call = `
         <div class="dispatch-call ${Id} animate__animated">
@@ -64,11 +16,9 @@ function NewCall(Id, length, data) {
             </div>
                 <div class="informations-holder">`
 
-    if (data.time) {
+    if (data.langtime) {
         Call += `
-        <div class="information">
-        <span class="fas fa-stopwatch" style="margin-right: .5vh;"></span> ${GetTime(data.time)}
-        </div>`
+        <div class="information"><span class="fas fa-stopwatch" style="margin-right: .5vh;"></span> ${data.langtime}</div>`
     }
 
     if (data.location || data.heading){
@@ -84,59 +34,67 @@ function NewCall(Id, length, data) {
         Call += `</div>`
     }
 
-    if (data["camId"]) {
-        Call += `<div class="information"><span class="fas fa-video" style="margin-right: .5vh;"></span>#${data.camId}</div>`
+    if (data.speed) {
+        Call += `<div class="information"><span class="fas fa-gauge-simple-high" style="margin-right: .5vh;"></span> ${data.speed}</div>`
+    }
+
+    if (data.camId) {
+        Call += `<div class="information"><span class="fas fa-video" style="margin-right: .5vh;"></span> #${data.camId}</div>`
     }
 
     if (data.weapon || data.automatic || data.weaponclass) {
         let style = `margin-right: .5vh;`
         Call += `<div class="weapon information">`
         if (data.weapon) {
-            Call += `<span class="fas fa-gun" style="${style}"></span>${data.weapon}`
+            Call += `<span class="fas fa-gun" style="${style}"></span> ${data.weapon}`
         }
         if (data.weaponclass) {
             if (data.weapon) { style += ` margin-left: 2vh;` }
-            Call += `<span class="fas fa-paperclip" style="${style}"></span>${data.weaponclass}`
+            Call += `<span class="fas fa-paperclip" style="${style}"></span> ${data.weaponclass}`
         }
         if (data.automatic) {
-            if (data.weapon || data.weaponclass) { style += ` margin-left: 2vh;` }
-            Call += `<span class="fab fa-blackberry" style="${style}"></span>${data.automatic}`
+            if (data.weapon || !data.weaponclass) { style += ` margin-left: 2vh;` }
+            Call += `<span class="fab fa-blackberry" style="${style}"></span> ${data.automatic}`
         }
         Call += `</div>`
     }
 
-    if (data.model || data.color || data.plate || data.doors) {
+    if (data.model || data.class || data.color || data.plate || data.doors) {
         let style = `margin-right: .5vh;`
         Call += `<div class="vehicle information">`
         if (data.model) {
-            Call += `<span class="fas fa-car" style="${style}"></span>${data.model}`
+            Call += `<span class="fas fa-car" style="${style}"></span> ${data.model}`
+        }
+        if (data.class) {
+            if (data.model) { style += ` margin-left: 2vh;` }
+            Call += `<span class="fas fa-keyboard" style="${style}"></span> ${data.class}`
         }
         if (data.plate) {
-            if (data.model) { style += ` margin-left: 2vh;` }
-            Call += `<span class="fas fa-keyboard" style="${style}"></span>${data.plate}`
+            if (data.model || !data.class) { style += ` margin-left: 2vh;` }
+            Call += `<span class="fas fa-keyboard" style="${style}"></span> ${data.plate}`
         }
         Call += `</div>`
         if (data.doors) {
-            Call += `<div class="information"><span class="fas fa-door-open" style="margin-right: .5vh;"></span>${data.doors}</div>`
+            Call += `<div class="information"><span class="fas fa-door-open" style="margin-right: .5vh;"></span> ${data.doors}</div>`
         }
         if (data.color) {
-            Call += `<div class="information"><span class="fas fa-palette" style="margin-right: .5vh;"></span>${data.color}</div>`
+            Call += `<div class="information"><span class="fas fa-palette" style="margin-right: .5vh;"></span> ${data.color}</div>`
         }
     }
 
     if (data.callsign) {
-        Call += `<div class="information"><span class="fas fa-id-card-clip" style="margin-right: .5vh;"></span>${data.callsign}</div>`
+        Call += `<div class="information"><span class="fas fa-id-card-clip" style="margin-right: .5vh;"></span> ${data.callsign}</div>`
     }
 
     if (data.name || data.number) {
         let style = `margin-right: .5vh;`
         Call += `<div class="person information">`
         if (data.number) {
-            Call += `<span class="fas fa-mobile-alt" style="${style}"></span>${data.number}`
+            Call += `<span class="fas fa-mobile-alt" style="${style}"></span> ${data.number}`
         }
         if (data.name) {
             if (data.number) { style += ` margin-left: 2vh;` }
-            Call += `<span class="far fa-id-badge" style="${style}"></span>${data.name}`
+            Call += `<span class="far fa-id-badge" style="${style}"></span> ${data.name}`
         }
         Call += `</div>`
     }
@@ -148,11 +106,11 @@ function NewCall(Id, length, data) {
             icon = "fas fa-venus"
             gender = 'Female'
         }
-        Call += `<div class="information"><span class="${icon}" style="margin-right: .5vh;"></span>${gender}</div>`
+        Call += `<div class="information"><span class="${icon}" style="margin-right: .5vh;"></span> ${gender}</div>`
     }
 
     if (data.information) {
-        Call += `<div class="information"><span class="fas fa-comment-dots" style="margin-right: .5vh;"></span>${data.information}</div>`
+        Call += `<div class="information"><span class="fas fa-comment-dots" style="margin-right: .5vh;"></span> ${data.information}</div>`
     }
 
     Call += `</div></div>`

@@ -61,6 +61,7 @@ local Translations = {
         enableddispatch = 'You have enabled the dispatch',
     },
     general = {
+        justnow = 'A few seconds ago',
         unknown = 'Unknown',
         genderM = 'Male',
         genderF = 'Female',

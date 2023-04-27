@@ -89,11 +89,14 @@ RegisterNetEvent('qbx-dispatch:client:AddCall', function(Data, CallId)
     if Config.OnlyOnDuty and not PlayerData.job.onduty then return end
     if not Data.coords then return end
 
+    if Data.speed then Data.speed = (Config.UseMPH and Data.speed * 2.236936 .. " Mph") or (Data.speed * 3.6 .. " Km/h") end
+
     SendNUIMessage({
         type = "AddCall",
         id = CallId,
         data = Data,
     })
+
     local sound = Config.TenCodes[Data.tencodeid].sound
     if PlayerData.metadata.mutedispatch or not sound then return end
     if not sound.custom then PlaySound(-1, sound.name, sound.ref, false, false, true) return end
