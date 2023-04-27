@@ -8,6 +8,8 @@ Config.DisptachJobs = { -- Jobs that uses the dispatch system
     ['ambulance'] = true,
 }
 
+Config.UseMPH = false -- Use MPH instead of KMH
+
 Config.TenCodes = {
     --[[
         ["TenCodeId"] = {
