@@ -1,5 +1,6 @@
 QBCore = exports['qbx-core']:GetCoreObject()
 
+local classes = { Lang:t('classes.compact'), Lang:t('classes.sedan'), Lang:t('classes.suv'), Lang:t('classes.coupe'), Lang:t('classes.muscle'), Lang:t('classes.sports_classic'), Lang:t('classes.sports'), Lang:t('classes.super'), Lang:t('classes.motorcycle'), Lang:t('classes.offroad'), Lang:t('classes.industrial'), Lang:t('classes.utility'), Lang:t('classes.van'), Lang:t('classes.service'), Lang:t('classes.military'), Lang:t('classes.truck') }
 local blips, radiuses, DispatchDisabled = {}, {}, false
 --#region Functions
 --#region Getter Functions
@@ -8,27 +9,17 @@ local blips, radiuses, DispatchDisabled = {}, {}, false
 ---@return table
 function GetVehicleData(vehicle)
     local Data = {}
-    local classes = { Lang:t('classes.compact'), Lang:t('classes.sedan'), Lang:t('classes.suv'), Lang:t('classes.coupe'),
-        Lang:t('classes.muscle'), Lang:t('classes.sports_classic'), Lang:t('classes.sports'), Lang:t('classes.super'),
-        Lang:t('classes.motorcycle'), Lang:t('classes.offroad'), Lang:t('classes.industrial'), Lang:t('classes.utility'),
-        Lang:t('classes.van'), Lang:t('classes.service'), Lang:t('classes.military'), Lang:t('classes.truck') }
     Data.class = classes[GetVehicleClass(vehicle)]
     Data.plate = GetVehicleNumberPlateText(vehicle)
-    Data.name = GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(vehicle)))
     Data.id = NetworkGetNetworkIdFromEntity(vehicle)
-    if Data.name == 'NULL' then Data.name = QBCore.Shared.Vehicles[model].name end
-    local color1, color2 = GetVehicleColours(vehicle)
-    local color = Lang:t('general.unknown')
-    if color1 then
-        if Lang:t('colors.' .. tostring(color1)) and Lang:t('colors.' .. tostring(color2)) then
-            color = Lang:t('colors.' .. tostring(color2)) .. " & " .. Lang:t('colors.' .. tostring(color1))
-        elseif Lang:t('colors.' .. tostring(color1)) then
-            color = Lang:t('colors.' .. tostring(color1))
-        elseif Lang:t('colors.' .. tostring(color2)) then
-            color = Lang:t('colors.' .. tostring(color2))
-        end
-    end
-    Data.color = color
+    Data.speed = GetEntitySpeed(vehicle)
+    Data.name = GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(vehicle)))
+    Data.name = Data.name == 'NULL' and QBCore.Shared.Vehicles[model].name or Data.name
+
+    local primary, secondary = GetVehicleColours(vehicle)
+    local color1, color2 = Lang:t('colors.' .. primary), Lang:t('colors.' .. secondary)
+    Data.color = ((color1 and color2) and (color2 .. " & " .. color1)) or (color1 and color1) or (color2 and color2) or Lang:t('general.unknown')
+
     local doorcount = 0
     local doors = { 'door_dside_f', 'door_pside_f', 'door_dside_r', 'door_pside_r' }
     for i = 1, #doors do
