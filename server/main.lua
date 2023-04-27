@@ -17,7 +17,7 @@ RegisterServerEvent("qbx-dispatch:server:AddCall", function(info)
 
     -- would be better to have a Lang:t directly in the JS but I don't know how to do that so until then..
     if data.automatic then data.automatic = Lang:t('general.automatic') end
-    Data.langtime = Lang:t('general.justnow')
+    data.langtime = Lang:t('general.justnow')
     --
 
     TriggerClientEvent('qbx-dispatch:client:AddCall', -1, data, callId)
