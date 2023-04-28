@@ -61,7 +61,6 @@ local Translations = {
         enableddispatch = 'You have enabled the dispatch',
     },
     general = {
-        justnow = 'A few seconds ago',
         unknown = 'Unknown',
         genderM = 'Male',
         genderF = 'Female',
@@ -72,7 +71,6 @@ local Translations = {
         ['2_door'] = '2 Door',
         ['3_door'] = '3 Door',
         ['4_door'] = '4 Door',
-        automatic = 'Automatic gunfire',
     },
     classes = {
         compact = 'Compact',
@@ -92,6 +90,18 @@ local Translations = {
         military = 'Military',
         truck = 'Truck',
     },
+    WeaponClasses = {
+        melee = "Melee",
+        gun = "Handgun",
+        submachinegun = "Submachine Gun",
+        shotgun = "Shotgun",
+        assaultrifle = "Assault Rifle",
+        lightmachinegun = "Light Machine Gun",
+        sniper = "Sniper",
+        heavyweapon = "Heavy Weapon",
+        throwables = "Throwables",
+        misc = "Misc"
+     },
     colors = {
         ['0'] = "Metallic Black",
         ['1'] = "Metallic Graphite Black",

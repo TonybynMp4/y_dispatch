@@ -1,3 +1,11 @@
+let locales = {};
+
+fetch(`https://${GetParentResourceName()}/GetLocales`, {
+    method: 'POST',
+}).then(data => data.json()).then(data => {
+    locales = JSON.parse(data);
+});
+
 $(document).ready(() => {
     window.addEventListener('message', function (event) {
         if (event.data.type == "AddCall") {
@@ -5,6 +13,11 @@ $(document).ready(() => {
         };
     });
 });
+
+// returns the locale for a given path (like in LUA)
+function locale(localeindex) {
+    return locales[localeindex];
+}
 
 function NewCall(Id, length, data) {
     let Call = `
@@ -14,12 +27,10 @@ function NewCall(Id, length, data) {
                 <div class="top-bar-code type-${data.type}">${data.tencode}</div>
                 <div class="top-bar-name">${data.title}</div>
             </div>
-                <div class="informations-holder">`
-
-    if (data.langtime) {
-        Call += `
-        <div class="information"><span class="fas fa-stopwatch" style="margin-right: .5vh;"></span> ${data.langtime}</div>`
-    }
+                <div class="informations-holder">
+                    <div class="information"><span class="fas fa-stopwatch" style="margin-right: .5vh;"></span> ${locale('justnow')}
+                </div>
+    `
 
     if (data.location || data.heading){
         let style = `margin-right: .5vh;`
@@ -45,7 +56,7 @@ function NewCall(Id, length, data) {
     if (data.weapon || data.automatic || data.weaponclass) {
         let style = `margin-right: .5vh;`
         Call += `<div class="weapon information">`
-        if (data.weapon) {
+        if (data.weapon) { // need to find a *good* way to get the weapon name from the hash
             Call += `<span class="fas fa-gun" style="${style}"></span> ${data.weapon}`
         }
         if (data.weaponclass) {
@@ -54,7 +65,7 @@ function NewCall(Id, length, data) {
         }
         if (data.automatic) {
             if (data.weapon || !data.weaponclass) { style += ` margin-left: 2vh;` }
-            Call += `<span class="fab fa-blackberry" style="${style}"></span> ${data.automatic}`
+            Call += `<span class="fab fa-blackberry" style="${style}"></span> ${locale('automatic')}`
         }
         Call += `</div>`
     }

@@ -1,7 +1,7 @@
 fx_version 'cerulean'
 game 'gta5'
 
-version '0.0.1'
+version '0.0.2'
 
 
 shared_scripts {
@@ -23,6 +23,7 @@ server_scripts {
 ui_page 'html/index.html'
 
 files {
+    'locales/*.json',
     'html/index.html',
     'html/*.css',
     'html/*.js',

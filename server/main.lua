@@ -15,11 +15,6 @@ RegisterServerEvent("qbx-dispatch:server:AddCall", function(info)
 	calls[callId] = call
     table.insert( calls[callId], data )
 
-    -- would be better to have a Lang:t directly in the JS but I don't know how to do that so until then..
-    if data.automatic then data.automatic = Lang:t('general.automatic') end
-    data.langtime = Lang:t('general.justnow')
-    --
-
     TriggerClientEvent('qbx-dispatch:client:AddCall', -1, data, callId)
     if not info.TenCode then
         TriggerClientEvent("qbx-dispatch:client:AddBlip", -1, data.coords, Config.TenCodes[data.tencodeid], callId)
@@ -28,13 +23,13 @@ RegisterServerEvent("qbx-dispatch:server:AddCall", function(info)
     end
 end)
 
-lib.addCommand('mutedispatch', {help = locale('commands.mutedispatch')}, function(source, _)
+lib.addCommand('mutedispatch', {help = Lang:t('commands.mutedispatch')}, function(source, _)
     local Player = QBCore.Functions.GetPlayer(source)
     Player.Functions.SetMetaData('mutedispatch', not Player.PlayerData.metadata['mutedispatch'])
     QBCore.Player.Save(source)
 end)
 
-lib.addCommand('disabledispatch', {help = locale('commands.disabledispatch')}, function(source, _)
+lib.addCommand('disabledispatch', {help = Lang:t('commands.disabledispatch')}, function(source, _)
     local job = QBCore.Functions.GetPlayer(source).PlayerData.job
     if not Config.DisptachJobs[job.name] then return end
 

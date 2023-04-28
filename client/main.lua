@@ -2,9 +2,16 @@ QBCore = exports['qbx-core']:GetCoreObject()
 
 local classes = { Lang:t('classes.compact'), Lang:t('classes.sedan'), Lang:t('classes.suv'), Lang:t('classes.coupe'), Lang:t('classes.muscle'), Lang:t('classes.sports_classic'), Lang:t('classes.sports'), Lang:t('classes.super'), Lang:t('classes.motorcycle'), Lang:t('classes.offroad'), Lang:t('classes.industrial'), Lang:t('classes.utility'), Lang:t('classes.van'), Lang:t('classes.service'), Lang:t('classes.military'), Lang:t('classes.truck') }
 local blips, radiuses, DispatchDisabled = {}, {}, false
+
+-- Send Locales to NUI
+RegisterNUICallback('GetLocales', function(data, cb)
+    cb(LoadResourceFile(GetCurrentResourceName(), "locales/" .. GetConvar("ox:locales", "en") .. ".json"))
+end)
+
 --#region Functions
 --#region Getter Functions
 
+--- returns the vehicle's data ( model, class, name, plate, NetId, speed, color, n° of doors)
 ---@param vehicle number
 ---@return table
 function GetVehicleData(vehicle)
@@ -29,12 +36,14 @@ function GetVehicleData(vehicle)
     return Data
 end
 
+--- returns the player's gender
 ---@return string
 function GetGender()
     local PlayerData = QBCore.Functions.GetPlayerData()
     return PlayerData.charinfo.gender
 end
 
+--- returns the heading of the player
 ---@return string
 function GetHeading()
     local heading = GetEntityHeading(cache.ped)
@@ -49,25 +58,52 @@ function GetHeading()
     end
 end
 
+local WeaponClasses = {
+    [2685387236] = Lang:t('WeaponClasses.melee'),
+    [416676503] = Lang:t('WeaponClasses.gun'),
+   [-95776620] = Lang:t('WeaponClasses.submachinegun'),
+    [860033945] = Lang:t('WeaponClasses.shotgun'),
+    [970310034] = Lang:t('WeaponClasses.assaultrifle'),
+    [1159398588] = Lang:t('WeaponClasses.lightmachinegun'),
+    [3082541095] = Lang:t('WeaponClasses.sniper'),
+    [2725924767] = Lang:t('WeaponClasses.heavyweapon'),
+    [1548507267] = Lang:t('WeaponClasses.throwables'),
+    [4257178988] = Lang:t('WeaponClasses.misc'),
+}
+
+--- Returns the Class of a weapon (e.g. Melee, Handguns, Shotguns, etc.)
+---@param SelectedWeapon number
+---@return string
+function GetWeaponClass(SelectedWeapon)
+    return WeaponClasses[GetWeapontypeGroup(SelectedWeapon)] or Lang:t('general.unknown')
+end
+
+--- Returns the street at coords
 ---@param coords vector3
 ---@return string
 function GetStreet(coords)
     return GetStreetNameFromHashKey(GetStreetNameAtCoord(coords.x, coords.y, coords.z))
 end
 
+--- Returns the zone at coords
 ---@param coords vector3
 ---@return string
 function GetZone(coords)
     return GetLabelText(GetNameOfZone(coords.x, coords.y, coords.z))
 end
 
+--- Returns the location (street + zone) at coords
 ---@param coords vector3
 ---@return string
 function GetLocation(coords)
-	return GetStreetNameFromHashKey(GetStreetNameAtCoord(coords.x, coords.y, coords.z)) .. ", " .. GetLabelText(GetNameOfZone(coords.x, coords.y, coords.z))
+	return GetStreet(coords) .. ", " .. GetZone(coords)
 end
 --#endregion Getter Functions
 
+--- Checks if the player's job is in the jobs table
+---@param jobs any
+---@param playerjob any
+---@return boolean
 function CheckJob(jobs, playerjob)
     for _, v in pairs(jobs) do
         if playerjob == v then
@@ -79,6 +115,7 @@ end
 --#endregion Functions
 --#region Events
 
+--- Adds a call to the NUI
 ---@param Data table
 ---@param CallId number
 RegisterNetEvent('qbx-dispatch:client:AddCall', function(Data, CallId)
@@ -103,6 +140,7 @@ RegisterNetEvent('qbx-dispatch:client:AddCall', function(Data, CallId)
     TriggerServerEvent("InteractSound_SV:PlayOnSource", sound.name, sound.volume or 0.25) -- For Custom Sounds
 end)
 
+--- Adds a blip to the map
 ---@param coords vector3
 ---@param data table
 ---@param CallId number
@@ -155,6 +193,7 @@ RegisterNetEvent("qbx-dispatch:client:AddBlip", function(coords, data, CallId)
     end
 end)
 
+--- Removes a blip from the map
 ---@param CallId number
 RegisterNetEvent("qbx-dispatch:client:RemoveBlip", function(CallId)
 	RemoveBlip(blips[CallId])
@@ -164,6 +203,7 @@ RegisterNetEvent("qbx-dispatch:client:RemoveBlip", function(CallId)
 end)
 
 
+--- Clears all blips from the map
 RegisterNetEvent("qbx-dispatch:client:ClearBlips", function()
 	for _, v in pairs(blips) do
 		RemoveBlip(v)
@@ -176,6 +216,7 @@ RegisterNetEvent("qbx-dispatch:client:ClearBlips", function()
 	QBCore.Functions.Notify(Lang:t('success.clearedblips'), "success")
 end)
 
+--- Disables the dispatch
 RegisterNetEvent("qbx-dispatch:client:DisableDispatch", function()
     DispatchDisabled = not DispatchDisabled
     TriggerClientEvent('QBCore:Notify', source, DispatchDisabled and Lang:t('success.disableddispatch') or Lang:t('success.enableddispatch'), "success")
