@@ -219,6 +219,30 @@ end)
 --- Disables the dispatch
 RegisterNetEvent("qbx-dispatch:client:DisableDispatch", function()
     DispatchDisabled = not DispatchDisabled
-    TriggerClientEvent('QBCore:Notify', source, DispatchDisabled and Lang:t('success.disableddispatch') or Lang:t('success.enableddispatch'), "success")
+    QBCore.Functions.Notify(DispatchDisabled and Lang:t('success.disableddispatch') or Lang:t('success.enableddispatch'), "success")
+end)
+
+-- Sends a message to the dispatch when someone send a message to 911 (NPWD)
+RegisterNetEvent('qbx-dispatch:NPWD:Text911', function(message)
+    local msg = message
+    if string.len(msg) <= 0 then QBCore.Functions.Notify(Lang:t('error.nomessage'), 'error') return end
+    if exports['qbx-policejob']:IsHandcuffed() then QBCore.Functions.Notify(Lang:t('error.handcuffed'), 'error') return end
+    if exports.npwd:isPhoneDisabled() then QBCore.Functions.Notify(Lang:t('error.disabledphone'), 'error') return end
+
+    local anonymous = (((Config.AllowAnonText and string.split(message, " ")[1] == "anon") and true) or false)
+    if anonymous then message = string.gsub(message, "anon ", "") end
+    EmergencyCall(message, 911, anonymous)
+end)
+
+-- Sends a message to the dispatch when someone send a message to 912 (NPWD)
+RegisterNetEvent('qbx-dispatch:NPWD:Text912', function(message)
+    local msg = message
+    if string.len(msg) <= 0 then QBCore.Functions.Notify(Lang:t('error.nomessage'), 'error') return end
+    if exports['qbx-policejob']:IsHandcuffed() then QBCore.Functions.Notify(Lang:t('error.handcuffed'), 'error') return end
+    if exports.npwd:isPhoneDisabled() then QBCore.Functions.Notify(Lang:t('error.disabledphone'), 'error') return end
+
+    local anonymous = (((Config.AllowAnonText and string.split(message, " ")[1] == "anon") and true) or false)
+    if anonymous then message = string.gsub(message, "anon ", "") end
+    EmergencyCall(message, 912, anonymous)
 end)
 --#endregion Events

@@ -35,3 +35,17 @@ lib.addCommand('disabledispatch', {help = Lang:t('commands.disabledispatch')}, f
 
     TriggerClientEvent('qbx-dispatch:client:DisableDispatch', source)
 end)
+
+if Config.UseNpwd and GetResourceState('npwd') == 'started' then
+    exports.npwd:onMessage('911', function(ctx)
+        if ctx then
+            TriggerClientEvent('qbx-dispatch:NPWD:Text911', ctx.source, ctx.data.message)
+        end
+    end)
+
+    exports.npwd:onMessage('912', function(ctx)
+        if ctx then
+            TriggerClientEvent('qbx-dispatch:NPWD:Text912', ctx.source, ctx.data.message)
+        end
+    end)
+end

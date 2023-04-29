@@ -137,7 +137,7 @@ local function InjuriedPerson()
 end
 exports('InjuriedPerson', InjuriedPerson)
 
-local function EmergencyCall(message, phonenumber)
+function EmergencyCall(message, phonenumber, anonymous)
     local PlayerData = QBCore.Functions.GetPlayerData()
     local data = {
         tencodeid = phonenumber.."call",
@@ -146,8 +146,8 @@ local function EmergencyCall(message, phonenumber)
         gender = GetGender(),
         type = 0,
         coords = GetEntityCoords(cache.ped),
-        name = PlayerData.charinfo.lastname .. " " .. PlayerData.charinfo.firstname,
-        number = PlayerData.charinfo.phone,
+        name = not anonymous and PlayerData.charinfo.lastname .. " " .. PlayerData.charinfo.firstname,
+        number = not anonymous and PlayerData.charinfo.phone,
         information = message,
         title = Config.TenCodes[phonenumber.."call"].title,
         jobs = Config.TenCodes[phonenumber.."call"].jobs

@@ -53,6 +53,11 @@ local Translations = {
         drugrun = 'Drug Run',
         explosion = 'Explosion',
     },
+    error = {
+        handcuffed = 'You can\'t call the dispatch while handcuffed',
+        disabledphone = 'You can\'t call the dispatch while your phone is disabled',
+        nomessage = 'You didn\'t enter a message',
+    },
     success = {
         clearedblips = 'All calls have been cleared',
         mutedispatch = 'You have muted the dispatch',
