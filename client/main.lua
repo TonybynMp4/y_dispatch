@@ -105,11 +105,25 @@ end
 ---@param playerjob any
 ---@return boolean
 function CheckJob(jobs, playerjob)
-    for _, v in pairs(jobs) do
-        if playerjob == v then
-            return true
+    if type(jobs) == 'table' then
+        for _, v in pairs(jobs.jobs) do
+            if playerjob.name == v then
+                return true
+            end
+        end
+        for _, v in pairs(jobs.types) do
+            if playerjob.type == v then
+                return true
+            end
+        end
+    else
+        for _, v in pairs(jobs) do
+            if playerjob.name == v then
+                return true
+            end
         end
     end
+    return false
 end
 
 --#endregion Functions
@@ -122,7 +136,7 @@ RegisterNetEvent('qbx-dispatch:client:AddCall', function(Data, CallId)
     if DispatchDisabled then return end
     if not Data or not LocalPlayer.state.isLoggedIn then return end
     local PlayerData = QBCore.Functions.GetPlayerData()
-    if Data.jobs and not CheckJob(Data.jobs, PlayerData.job.name) then return end
+    if Data.jobs and not CheckJob(Data.jobs, PlayerData.job) then return end
     if Config.OnlyOnDuty and not PlayerData.job.onduty then return end
     if not Data.coords then return end
 
@@ -147,7 +161,7 @@ end)
 RegisterNetEvent("qbx-dispatch:client:AddBlip", function(coords, data, CallId)
     if DispatchDisabled then return end
     local PlayerData = QBCore.Functions.GetPlayerData()
-    if not data.jobs and not CheckJob(data.jobs, PlayerData.job.name) then return end
+    if not data.jobs and not CheckJob(data.jobs, PlayerData.job) then return end
     if not (not Config.OnlyOnDuty or PlayerData.job.onduty) then return end
     local alpha = 255
     local radiusAlpha = 128

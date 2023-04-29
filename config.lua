@@ -2,10 +2,16 @@ Config = {}
 
 Config.OnlyOnDuty = true -- Only display calls when on duty
 
-Config.DisptachJobs = { -- Jobs that uses the dispatch system
-    ['police'] = true,
-    ['sheriff'] = true,
-    ['ambulance'] = true,
+Config.DispatchJobs = { -- Jobs that uses the dispatch system
+    Jobs = {
+        ['police'] = true,
+        ['sheriff'] = true,
+        ['ambulance'] = true,
+    },
+    Types = {
+        ['leo'] = true,
+        ['medic'] = true,
+    }
 }
 
 Config.UseNpwd = true -- Use npwd for 911/912 calls (send a text to the number and the message is sent to the dispatch)
@@ -19,7 +25,17 @@ Config.TenCodes = {
             tencode = '10-Code',
             title = 'Title of the call',
             description = 'name of the blip', (10-code - name)
-            jobs = { jobs that can see the call }, (i.e. {'police', 'sheriff'})
+            jobs = {
+                jobs = {
+                    jobs that can see the call (i.e. {'police', 'sheriff'})
+                },
+                types = {
+                    job types that can see the call (i.e. {'leo', 'mechanic'})
+                }
+                -- or strings
+                'police',
+                'sheriff',
+            },
             blip = {
                 radius = radius of the zone, ( 0 = no zone)
                 sprite = sprite of the blip, (https://docs.fivem.net/game-references/blips/)
@@ -44,7 +60,7 @@ Config.TenCodes = {
         tencode = '10-59',
         title = Lang:t('title.carjack'),
         description = Lang:t('tencodes.carjack'),
-        jobs = { 'police', 'sheriff' },
+        jobs = { jobs = {'police', 'sheriff'}, types = {'leo'} },
         blip = {
             radius = 0,
             sprite = 595,
@@ -63,7 +79,7 @@ Config.TenCodes = {
         tencode = '10-59',
         title = Lang:t('title.vehicletheft'),
         description = Lang:t('tencodes.vehicletheft'),
-        jobs = { 'police', 'sheriff' },
+        jobs = { jobs = {'police', 'sheriff'}, types = {'leo'} },
         blip = {
             radius = 0,
             sprite = 595,
@@ -82,7 +98,7 @@ Config.TenCodes = {
         tencode = '10-55',
         title = Lang:t('title.speedradar'),
         description = Lang:t('tencodes.speedradar'),
-        jobs = { 'police', 'sheriff' },
+        jobs = { jobs = {'police', 'sheriff'}, types = {'leo'} },
         blip = {
             radius = 0,
             sprite = 326,
@@ -98,7 +114,7 @@ Config.TenCodes = {
         title = Lang:t('title.driveby'),
         description = Lang:t('tencodes.driveby'),
         name = Lang:t('tencodes.driveby'),
-        jobs = { 'police', 'sheriff' },
+        jobs = { jobs = {'police', 'sheriff'}, types = {'leo'} },
         blip = {
             sprite = 119,
             radius = 120.0,
@@ -120,7 +136,7 @@ Config.TenCodes = {
         tencode = '10-31',
         title = Lang:t('title.shooting'),
         description = Lang:t('tencodes.shooting'),
-        jobs = { 'police', 'sheriff' },
+        jobs = { jobs = {'police', 'sheriff'}, types = {'leo'} },
         blip = {
             radius = 120.0,
             sprite = 110,
@@ -142,7 +158,7 @@ Config.TenCodes = {
         tencode = '10-30',
         title = Lang:t('title.fight'),
         description = Lang:t('tencodes.fight'),
-        jobs = { 'police', 'sheriff' },
+        jobs = { jobs = {'police', 'sheriff'}, types = {'leo'} },
         blip = {
             radius = 80.0,
             color = 69,
@@ -164,7 +180,7 @@ Config.TenCodes = {
         tencode = '10-30',
         title = Lang:t('title.death'),
         description = Lang:t('tencodes.death'),
-        jobs = { 'ambulance', 'ambulancebc' },
+        jobs = { jobs = {'ambulance'} },
         blip = {
             radius = 100,
             sprite = 126,
@@ -186,7 +202,7 @@ Config.TenCodes = {
         tencode = '10-99',
         title = Lang:t('title.pol99'),
         description = Lang:t('tencodes.pol99'),
-        jobs = { 'police', 'sheriff' },
+        jobs = { jobs = {'police', 'sheriff'}, types = {'leo'} },
         blip = {
             radius = 100.0,
             sprite = 526,
@@ -209,7 +225,7 @@ Config.TenCodes = {
         tencode = '10-99',
         title = Lang:t('title.ems99'),
         description = Lang:t('tencodes.ems99'),
-        jobs = { 'police', 'sheriff', 'ambulance', 'ambulancebc' },
+        jobs = { jobs = {'police', 'sheriff', 'ambulance'}, types = {'leo'} },
         blip = {
             radius = 100.0,
             sprite = 526,
@@ -232,7 +248,7 @@ Config.TenCodes = {
         tencode = '911',
         title = Lang:t('title.911call'),
         description = Lang:t('tencodes.911call'),
-        jobs = { 'police', 'sheriff' },
+        jobs = { jobs = {'police', 'sheriff'}, types = {'leo'} },
         blip = {
             radius = 0,
             sprite = 480,
@@ -251,7 +267,7 @@ Config.TenCodes = {
         tencode = '912',
         title = Lang:t('title.912call'),
         description = Lang:t('tencodes.912call'),
-        jobs = { 'ambulance', 'ambulancebc' },
+        jobs = { jobs = {'ambulance'} },
         blip = {
             radius = 0,
             color = 3,
@@ -270,7 +286,7 @@ Config.TenCodes = {
         tencode = '10-40',
         title = Lang:t('title.storerobbery'),
         description = Lang:t('tencodes.storerobbery'),
-        jobs = { 'police', 'sheriff' },
+        jobs = { jobs = {'police', 'sheriff'}, types = {'leo'} },
         blip = {
             radius = 0,
             sprite = 52,
@@ -289,7 +305,7 @@ Config.TenCodes = {
         tencode = '10-91',
         title = Lang:t('title.bankrobbery'),
         description = Lang:t('tencodes.bankrobbery'),
-        jobs = { 'police', 'sheriff' },
+        jobs = { jobs = {'police', 'sheriff'}, types = {'leo'} },
         blip = {
             radius = 0,
             sprite = 500,
@@ -308,7 +324,7 @@ Config.TenCodes = {
         tencode = '10-91',
         title = Lang:t('title.paletorobbery'),
         description = Lang:t('tencodes.paletorobbery'),
-        jobs = { 'police', 'sheriff' },
+        jobs = { jobs = {'police', 'sheriff'}, types = {'leo'} },
         blip = {
             radius = 0,
             sprite = 500,
@@ -327,7 +343,7 @@ Config.TenCodes = {
         tencode = '10-93',
         title = Lang:t('title.pacificrobbery'),
         description = Lang:t('tencodes.pacificrobbery'),
-        jobs = { 'police', 'sheriff' },
+        jobs = { jobs = {'police', 'sheriff'}, types = {'leo'} },
         blip = {
             radius = 0,
             sprite = 500,
@@ -346,7 +362,7 @@ Config.TenCodes = {
         tencode = '10-94',
         title = Lang:t('title.prisonbreak'),
         description = Lang:t('tencodes.prisonbreak'),
-        jobs = { 'police', 'sheriff' },
+        jobs = { jobs = {'police', 'sheriff'}, types = {'leo'} },
         blip = {
             radius = 0,
             sprite = 189,
@@ -365,7 +381,7 @@ Config.TenCodes = {
         tencode = '10-92',
         title = Lang:t('title.jewelryrobbery'),
         description = Lang:t('tencodes.jewelryrobbery'),
-        jobs = { 'police', 'sheriff' },
+        jobs = { jobs = {'police', 'sheriff'}, types = {'leo'} },
         blip = {
             radius = 0,
             sprite = 434,
@@ -384,7 +400,7 @@ Config.TenCodes = {
         tencode = '10-37',
         title = Lang:t('title.houserobbery'),
         description = Lang:t('tencodes.houserobbery'),
-        jobs = { 'police', 'sheriff' },
+        jobs = { jobs = {'police', 'sheriff'}, types = {'leo'} },
         blip = {
             radius = 0,
             sprite = 40,
@@ -403,7 +419,7 @@ Config.TenCodes = {
         tencode = '10-60',
         title = Lang:t('title.suspicioushandoff'),
         description = Lang:t('tencodes.suspicioushandoff'),
-        jobs = { 'police', 'sheriff' },
+        jobs = { jobs = {'police', 'sheriff'}, types = {'leo'} },
         blip = {
             radius = 250.0,
             sprite = 469,
@@ -425,7 +441,7 @@ Config.TenCodes = {
         tencode = '10-58',
         title = Lang:t('tencodes.carboosting'),
         description = Lang:t('tencodes.carboosting'),
-        jobs = { 'police', 'sheriff' },
+        jobs = { jobs = {'police', 'sheriff'}, types = {'leo'} },
         blip = {
             radius = 0,
             sprite = 595,
@@ -444,7 +460,7 @@ Config.TenCodes = {
         tencode = '10-80',
         title = Lang:t('title.explosion'),
         description = Lang:t('tencodes.explosion'),
-        jobs = { 'police', 'sheriff', 'ambulance', 'ambulancebc' },
+        jobs = { jobs = {'police', 'sheriff', 'ambulance'}, types = {'leo'} },
         blip = {
             radius = 0,
             sprite = 436,
@@ -463,7 +479,7 @@ Config.TenCodes = {
         tencode = '10-61',
         title = Lang:t('title.drugrun'),
         description = Lang:t('tencodes.drugrun'),
-        jobs = { 'police', 'sheriff' },
+        jobs = { jobs = {'police', 'sheriff'}, types = {'leo'} },
         blip = {
             radius = 120.0,
             sprite = 469,
@@ -485,7 +501,7 @@ Config.TenCodes = {
         tencode = '10-90',
         title = Lang:t('title.truckrobbery'),
         description = Lang:t('tencodes.truckrobbery'),
-        jobs = { 'police', 'sheriff' },
+        jobs = { jobs = {'police', 'sheriff'}, types = {'leo'} },
         blip = {
             radius = 120.0,
             sprite = 67,
