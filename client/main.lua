@@ -5,7 +5,7 @@ local blips, radiuses, DispatchDisabled = {}, {}, false
 
 -- Send Locales to NUI
 RegisterNUICallback('GetLocales', function(data, cb)
-    local locales = json.decode(LoadResourceFile(GetCurrentResourceName(), "locales/" .. GetConvar("ox:locales", "en") .. ".json"))
+    local locales = json.decode(LoadResourceFile(GetCurrentResourceName(), "locales/" .. GetConvar("qb_locale", "en") .. ".json"))
     locales.accept = "[" .. Config.AcceptDispatchKey .. "]" .. locales.accept
     locales.deny = "[" .. Config.DenyDispatchKey.. "]" .. locales.deny
     cb(locales)
