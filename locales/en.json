@@ -1,4 +1,6 @@
 {
     "justnow": "A few seconds ago",
-    "automatic": "Automatic gunfire"
+    "automatic": "Automatic gunfire",
+    "accept": " Respond",
+    "deny": " Dismiss"
 }

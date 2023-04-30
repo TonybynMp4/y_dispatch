@@ -3,13 +3,15 @@ let locales = {};
 fetch(`https://${GetParentResourceName()}/GetLocales`, {
     method: 'POST',
 }).then(data => data.json()).then(data => {
-    locales = JSON.parse(data);
+    locales = data;
 });
 
 $(document).ready(() => {
     window.addEventListener('message', function (event) {
         if (event.data.type == "AddCall") {
             NewCall(event.data.id, event.data.data.length, event.data.data);
+        }else if (event.data.type == "RemoveCall") {
+            RemoveCall();
         };
     });
 });
@@ -130,6 +132,7 @@ function NewCall(Id, length, data) {
 
     length = length * 1000 || (data.type == 1 && 15000) || (data.type == 2 && 10000) || 8000
 
+    UpdateCalls();
     $(`.${Id}`).addClass("animate__slideInRight");
 
     setTimeout(() => {
@@ -137,7 +140,44 @@ function NewCall(Id, length, data) {
 
         setTimeout(() => {
             $(`.${Id}`).remove();
+            UpdateCalls();
         }, 1500);
 
     }, length);
 };
+
+function UpdateCalls() {
+    if ($(".dispatch-call").length == 0) return;
+    $(".dispatch-call").not(":first").each(function() {
+        if ($(this).find(".call-buttons").length > 0) {
+            $(this).find(".call-buttons").remove();
+        }
+    });
+    if ($(".dispatch-call").first().find(".call-buttons").length == 0) {
+        $(".dispatch-call").first().find(".informations-holder").after(`
+             <div class="call-buttons">
+                <div class="call-button call-button-accept">
+                    <div class="call-button-text">${locale('accept') || 'Accept'}</div>
+                </div>
+                <div class="call-button call-button-deny">
+                    <div class="call-button-text">${locale('deny') || 'Deny'}</div>
+                </div>
+            </div>
+        `);
+    }
+}
+
+function RemoveCall() {
+    if ($(".dispatch-call").length == 0) return;
+    if ($(".dispatch-call").first().hasClass("animate__slideOutRight")) return;
+    const Id = $(".dispatch-call").first().attr("class").split(" ")[1];
+    $(`.${Id}`).addClass("animate__slideOutRight");
+
+    setTimeout(() => {
+        $(`.${Id}`).remove();
+        UpdateCalls();
+        fetch(`https://${GetParentResourceName()}/RemoveCall`, {
+            method: 'POST'
+        })
+    }, 1000);
+}

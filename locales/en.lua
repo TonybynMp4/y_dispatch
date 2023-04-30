@@ -76,6 +76,8 @@ local Translations = {
         ['2_door'] = '2 Door',
         ['3_door'] = '3 Door',
         ['4_door'] = '4 Door',
+        acceptdispatchcall = 'Accept Dispatch Call',
+        denydispatchcall = 'Deny Dispatch Call',
     },
     classes = {
         compact = 'Compact',

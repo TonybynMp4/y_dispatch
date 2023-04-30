@@ -5,7 +5,16 @@ local blips, radiuses, DispatchDisabled = {}, {}, false
 
 -- Send Locales to NUI
 RegisterNUICallback('GetLocales', function(data, cb)
-    cb(LoadResourceFile(GetCurrentResourceName(), "locales/" .. GetConvar("ox:locales", "en") .. ".json"))
+    local locales = json.decode(LoadResourceFile(GetCurrentResourceName(), "locales/" .. GetConvar("ox:locales", "en") .. ".json"))
+    locales.accept = "[" .. Config.AcceptDispatchKey .. "]" .. locales.accept
+    locales.deny = "[" .. Config.DenyDispatchKey.. "]" .. locales.deny
+    cb(locales)
+end)
+
+-- waits for the call to be removed before changing the table
+RegisterNuiCallback('RemoveCall', function(_, cb)
+    TriggerServerEvent('qbx-dispatch:server:RemoveCall')
+    cb('ok')
 end)
 
 --#region Functions
@@ -139,7 +148,6 @@ RegisterNetEvent('qbx-dispatch:client:AddCall', function(Data, CallId)
     if Data.jobs and not CheckJob(Data.jobs, PlayerData.job) then return end
     if Config.OnlyOnDuty and not PlayerData.job.onduty then return end
     if not Data.coords then return end
-
     if Data.speed then Data.speed = (Config.UseMPH and math.ceil(Data.speed * 2.236936) .. " Mph") or (math.ceil(Data.speed * 3.6) .. " Km/h") end
 
     SendNUIMessage({
@@ -216,7 +224,6 @@ RegisterNetEvent("qbx-dispatch:client:RemoveBlip", function(CallId)
     blips[CallId] = nil
 end)
 
-
 --- Clears all blips from the map
 RegisterNetEvent("qbx-dispatch:client:ClearBlips", function()
 	for _, v in pairs(blips) do
@@ -236,7 +243,7 @@ RegisterNetEvent("qbx-dispatch:client:DisableDispatch", function()
     QBCore.Functions.Notify(DispatchDisabled and Lang:t('success.disableddispatch') or Lang:t('success.enableddispatch'), "success")
 end)
 
--- Sends a message to the dispatch when someone send a message to 911 (NPWD)
+--- Sends a message to the dispatch when someone send a message to 911 (NPWD)
 RegisterNetEvent('qbx-dispatch:NPWD:Text911', function(message)
     local msg = message
     if string.len(msg) <= 0 then QBCore.Functions.Notify(Lang:t('error.nomessage'), 'error') return end
@@ -248,7 +255,7 @@ RegisterNetEvent('qbx-dispatch:NPWD:Text911', function(message)
     EmergencyCall(message, 911, anonymous)
 end)
 
--- Sends a message to the dispatch when someone send a message to 912 (NPWD)
+--- Sends a message to the dispatch when someone send a message to 912 (NPWD)
 RegisterNetEvent('qbx-dispatch:NPWD:Text912', function(message)
     local msg = message
     if string.len(msg) <= 0 then QBCore.Functions.Notify(Lang:t('error.nomessage'), 'error') return end
@@ -260,3 +267,25 @@ RegisterNetEvent('qbx-dispatch:NPWD:Text912', function(message)
     EmergencyCall(message, 912, anonymous)
 end)
 --#endregion Events
+
+--#region Commands
+--- Accepting and denying calls
+RegisterCommand('acceptdispatch', function()
+    -- get the most recent call and set the gps to the locaiton
+    local call = lib.callback.await('qbx-dispatch:server:GetLastCall', false)
+    if not call then return end
+    SetBlipRoute(blips[call.blipid], true)
+    SetBlipRouteColour(blips[call.blipid], 60)
+    repeat
+        Wait(500)
+    until(#(GetEntityCoords(cache.ped) - GetBlipCoords(blips[call.blipid])) <= 50)
+        SetBlipRoute(blips[call.blipid], false)
+end, false)
+RegisterKeyMapping('acceptdispatch', Lang:t('general.acceptdispatchcall'), 'keyboard', Config.AcceptDispatchKey)
+
+RegisterCommand('denydispatch', function()
+    SendNUIMessage({type = 'RemoveCall'})
+end, false)
+RegisterKeyMapping('denydispatch', Lang:t('general.denydispatchcall'), 'keyboard', Config.DenyDispatchKey)
+---
+--#endregion Commands

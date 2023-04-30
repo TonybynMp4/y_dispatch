@@ -9,12 +9,12 @@ RegisterServerEvent("qbx-dispatch:server:AddCall", function(info)
         source = source,
         id = callId,
         UnitsResponding = {},
+        UnitsNotResponding = {},
         DispatcherResponses = {},
         time = data.time,
+        data = data
     }
 	calls[callId] = call
-    table.insert( calls[callId], data )
-
     TriggerClientEvent('qbx-dispatch:client:AddCall', -1, data, callId)
     if not info.TenCode then
         TriggerClientEvent("qbx-dispatch:client:AddBlip", -1, data.coords, Config.TenCodes[data.tencodeid], callId)
@@ -31,7 +31,7 @@ end)
 
 lib.addCommand('disabledispatch', {help = Lang:t('commands.disabledispatch')}, function(source, _)
     local job = QBCore.Functions.GetPlayer(source).PlayerData.job
-    if not Config.DisptachJobs[job.name] then return end
+    if not Config.DispatchJobs.Types[job.type] or not Config.DispatchJobs.Jobs[job.name] then return end
 
     TriggerClientEvent('qbx-dispatch:client:DisableDispatch', source)
 end)
@@ -49,3 +49,22 @@ if Config.UseNpwd and GetResourceState('npwd') == 'started' then
         end
     end)
 end
+
+RegisterNetEvent('qbx-dispatch:server:RemoveCall', function()
+    if not calls then return end
+    for i = #calls, 1, -1 do
+        if calls[i].UnitsNotResponding[source] ~= true then
+            print(calls[i].id)
+            calls[i].UnitsNotResponding[source] = true
+            break
+        end
+    end
+end)
+
+lib.callback.register('qbx-dispatch:server:GetLastCall', function(source)
+    for i = #calls, 1, -1 do
+        if not calls[i].UnitsNotResponding[source] then
+            return {blipid = calls[i].id}
+        end
+    end
+end)

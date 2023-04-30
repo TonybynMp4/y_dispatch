@@ -14,6 +14,9 @@ Config.DispatchJobs = { -- Jobs that uses the dispatch system
     }
 }
 
+Config.AcceptDispatchKey = 'Y'
+Config.DenyDispatchKey = 'N'
+
 Config.UseNpwd = true -- Use npwd for 911/912 calls (send a text to the number and the message is sent to the dispatch)
 Config.AllowAnonCalls = true -- Requires UseNpwd = true, Allow anonymous Texts to 911/912 (start the text with: "anon [...]")
 
