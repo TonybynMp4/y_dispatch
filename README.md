@@ -8,8 +8,11 @@ A dispatch system for FiveM using qbx-core.
 Either
 * Unzip qbx-dispatch into your resources folder (wherever you want)
 * Add 'ensure qbx-dispatch' to the server.cfg
+
 Or
+
 * Unzip qbx-dispatch into your [qbx] folder (will start automatically)
+
 * Modify the config to your liking.
 * Restart the server.
 
