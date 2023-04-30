@@ -20,7 +20,7 @@ Then
 
 ## Dependencies
 
-- [qbx-core](https://github.com/qbox-framework/qbx-core) (Latest)
+- [qbx-core](https://github.com/qbox-project/qbx-core) (Latest)
 - [ox_lib](https://github.com/overextended/ox_lib)
 - [interact-sound](https://github.com/Qbox-project/interact-sound) (Comes with qbx-core and has sounds included)
 
