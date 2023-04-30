@@ -36,6 +36,21 @@ lib.addCommand('disabledispatch', {help = Lang:t('commands.disabledispatch')}, f
     TriggerClientEvent('qbx-dispatch:client:DisableDispatch', source)
 end)
 
+exports('GetCalls', function() return calls end)
+
+lib.callback.register('qbx-dispatch:server:addUnit', function(_, id, unitid, unit)
+    if not calls[id] then return end
+    calls[id].UnitsResponding[unitid] = unit
+    return calls[id].UnitsResponding
+end)
+
+lib.callback.register('qbx-dispatch:server:removeUnit', function(_, id, unitid)
+    if not calls[id] then return end
+    if not calls[id].UnitsResponding[unit] then return end
+    calls[id].UnitsResponding[unitid] = nil
+    return calls[id].UnitsResponding
+end)
+
 if Config.UseNpwd and GetResourceState('npwd') == 'started' then
     exports.npwd:onMessage('911', function(ctx)
         if ctx then
