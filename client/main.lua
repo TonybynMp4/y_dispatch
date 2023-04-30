@@ -109,12 +109,46 @@ function GetLocation(coords)
 end
 --#endregion Getter Functions
 
+local fightAntiSpam = false
+local function fight(ped)
+    if ped ~= cache.ped then return end
+
+    local PlayerData = QBCore.Functions.GetPlayerData()
+    if CheckJob(Config.Events.fight.jobwhitelist, PlayerData.job) and PlayerData.job.onduty then return end
+
+    fightAntiSpam = true
+    exports['qbx-dispatch']:Fight()
+    SetTimeout(30 * 1000, function() -- Wait 30 seconds to avoid spam.
+        fightAntiSpam = false
+    end)
+end
+
+local shotsfiredAntiSpam = false
+local function shotfired(ped)
+    if ped ~= cache.ped then return end
+    if IsPedCurrentWeaponSilenced(ped) and math.random() <= 0.98 then return end
+    -- 2% chance to trigger the event if the weapon is silenced, ( real life weapons are not 100% silent ;c )
+
+    local PlayerData = QBCore.Functions.GetPlayerData()
+    if CheckJob(Config.Events.shotsfired.jobwhitelist, PlayerData.job) and PlayerData.job.onduty then return end
+
+    shotsfiredAntiSpam = true
+    if cache.vehicle then
+        exports['qbx-dispatch']:DriveBy()
+    else
+        exports['qbx-dispatch']:Shooting()
+    end
+    SetTimeout(30 * 1000, function() -- Wait 30 seconds to avoid spam.
+        shotsfiredAntiSpam = false
+    end)
+end
+
 --- Checks if the player's job is in the jobs table
 ---@param jobs any
 ---@param playerjob any
 ---@return boolean
 function CheckJob(jobs, playerjob)
-    if type(jobs) == 'table' then
+    if jobs.jobs or jobs.types then
         for _, v in pairs(jobs.jobs) do
             if playerjob.name == v then
                 return true
@@ -213,6 +247,17 @@ RegisterNetEvent("qbx-dispatch:client:AddBlip", function(coords, data, CallId)
             return
         end
     end
+end)
+
+RegisterNetEvent('CEventMeleeAction', function(_, ped)
+    if fightAntiSpam then return end
+    fight(ped)
+end)
+
+AddEventHandler('CEventShockingGunshotFired', function(_, ped, _)
+    if not Config.Events.shotsfired then return end
+    if shotsfiredAntiSpam then return end
+    shotfired(ped)
 end)
 
 --- Removes a blip from the map

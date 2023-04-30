@@ -22,6 +22,23 @@ Config.AllowAnonCalls = true -- Requires UseNpwd = true, Allow anonymous Texts t
 
 Config.UseMPH = false -- Use MPH instead of KMH
 
+Config.Events = {
+    fight = {
+        enabled = true,
+        jobwhitelist = {
+            'police',
+            'sheriff',
+        },
+    },
+    shotsfired = {
+        enabled = true,
+        jobwhitelist = {
+            'police',
+            'sheriff',
+        },
+    },
+}
+
 Config.TenCodes = {
     --[[
         ["TenCodeId"] = {
