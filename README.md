@@ -34,4 +34,4 @@ To trigger an alert you would use an export (client/exports.lua) like this:
     exports['qbx-dispatch']:DriveBy()
 ```
 
-You can add your own exports or use the CustomCall export to create your own alerts.
+You can add your own exports or use the CustomCall export to trigger customized alerts.
