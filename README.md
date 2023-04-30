@@ -13,6 +13,8 @@ Or
 
 * Unzip qbx-dispatch into your [qbx] folder (will start automatically)
 
+Then
+
 * Modify the config to your liking.
 * Restart the server.
 
