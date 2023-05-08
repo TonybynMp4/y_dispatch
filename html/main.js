@@ -58,7 +58,7 @@ function NewCall(Id, length, data) {
     if (data.weapon || data.automatic || data.weaponclass) {
         let style = `margin-right: .5vh;`
         Call += `<div class="weapon information">`
-        if (data.weapon) { // need to find a *good* way to get the weapon name from the hash
+        if (data.weapon) {
             Call += `<span class="fas fa-gun" style="${style}"></span> ${data.weapon}`
         }
         if (data.weaponclass) {

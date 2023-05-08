@@ -1,7 +1,7 @@
 fx_version 'cerulean'
 game 'gta5'
 
-version '1.0.0'
+version '1.0.1'
 
 
 shared_scripts {
@@ -27,6 +27,11 @@ files {
     'html/index.html',
     'html/*.css',
     'html/*.js',
+}
+
+dependencies {
+    'ox_lib',
+    'ox_inventory'
 }
 
 lua54 'yes'

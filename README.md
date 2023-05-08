@@ -22,6 +22,7 @@ Then
 
 - [qbx-core](https://github.com/qbox-project/qbx-core) (Latest)
 - [ox_lib](https://github.com/overextended/ox_lib)
+- [ox_inventory](https://github.com/overextended/ox_inventory) (Used in gun related alerts to get the name of the weapon)
 - [interact-sound](https://github.com/Qbox-project/interact-sound) (Comes with qbx-core and has sounds included)
 
 ## Preview
