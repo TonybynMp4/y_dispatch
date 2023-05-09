@@ -333,7 +333,7 @@ lib.addKeybind({
     name = 'acceptdispatch',
     description = Lang:t('general.acceptdispatchcall'),
     defaultKey = Config.AcceptDispatchKey,
-    onPressed = acceptdispatch()
+    onPressed = acceptdispatch
 })
 
 lib.addKeybind({
