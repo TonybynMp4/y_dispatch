@@ -180,7 +180,7 @@ local function acceptdispatch()
         Wait(500)
     until(#(GetEntityCoords(cache.ped) - GetBlipCoords(blips[call.blipid])) <= 50)
         SetBlipRoute(blips[call.blipid], false)
-end)
+end
 
 --#endregion Functions
 --#region Events
