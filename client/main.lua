@@ -169,6 +169,19 @@ function CheckJob(jobs, playerjob)
     return false
 end
 
+local function acceptdispatch()
+    -- get the most recent call
+    local call = lib.callback.await('qbx-dispatch:server:GetLastCall', false)
+    if not call then return end
+    -- set a route to the location (not the gps marker)
+    SetBlipRoute(blips[call.blipid], true)
+    SetBlipRouteColour(blips[call.blipid], 60)
+    repeat
+        Wait(500)
+    until(#(GetEntityCoords(cache.ped) - GetBlipCoords(blips[call.blipid])) <= 50)
+        SetBlipRoute(blips[call.blipid], false)
+end)
+
 --#endregion Functions
 --#region Events
 
@@ -313,24 +326,23 @@ RegisterNetEvent('qbx-dispatch:NPWD:Text912', function(message)
 end)
 --#endregion Events
 
---#region Commands
+--#region Keybinds
 --- Accepting and denying calls
-RegisterCommand('acceptdispatch', function()
-    -- get the most recent call and set the gps to the locaiton
-    local call = lib.callback.await('qbx-dispatch:server:GetLastCall', false)
-    if not call then return end
-    SetBlipRoute(blips[call.blipid], true)
-    SetBlipRouteColour(blips[call.blipid], 60)
-    repeat
-        Wait(500)
-    until(#(GetEntityCoords(cache.ped) - GetBlipCoords(blips[call.blipid])) <= 50)
-        SetBlipRoute(blips[call.blipid], false)
-end, false)
-RegisterKeyMapping('acceptdispatch', Lang:t('general.acceptdispatchcall'), 'keyboard', Config.AcceptDispatchKey)
 
-RegisterCommand('denydispatch', function()
-    SendNUIMessage({type = 'RemoveCall'})
-end, false)
-RegisterKeyMapping('denydispatch', Lang:t('general.denydispatchcall'), 'keyboard', Config.DenyDispatchKey)
+lib.addKeybind({
+    name = 'acceptdispatch',
+    description = Lang:t('general.acceptdispatchcall'),
+    defaultKey = Config.AcceptDispatchKey,
+    onPressed = acceptdispatch()
+})
+
+lib.addKeybind({
+    name = 'denydispatch',
+    description = Lang:t('general.denydispatchcall'),
+    defaultKey = Config.DenyDispatchKey,
+    onPressed = function()
+        SendNUIMessage({type = 'RemoveCall'})
+    end
+})
 ---
---#endregion Commands
+--#endregion Keybinds
