@@ -69,7 +69,6 @@ RegisterNetEvent('qbx-dispatch:server:RemoveCall', function()
     if not calls then return end
     for i = #calls, 1, -1 do
         if calls[i].UnitsNotResponding[source] ~= true then
-            print(calls[i].id)
             calls[i].UnitsNotResponding[source] = true
             break
         end
