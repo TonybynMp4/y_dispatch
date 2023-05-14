@@ -149,16 +149,20 @@ end
 ---@return boolean
 function CheckJob(jobs, playerjob)
     if jobs.jobs or jobs.types then
+        if not jobs.jobs then goto skipjobs end
         for _, v in pairs(jobs.jobs) do
             if playerjob.name == v then
                 return true
             end
         end
+        ::skipjobs::
+        if not jobs.types then goto skiptypes end
         for _, v in pairs(jobs.types) do
             if playerjob.type == v then
                 return true
             end
         end
+        ::skiptypes::
     else
         for _, v in pairs(jobs) do
             if playerjob.name == v then
