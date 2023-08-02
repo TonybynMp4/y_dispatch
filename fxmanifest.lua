@@ -3,13 +3,17 @@ game 'gta5'
 
 version '1.0.3'
 
-
 shared_scripts {
+    '@qbx-core/import.lua',
     '@ox_lib/init.lua',
     '@qbx-core/shared/locale.lua',
     'locales/en.lua',
     'locales/*.lua',
     'config.lua',
+}
+
+modules {
+    'qbx-core:core'
 }
 
 client_scripts {
@@ -31,7 +35,7 @@ files {
 
 dependencies {
     'ox_lib',
-    'ox_inventory'
 }
 
 lua54 'yes'
+use_experimental_fxv2_oal 'yes'
