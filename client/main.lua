@@ -1,5 +1,3 @@
-QBCore = exports['qbx-core']:GetCoreObject()
-
 local classes = { Lang:t('classes.compact'), Lang:t('classes.sedan'), Lang:t('classes.suv'), Lang:t('classes.coupe'), Lang:t('classes.muscle'), Lang:t('classes.sports_classic'), Lang:t('classes.sports'), Lang:t('classes.super'), Lang:t('classes.motorcycle'), Lang:t('classes.offroad'), Lang:t('classes.industrial'), Lang:t('classes.utility'), Lang:t('classes.van'), Lang:t('classes.service'), Lang:t('classes.military'), Lang:t('classes.truck') }
 local blips, radiuses, DispatchDisabled = {}, {}, false
 
@@ -220,7 +218,7 @@ end)
 RegisterNetEvent("qbx-dispatch:client:AddBlip", function(coords, data, CallId)
     if DispatchDisabled then return end
     local PlayerData = QBCore.Functions.GetPlayerData()
-    if not data.jobs and not CheckJob(data.jobs, PlayerData.job) then return end
+    if not data.jobs or not CheckJob(data.jobs, PlayerData.job) then return end
     if not (not Config.OnlyOnDuty or PlayerData.job.onduty) then return end
     local alpha = 255
     local radiusAlpha = 128
