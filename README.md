@@ -2,6 +2,8 @@
 
 A dispatch system for FiveM using qbx-core.
 
+Credits to @Zach488 for the images & a few bits of code
+
 ## Installation
 * <> Code -> Download ZIP
 
