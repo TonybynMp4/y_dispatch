@@ -1,19 +1,21 @@
 fx_version 'cerulean'
 game 'gta5'
 
-version '1.0.4'
+author 'Tonybyn_Mp4'
+description 'Dispatch resource for the Qbox framework'
+version '1.1.0'
 
 shared_scripts {
-    '@qbx-core/import.lua',
+    "@qbx_core/import.lua",
     '@ox_lib/init.lua',
-    '@qbx-core/shared/locale.lua',
+    '@qbx_core/shared/locale.lua',
     'locales/en.lua',
     'locales/*.lua',
     'config.lua',
 }
 
 modules {
-    'qbx-core:core'
+    "qbx_core:client:playerdata"
 }
 
 client_scripts {

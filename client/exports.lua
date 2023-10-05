@@ -140,7 +140,6 @@ end
 exports('InjuriedPerson', InjuriedPerson)
 
 function EmergencyCall(message, phonenumber, anonymous)
-    local PlayerData = QBCore.Functions.GetPlayerData()
     local data = {
         tencodeid = phonenumber.."call",
         tencode = Config.TenCodes[phonenumber.."call"].tencode,
@@ -148,8 +147,8 @@ function EmergencyCall(message, phonenumber, anonymous)
         gender = GetGender(),
         type = 0,
         coords = GetEntityCoords(cache.ped),
-        name = not anonymous and PlayerData.charinfo.lastname .. " " .. PlayerData.charinfo.firstname,
-        number = not anonymous and PlayerData.charinfo.phone,
+        name = not anonymous and QBX.PlayerData.charinfo.lastname .. " " .. QBX.PlayerData.charinfo.firstname,
+        number = not anonymous and QBX.PlayerData.charinfo.phone,
         information = message,
         title = Config.TenCodes[phonenumber.."call"].title,
         jobs = Config.TenCodes[phonenumber.."call"].jobs
@@ -166,13 +165,12 @@ local function Code99(servicetype)
         service = 'ems99'
     end
     if not service then return end
-    local PlayerData = QBCore.Functions.GetPlayerData()
     local data = {
         tencodeid = service,
         tencode = Config.TenCodes[service].tencode,
         location = GetLocation(GetEntityCoords(cache.ped)),
-        name = PlayerData.charinfo.lastname .. " " .. PlayerData.charinfo.firstname,
-        callsign = PlayerData.metadata.callsign,
+        name = QBX.PlayerData.charinfo.lastname .. " " .. QBX.PlayerData.charinfo.firstname,
+        callsign = QBX.PlayerData.metadata.callsign,
         type = 1,
         coords = GetEntityCoords(cache.ped),
         title = Config.TenCodes[service].title,
