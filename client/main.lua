@@ -28,7 +28,7 @@ function GetVehicleData(vehicle)
     Data.id = NetworkGetNetworkIdFromEntity(vehicle)
     Data.speed = GetEntitySpeed(vehicle)
     Data.name = GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(vehicle)))
-    Data.name = Data.name == 'NULL' and QBCore.Shared.Vehicles[model].name or Data.name
+    Data.name = Data.name == 'NULL' and exports.qbx_core:GetVehiclesByName().Vehicles[model].name or Data.name
 
     local primary, secondary = GetVehicleColours(vehicle)
     local color1, color2 = Lang:t('colors.' .. primary), Lang:t('colors.' .. secondary)
@@ -46,8 +46,7 @@ end
 --- returns the player's gender
 ---@return string
 function GetGender()
-    local PlayerData = QBCore.Functions.GetPlayerData()
-    return PlayerData.charinfo.gender
+    return tostring(QBX.PlayerData.charinfo.gender)
 end
 
 --- returns the heading of the player
@@ -68,7 +67,7 @@ end
 local WeaponClasses = {
     [2685387236] = Lang:t('WeaponClasses.melee'),
     [416676503] = Lang:t('WeaponClasses.gun'),
-   [-95776620] = Lang:t('WeaponClasses.submachinegun'),
+    [-95776620] = Lang:t('WeaponClasses.submachinegun'),
     [860033945] = Lang:t('WeaponClasses.shotgun'),
     [970310034] = Lang:t('WeaponClasses.assaultrifle'),
     [1159398588] = Lang:t('WeaponClasses.lightmachinegun'),
@@ -111,8 +110,7 @@ local fightAntiSpam = false
 local function fight(ped)
     if ped ~= cache.ped then return end
 
-    local PlayerData = QBCore.Functions.GetPlayerData()
-    if CheckJob(Config.Events.fight.jobwhitelist, PlayerData.job) and PlayerData.job.onduty then return end
+    if CheckJob(Config.Events.fight.jobwhitelist, QBX.PlayerData.job) and QBX.PlayerData.job.onduty then return end
 
     fightAntiSpam = true
     exports['qbx-dispatch']:Fight()
@@ -127,8 +125,7 @@ local function shotfired(ped)
     if IsPedCurrentWeaponSilenced(ped) and math.random() <= 0.98 then return end
     -- 2% chance to trigger the event if the weapon is silenced, ( real life weapons are not 100% silent ;c )
 
-    local PlayerData = QBCore.Functions.GetPlayerData()
-    if CheckJob(Config.Events.shotsfired.jobwhitelist, PlayerData.job) and PlayerData.job.onduty then return end
+    if CheckJob(Config.Events.shotsfired.jobwhitelist, QBX.PlayerData.job) and QBX.PlayerData.job.onduty then return end
 
     shotsfiredAntiSpam = true
     if cache.vehicle then
@@ -193,9 +190,8 @@ end
 RegisterNetEvent('qbx-dispatch:client:AddCall', function(Data, CallId)
     if DispatchDisabled then return end
     if not Data or not LocalPlayer.state.isLoggedIn then return end
-    local PlayerData = QBCore.Functions.GetPlayerData()
-    if Data.jobs and not CheckJob(Data.jobs, PlayerData.job) then return end
-    if Config.OnlyOnDuty and not PlayerData.job.onduty then return end
+    if Data.jobs and not CheckJob(Data.jobs, QBX.PlayerData.job) then return end
+    if Config.OnlyOnDuty and not QBX.PlayerData.job.onduty then return end
     if not Data.coords then return end
     if Data.speed then Data.speed = (Config.UseMPH and math.ceil(Data.speed * 2.236936) .. " Mph") or (math.ceil(Data.speed * 3.6) .. " Km/h") end
 
@@ -206,7 +202,7 @@ RegisterNetEvent('qbx-dispatch:client:AddCall', function(Data, CallId)
     })
 
     local sound = Config.TenCodes[Data.tencodeid].sound
-    if PlayerData.metadata.mutedispatch or not sound then return end
+    if QBX.PlayerData.metadata.mutedispatch or not sound then return end
     if not sound.custom then PlaySound(-1, sound.name, sound.ref, false, false, true) return end
     TriggerServerEvent("InteractSound_SV:PlayOnSource", sound.name, sound.volume or 0.25) -- For Custom Sounds
 end)
@@ -217,9 +213,8 @@ end)
 ---@param CallId number
 RegisterNetEvent("qbx-dispatch:client:AddBlip", function(coords, data, CallId)
     if DispatchDisabled then return end
-    local PlayerData = QBCore.Functions.GetPlayerData()
-    if not data.jobs or not CheckJob(data.jobs, PlayerData.job) then return end
-    if not (not Config.OnlyOnDuty or PlayerData.job.onduty) then return end
+    if not data?.jobs or not CheckJob(data?.jobs, QBX.PlayerData.job) then return end
+    if not (not Config.OnlyOnDuty or QBX.PlayerData.job.onduty) then return end
     local alpha = 255
     local radiusAlpha = 128
     local blip, radius
@@ -294,21 +289,21 @@ RegisterNetEvent("qbx-dispatch:client:ClearBlips", function()
 	end
     radiuses = {}
     blips = {}
-	QBCore.Functions.Notify(Lang:t('success.clearedblips'), "success")
+	exports.qbx_core:Notify(Lang:t('success.clearedblips'), "success")
 end)
 
 --- Disables the dispatch
 RegisterNetEvent("qbx-dispatch:client:DisableDispatch", function()
     DispatchDisabled = not DispatchDisabled
-    QBCore.Functions.Notify(DispatchDisabled and Lang:t('success.disableddispatch') or Lang:t('success.enableddispatch'), "success")
+    exports.qbx_core:Notify(DispatchDisabled and Lang:t('success.disableddispatch') or Lang:t('success.enableddispatch'), "success")
 end)
 
 --- Sends a message to the dispatch when someone send a message to 911 (NPWD)
 RegisterNetEvent('qbx-dispatch:NPWD:Text911', function(message)
     local msg = message
-    if string.len(msg) <= 0 then QBCore.Functions.Notify(Lang:t('error.nomessage'), 'error') return end
-    if exports['qbx-policejob']:IsHandcuffed() then QBCore.Functions.Notify(Lang:t('error.handcuffed'), 'error') return end
-    if exports.npwd:isPhoneDisabled() then QBCore.Functions.Notify(Lang:t('error.disabledphone'), 'error') return end
+    if string.len(msg) <= 0 then exports.qbx_core:Notify(Lang:t('error.nomessage'), 'error') return end
+    if exports['qbx-policejob']:IsHandcuffed() then exports.qbx_core:Notify(Lang:t('error.handcuffed'), 'error') return end
+    if exports.npwd:isPhoneDisabled() then exports.qbx_core:Notify(Lang:t('error.disabledphone'), 'error') return end
 
     local anonymous = (((Config.AllowAnonText and string.split(message, " ")[1] == "anon") and true) or false)
     if anonymous then message = string.gsub(message, "anon ", "") end
@@ -318,9 +313,9 @@ end)
 --- Sends a message to the dispatch when someone send a message to 912 (NPWD)
 RegisterNetEvent('qbx-dispatch:NPWD:Text912', function(message)
     local msg = message
-    if string.len(msg) <= 0 then QBCore.Functions.Notify(Lang:t('error.nomessage'), 'error') return end
-    if exports['qbx-policejob']:IsHandcuffed() then QBCore.Functions.Notify(Lang:t('error.handcuffed'), 'error') return end
-    if exports.npwd:isPhoneDisabled() then QBCore.Functions.Notify(Lang:t('error.disabledphone'), 'error') return end
+    if string.len(msg) <= 0 then exports.qbx_core:Notify(Lang:t('error.nomessage'), 'error') return end
+    if exports['qbx-policejob']:IsHandcuffed() then exports.qbx_core:Notify(Lang:t('error.handcuffed'), 'error') return end
+    if exports.npwd:isPhoneDisabled() then exports.qbx_core:Notify(Lang:t('error.disabledphone'), 'error') return end
 
     local anonymous = (((Config.AllowAnonText and string.split(message, " ")[1] == "anon") and true) or false)
     if anonymous then message = string.gsub(message, "anon ", "") end
@@ -330,7 +325,6 @@ end)
 
 --#region Keybinds
 --- Accepting and denying calls
-
 lib.addKeybind({
     name = 'acceptdispatch',
     description = Lang:t('general.acceptdispatchcall'),

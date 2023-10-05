@@ -23,13 +23,13 @@ RegisterServerEvent("qbx-dispatch:server:AddCall", function(info)
 end)
 
 lib.addCommand('mutedispatch', {help = Lang:t('commands.mutedispatch')}, function(source, _)
-    local Player = QBCore.Functions.GetPlayer(source)
-    Player.Functions.SetMetaData('mutedispatch', not Player.PlayerData.metadata['mutedispatch'])
-    QBCore.Player.Save(source)
+    local player = exports.qbx_core:GetPlayer(source)
+    player.Functions.SetMetaData('mutedispatch', not player.PlayerData.metadata['mutedispatch'])
+    exports.qbx_core:Save(source)
 end)
 
 lib.addCommand('disabledispatch', {help = Lang:t('commands.disabledispatch')}, function(source, _)
-    local job = QBCore.Functions.GetPlayer(source).PlayerData.job
+    local job = exports.qbx_core:GetPlayer(source).PlayerData.job
     if not Config.DispatchJobs.Types[job.type] or not Config.DispatchJobs.Jobs[job.name] then return end
 
     TriggerClientEvent('qbx-dispatch:client:DisableDispatch', source)
