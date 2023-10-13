@@ -1,5 +1,7 @@
 Config = {}
 
+Config.versionCheck = true -- Get notified when a new version is available on GitHub
+
 Config.OnlyOnDuty = true -- Only display calls when on duty
 
 Config.DispatchJobs = { -- Jobs that uses the dispatch system
