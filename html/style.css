@@ -35,6 +35,11 @@ body {
     border-top-left-radius: 2vh;
     display: flex;
     flex-direction: column;
+    animation: call-appear 1.5s ease;
+}
+
+.dispatch-call.removing{
+    animation: call-disappear 1.5s ease;
 }
 
 .top-bar {
@@ -139,9 +144,30 @@ body {
     background-color: var(--color-ambulance);
 }
 
-/*  */
 @keyframes gradients {
     0%{background-position:0% 50%}
     50%{background-position:100% 50%}
     100%{background-position:0% 50%}
+}
+
+@keyframes call-appear {
+    0% {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0%);
+    }
+}
+
+@keyframes call-disappear {
+    0% {
+        opacity: 1;
+        transform: translateX(0%);
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(100%);
+    }
 }
