@@ -1,5 +1,9 @@
 local calls = {}
 
+if Config.versionCheck then
+	lib.versionCheck('TonybynMp4/qbx_dispatch')
+end
+
 RegisterServerEvent("qbx-dispatch:server:AddCall", function(info)
     local data = not info.TenCode and info or info.data
     data.time = os.time() * 1000
