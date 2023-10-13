@@ -6,24 +6,26 @@ fetch(`https://${GetParentResourceName()}/GetLocales`, {
     locales = data;
 });
 
-$(document).ready(() => {
+document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('message', function (event) {
         if (event.data.type == "AddCall") {
             NewCall(event.data.id, event.data.data.length, event.data.data);
-        }else if (event.data.type == "RemoveCall") {
+        } else if (event.data.type == "RemoveCall") {
             RemoveCall();
         };
     });
 });
 
-// returns the locale for a given path (like in LUA)
+// returns the locale for a given path (like in the core's lang:t)
 function locale(localeindex) {
     return locales[localeindex];
 }
 
 function NewCall(Id, length, data) {
-    let Call = `
-        <div class="dispatch-call ${Id} animate__animated">
+    const callElement = document.createElement('div');
+    callElement.classList.add('dispatch-call');
+    callElement.setAttribute('id', Id);
+    let callInnerHTML = `
             <div class="top-bar">
                 <div class="top-bar-id">#${Id}</div>
                 <div class="top-bar-code type-${data.type}">${data.tencode}</div>
@@ -34,147 +36,144 @@ function NewCall(Id, length, data) {
                 </div>
     `
 
-    if (data.location || data.heading){
+    if (data.location || data.heading) {
         let style = `margin-right: .5vh;`
-        Call += `<div class="position information">`
+        callInnerHTML += `<div class="position information">`
         if (data.location) {
-            Call += `<span class="fas fa-map-pin" style="${style}"></span> ${data.location}`
+            callInnerHTML += `<span class="fas fa-map-pin" style="${style}"></span> ${data.location}`
         }
         if (data.heading) {
             if (data.location) { style += ` margin-left: 2vh;` }
-            Call += `<span class="fas fa-compass" style="${style}"></span> ${data.heading}`
+            callInnerHTML += `<span class="fas fa-compass" style="${style}"></span> ${data.heading}`
         }
-        Call += `</div>`
+        callInnerHTML += `</div>`
     }
 
     if (data.speed) {
-        Call += `<div class="information"><span class="fas fa-gauge-simple-high" style="margin-right: .5vh;"></span> ${data.speed}</div>`
+        callInnerHTML += `<div class="information"><span class="fas fa-gauge-simple-high" style="margin-right: .5vh;"></span> ${data.speed}</div>`
     }
 
     if (data.camId) {
-        Call += `<div class="information"><span class="fas fa-video" style="margin-right: .5vh;"></span> #${data.camId}</div>`
+        callInnerHTML += `<div class="information"><span class="fas fa-video" style="margin-right: .5vh;"></span> #${data.camId}</div>`
     }
 
     if (data.weapon || data.automatic || data.weaponclass) {
         let style = `margin-right: .5vh;`
-        Call += `<div class="weapon information">`
+        callInnerHTML += `<div class="weapon information">`
         if (data.weapon) {
-            Call += `<span class="fas fa-gun" style="${style}"></span> ${data.weapon}`
+            callInnerHTML += `<span class="fas fa-gun" style="${style}"></span> ${data.weapon}`
         }
         if (data.weaponclass) {
             if (data.weapon) { style += ` margin-left: 2vh;` }
-            Call += `<span class="fas fa-paperclip" style="${style}"></span> ${data.weaponclass}`
+            callInnerHTML += `<span class="fas fa-paperclip" style="${style}"></span> ${data.weaponclass}`
         }
         if (data.automatic) {
             if (data.weapon || !data.weaponclass) { style += ` margin-left: 2vh;` }
-            Call += `<span class="fab fa-blackberry" style="${style}"></span> ${locale('automatic')}`
+            callInnerHTML += `<span class="fab fa-blackberry" style="${style}"></span> ${locale('automatic')}`
         }
-        Call += `</div>`
+        callInnerHTML += `</div>`
     }
 
     if (data.model || data.class || data.color || data.plate || data.doors) {
         let style = `margin-right: .5vh;`
-        Call += `<div class="vehicle information">`
+        callInnerHTML += `<div class="vehicle information">`
         if (data.model) {
-            Call += `<span class="fas fa-car" style="${style}"></span> ${data.model}`
+            callInnerHTML += `<span class="fas fa-car" style="${style}"></span> ${data.model}`
         }
         if (data.class) {
             if (data.model) { style += ` margin-left: 2vh;` }
-            Call += `<span class="fas fa-keyboard" style="${style}"></span> ${data.class}`
+            callInnerHTML += `<span class="fas fa-keyboard" style="${style}"></span> ${data.class}`
         }
         if (data.plate) {
             if (data.model || !data.class) { style += ` margin-left: 2vh;` }
-            Call += `<span class="fas fa-keyboard" style="${style}"></span> ${data.plate}`
+            callInnerHTML += `<span class="fas fa-keyboard" style="${style}"></span> ${data.plate}`
         }
-        Call += `</div>`
+        callInnerHTML += `</div>`
         if (data.doors) {
-            Call += `<div class="information"><span class="fas fa-door-open" style="margin-right: .5vh;"></span> ${data.doors}</div>`
+            callInnerHTML += `<div class="information"><span class="fas fa-door-open" style="margin-right: .5vh;"></span> ${data.doors}</div>`
         }
         if (data.color) {
-            Call += `<div class="information"><span class="fas fa-palette" style="margin-right: .5vh;"></span> ${data.color}</div>`
+            callInnerHTML += `<div class="information"><span class="fas fa-palette" style="margin-right: .5vh;"></span> ${data.color}</div>`
         }
     }
 
     if (data.callsign) {
-        Call += `<div class="information"><span class="fas fa-id-card-clip" style="margin-right: .5vh;"></span> ${data.callsign}</div>`
+        callInnerHTML += `<div class="information"><span class="fas fa-id-card-clip" style="margin-right: .5vh;"></span> ${data.callsign}</div>`
     }
 
     if (data.name || data.number) {
         let style = `margin-right: .5vh;`
-        Call += `<div class="person information">`
+        callInnerHTML += `<div class="person information">`
         if (data.number) {
-            Call += `<span class="fas fa-mobile-alt" style="${style}"></span> ${data.number}`
+            callInnerHTML += `<span class="fas fa-mobile-alt" style="${style}"></span> ${data.number}`
         }
         if (data.name) {
             if (data.number) { style += ` margin-left: 2vh;` }
-            Call += `<span class="far fa-id-badge" style="${style}"></span> ${data.name}`
+            callInnerHTML += `<span class="far fa-id-badge" style="${style}"></span> ${data.name}`
         }
-        Call += `</div>`
+        callInnerHTML += `</div>`
     }
 
     if (typeof data.gender == 'number') {
-        icon = "fas fa-mars"
-        gender = 'Male'
-        if (data.gender === 1){
-            icon = "fas fa-venus"
-            gender = 'Female'
-        }
-        Call += `<div class="information"><span class="${icon}" style="margin-right: .5vh;"></span> ${gender}</div>`
+        const icon = data.gender === 1 && "fas fa-venus" || "fas fa-mars"
+        const gender = data.gender === 1 && 'Female' || 'Male'
+        callInnerHTML += `<div class="information"><span class="${icon}" style="margin-right: .5vh;"></span> ${gender}</div>`
     }
 
     if (data.information) {
-        Call += `<div class="information"><span class="fas fa-comment-dots" style="margin-right: .5vh;"></span> ${data.information}</div>`
+        callInnerHTML += `<div class="information"><span class="fas fa-comment-dots" style="margin-right: .5vh;"></span> ${data.information}</div>`
     }
 
-    Call += `</div></div>`
+    callInnerHTML += `</div>`
 
-    $(".dispatch-container").prepend(Call)
+    callElement.innerHTML = callInnerHTML;
+    document.getElementById("dispatch-container").appendChild(callElement);
 
     length = length * 1000 || (data.type == 1 && 15000) || (data.type == 2 && 10000) || 8000
 
     UpdateCalls();
-    $(`.${Id}`).addClass("animate__slideInRight");
 
     setTimeout(() => {
-        $(`.${Id}`).addClass("animate__slideOutRight");
+        document.getElementById(Id).classList.add("removing");
 
         setTimeout(() => {
-            $(`.${Id}`).remove();
+            document.getElementById(Id).remove();
             UpdateCalls();
         }, 1500);
-
     }, length);
 };
 
 function UpdateCalls() {
-    if ($(".dispatch-call").length == 0) return;
-    $(".dispatch-call").not(":first").each(function() {
-        if ($(this).find(".call-buttons").length > 0) {
-            $(this).find(".call-buttons").remove();
+    const calls = document.getElementsByClassName('dispatch-call')
+    if (calls.length == 0) return;
+    Object.keys(calls).forEach(function(call, index) {
+        if (index == 0) return;
+        const callButtons = call.getElementsByClassName('call-buttons')[0];
+        if (callButtons) {
+            callButtons.remove();
         }
     });
-    if ($(".dispatch-call").first().find(".call-buttons").length == 0) {
-        $(".dispatch-call").first().find(".informations-holder").after(`
-             <div class="call-buttons">
-                <div class="call-button call-button-accept">
-                    <div class="call-button-text">${locale('accept') || 'Accept'}</div>
-                </div>
-                <div class="call-button call-button-deny">
-                    <div class="call-button-text">${locale('deny') || 'Deny'}</div>
-                </div>
+    if (calls[0].getElementsByClassName("call-buttons").length != 0) return;
+    calls[0].getElementsByClassName("informations-holder")[0].insertAdjacentHTML('afterend', `
+        <div class="call-buttons">
+            <div class="call-button call-button-accept">
+                <div class="call-button-text">${locale('accept') || 'Accept'}</div>
             </div>
-        `);
-    }
+            <div class="call-button call-button-deny">
+                <div class="call-button-text">${locale('deny') || 'Deny'}</div>
+            </div>
+        </div>
+    `);
 }
 
 function RemoveCall() {
-    if ($(".dispatch-call").length == 0) return;
-    if ($(".dispatch-call").first().hasClass("animate__slideOutRight")) return;
-    const Id = $(".dispatch-call").first().attr("class").split(" ")[1];
-    $(`.${Id}`).addClass("animate__slideOutRight");
+    const calls = document.getElementsByClassName('dispatch-call')
+    if (calls.length == 0) return;
+    if (calls[0].classList.contains("animate__slideOutRight")) return;
+    calls[0].classList.add("animate__slideOutRight");
 
     setTimeout(() => {
-        $(`.${Id}`).remove();
+        calls[0].remove();
         UpdateCalls();
         fetch(`https://${GetParentResourceName()}/RemoveCall`, {
             method: 'POST'
