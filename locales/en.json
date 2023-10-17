@@ -1,5 +1,6 @@
 {
     "justnow": "A few seconds ago",
+    "distance": "${distance} meters away",
     "automatic": "Automatic gunfire",
     "accept": " Respond",
     "deny": " Dismiss"

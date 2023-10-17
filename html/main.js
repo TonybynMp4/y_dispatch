@@ -17,8 +17,15 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // returns the locale for a given path (like in the core's lang:t)
-function locale(localeindex) {
-    return locales[localeindex];
+function locale(localeindex, args) {
+    if (!locales || !locales[localeindex]) return localeindex;
+    let locale = locales[localeindex];
+    if (args) {
+        Object.keys(args).forEach(function (key) {
+            locale = locale.replace('${' + key + '}', args[key]);
+        });
+    }
+    return locale;
 }
 
 function NewCall(Id, length, data) {
@@ -32,8 +39,8 @@ function NewCall(Id, length, data) {
                 <div class="top-bar-name">${data.title}</div>
             </div>
                 <div class="informations-holder">
-                    <div class="information"><span class="fas fa-stopwatch" style="margin-right: .5vh;"></span> ${locale('justnow')}
-                </div>
+                <div class="information"><span class="fas fa-stopwatch" style="margin-right: .5vh;"></span> ${locale('justnow')}</div>
+                <div class="information"><span class="fas fa-road" style="margin-right: .5vh;"></span> ${locale('distance', {distance: data.distance})}</div>
     `
 
     if (data.location || data.heading) {
