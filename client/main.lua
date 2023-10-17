@@ -113,7 +113,7 @@ local function fight(ped)
     if CheckJob(Config.Events.fight.jobwhitelist, QBX.PlayerData.job) and QBX.PlayerData.job.onduty then return end
 
     fightAntiSpam = true
-    exports['qbx-dispatch']:Fight()
+    exports.qbx_dispatch:Fight()
     SetTimeout(30 * 1000, function() -- Wait 30 seconds to avoid spam.
         fightAntiSpam = false
     end)
@@ -129,9 +129,9 @@ local function shotfired(ped)
 
     shotsfiredAntiSpam = true
     if cache.vehicle then
-        exports['qbx-dispatch']:DriveBy()
+        exports.qbx_dispatch:DriveBy()
     else
-        exports['qbx-dispatch']:Shooting()
+        exports.qbx_dispatch:Shooting()
     end
     SetTimeout(30 * 1000, function() -- Wait 30 seconds to avoid spam.
         shotsfiredAntiSpam = false
@@ -195,7 +195,7 @@ RegisterNetEvent('qbx-dispatch:client:AddCall', function(Data, CallId)
     if not Data.coords then return end
     if Data.speed then Data.speed = (Config.UseMPH and math.ceil(Data.speed * 2.236936) .. " Mph") or (math.ceil(Data.speed * 3.6) .. " Km/h") end
     Data.distance = math.round(#(GetEntityCoords(cache.ped) - Data.coords))
-
+    
     SendNUIMessage({
         type = "AddCall",
         id = CallId,
