@@ -195,6 +195,7 @@ RegisterNetEvent('qbx-dispatch:client:AddCall', function(Data, CallId)
     if not Data.coords then return end
     if Data.speed then Data.speed = (Config.UseMPH and math.ceil(Data.speed * 2.236936) .. " Mph") or (math.ceil(Data.speed * 3.6) .. " Km/h") end
     Data.distance = math.round(#(GetEntityCoords(cache.ped) - Data.coords))
+    
     SendNUIMessage({
         type = "AddCall",
         id = CallId,

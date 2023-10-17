@@ -1,5 +1,6 @@
 {
     "justnow": "A l'instant",
+    "distance": "à ${distance} mètres",
     "automatic": "Tirs d'arme automatique",
     "accept": " Répondre",
     "deny": " Ignorer"
