@@ -3,7 +3,7 @@ game 'gta5'
 
 author 'Tonybyn_Mp4'
 description 'Dispatch resource for the Qbox framework'
-version '1.2.1'
+version '1.2.2'
 
 shared_scripts {
     "@qbx_core/import.lua",
