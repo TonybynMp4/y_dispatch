@@ -24,6 +24,7 @@ Config.AllowAnonCalls = true -- Requires UseNpwd = true, Allow anonymous Texts t
 
 Config.UseMPH = false -- Use MPH instead of KMH
 
+-- These need to be tested and might spam the dispatch
 Config.Events = {
     fight = {
         enabled = true,

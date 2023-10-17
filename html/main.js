@@ -17,8 +17,15 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // returns the locale for a given path (like in the core's lang:t)
-function locale(localeindex) {
-    return locales[localeindex];
+function locale(localeindex, args) {
+    if (!locales || !locales[localeindex]) return localeindex;
+    let locale = locales[localeindex];
+    if (args) {
+        Object.keys(args).forEach(function (key) {
+            locale = locale.replace('${' + key + '}', args[key]);
+        });
+    }
+    return locale;
 }
 
 function NewCall(Id, length, data) {
@@ -32,8 +39,8 @@ function NewCall(Id, length, data) {
                 <div class="top-bar-name">${data.title}</div>
             </div>
                 <div class="informations-holder">
-                    <div class="information"><span class="fas fa-stopwatch" style="margin-right: .5vh;"></span> ${locale('justnow')}
-                </div>
+                    <div class="information"><span class="fas fa-stopwatch" style="margin-right: .5vh;"></span> ${locale('justnow')}</div>
+                    <div class="information"><span class="fas fa-road" style="margin-right: .5vh;"></span> ${locale('distance', {distance: data.distance})}</div>
     `
 
     if (data.location || data.heading) {
@@ -134,10 +141,13 @@ function NewCall(Id, length, data) {
     UpdateCalls();
 
     setTimeout(() => {
-        document.getElementById(Id).classList.add("removing");
+        const call = document.getElementById(Id);
+        if (!call) return;
+        call.classList.add("removing");
 
         setTimeout(() => {
-            document.getElementById(Id).remove();
+            if (!call) return;
+            call.remove();
             UpdateCalls();
         }, 1500);
     }, length);
@@ -146,7 +156,7 @@ function NewCall(Id, length, data) {
 function UpdateCalls() {
     const calls = document.getElementsByClassName('dispatch-call')
     if (calls.length == 0) return;
-    Object.keys(calls).forEach(function(call, index) {
+    Object.values(calls).forEach(function(call, index) {
         if (index == 0) return;
         const callButtons = call.getElementsByClassName('call-buttons')[0];
         if (callButtons) {
@@ -170,7 +180,7 @@ function RemoveCall() {
     const calls = document.getElementsByClassName('dispatch-call')
     if (calls.length == 0) return;
     if (calls[0].classList.contains("animate__slideOutRight")) return;
-    calls[0].classList.add("animate__slideOutRight");
+    calls[0].classList.add("removing");
 
     setTimeout(() => {
         calls[0].remove();
