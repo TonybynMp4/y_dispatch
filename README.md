@@ -9,11 +9,11 @@ Credits to @Zach488 for the images & a few bits of code
 
 Either
 * Unzip qbx-dispatch into your resources folder (wherever you want)
-* Add 'ensure qbx-dispatch' to the server.cfg
+* Add 'ensure qbx_dispatch' to the server.cfg
 
 Or
 
-* Unzip qbx-dispatch into your [qbx] folder (will start automatically)
+* Unzip qbx_dispatch into your [qbx] folder (will start automatically)
 
 Then
 
@@ -22,7 +22,7 @@ Then
 
 ## Dependencies
 
-- [qbx-core](https://github.com/qbox-project/qbx-core) (Latest)
+- [qbx_core](https://github.com/qbox-project/qbx_core/releases/latest)
 - [ox_lib](https://github.com/overextended/ox_lib)
 - [ox_inventory](https://github.com/overextended/ox_inventory) (Used in gun related alerts to get the name of the weapon)
 - [interact-sound](https://github.com/Qbox-project/interact-sound) (Comes with qbx-core and has sounds included)
@@ -34,7 +34,7 @@ Then
 
 To trigger an alert you would use an export (client/exports.lua) like this:
 ```lua
-    exports['qbx-dispatch']:DriveBy()
+    exports.qbx_dispatch:DriveBy()
 ```
 
 You can add your own exports or use the CustomCall export to trigger customized alerts.

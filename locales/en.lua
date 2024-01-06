@@ -60,10 +60,10 @@ local Translations = {
     },
     success = {
         clearedblips = 'All calls have been cleared',
-        mutedispatch = 'You have muted the dispatch',
-        unmutedispatch = 'You have unmuted the dispatch',
-        disableddispatch = 'You have disabled the dispatch',
-        enableddispatch = 'You have enabled the dispatch',
+        dispatchMuted = 'You have muted the dispatch',
+        dispatchUnmuted = 'You have unmuted the dispatch',
+        disabledDispatch = 'You have disabled the dispatch',
+        enabledDispatch = 'You have enabled the dispatch',
     },
     general = {
         unknown = 'Unknown',

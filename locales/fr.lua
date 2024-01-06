@@ -60,10 +60,10 @@ local Translations = {
     },
     success = {
         clearedblips = 'Tous les blips ont été supprimés',
-        mutedispatch = 'Vous avez désactivé le dispatch',
-        unmutedispatch = 'Vous avez activé le dispatch',
-        disableddispatch = 'Vous avez désactivé le dispatch',
-        enableddispatch = 'Vous avez activé le dispatch',
+        dispatchMuted = 'Vous avez désactivé le dispatch',
+        dispatchUnmuted = 'Vous avez activé le dispatch',
+        disabledDispatch = 'Vous avez désactivé le dispatch',
+        enabledDispatch = 'Vous avez activé le dispatch',
     },
     general = {
         unknown = 'Inconnu',
