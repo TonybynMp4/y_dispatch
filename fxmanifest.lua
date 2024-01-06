@@ -3,36 +3,32 @@ game 'gta5'
 
 author 'Tonybyn_Mp4'
 description 'Dispatch resource for the Qbox framework'
-version '1.2.2'
+repository 'https://github.com/TonybynMp4/qbx_dispatch'
+version '1.3.0'
 
 shared_scripts {
-    "@qbx_core/import.lua",
     '@ox_lib/init.lua',
     '@qbx_core/shared/locale.lua',
     'locales/en.lua',
     'locales/*.lua',
-    'config.lua',
 }
 
-modules {
-    "qbx_core:client:playerdata"
+ui_page 'html/index.html'
+files {
+    'config/*.lua',
+    'locales/*.json',
+    'html/index.html',
+    'html/*.css',
+    'html/*.js',
 }
 
 client_scripts {
+    '@qbx_core/modules/playerdata.lua',
     'client/*.lua'
 }
 
 server_scripts {
     'server/*.lua'
-}
-
-ui_page 'html/index.html'
-
-files {
-    'locales/*.json',
-    'html/index.html',
-    'html/*.css',
-    'html/*.js',
 }
 
 dependencies {

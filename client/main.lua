@@ -1,17 +1,19 @@
 local classes = { Lang:t('classes.compact'), Lang:t('classes.sedan'), Lang:t('classes.suv'), Lang:t('classes.coupe'), Lang:t('classes.muscle'), Lang:t('classes.sports_classic'), Lang:t('classes.sports'), Lang:t('classes.super'), Lang:t('classes.motorcycle'), Lang:t('classes.offroad'), Lang:t('classes.industrial'), Lang:t('classes.utility'), Lang:t('classes.van'), Lang:t('classes.service'), Lang:t('classes.military'), Lang:t('classes.truck') }
 local blips, radiuses, DispatchDisabled = {}, {}, false
+local config = require 'config/client'
+local tenCodes = require 'config/shared'.tenCodes
 
 -- Send Locales to NUI
 RegisterNUICallback('GetLocales', function(data, cb)
     local locales = json.decode(LoadResourceFile(GetCurrentResourceName(), "locales/" .. GetConvar("qb_locale", "en") .. ".json"))
-    locales.accept = "[" .. Config.AcceptDispatchKey .. "]" .. locales.accept
-    locales.deny = "[" .. Config.DenyDispatchKey.. "]" .. locales.deny
+    locales.accept = "[" .. config.acceptDispatchKey .. "]" .. locales.accept
+    locales.deny = "[" .. config.denyDispatchKey.. "]" .. locales.deny
     cb(locales)
 end)
 
 -- waits for the call to be removed before changing the table
 RegisterNuiCallback('RemoveCall', function(_, cb)
-    TriggerServerEvent('qbx-dispatch:server:RemoveCall')
+    TriggerServerEvent('qbx_dispatch:server:RemoveCall')
     cb('ok')
 end)
 
@@ -110,7 +112,7 @@ local fightAntiSpam = false
 local function fight(ped)
     if ped ~= cache.ped then return end
 
-    if CheckJob(Config.Events.fight.jobwhitelist, QBX.PlayerData.job) and QBX.PlayerData.job.onduty then return end
+    if CheckJob(config.events.fight.jobwhitelist, QBX.PlayerData.job) and QBX.PlayerData.job.onduty then return end
 
     fightAntiSpam = true
     exports.qbx_dispatch:Fight()
@@ -125,7 +127,7 @@ local function shotfired(ped)
     if IsPedCurrentWeaponSilenced(ped) and math.random() <= 0.98 then return end
     -- 2% chance to trigger the event if the weapon is silenced, ( real life weapons are not 100% silent ;c )
 
-    if CheckJob(Config.Events.shotsfired.jobwhitelist, QBX.PlayerData.job) and QBX.PlayerData.job.onduty then return end
+    if CheckJob(config.events.shotsfired.jobwhitelist, QBX.PlayerData.job) and QBX.PlayerData.job.onduty then return end
 
     shotsfiredAntiSpam = true
     if cache.vehicle then
@@ -168,16 +170,16 @@ function CheckJob(jobs, playerjob)
     return false
 end
 
-local function acceptdispatch()
+local function acceptDispatch()
     -- get the most recent call
-    local call = lib.callback.await('qbx-dispatch:server:GetLastCall', false)
+    local call = lib.callback.await('qbx_dispatch:server:GetLastCall')
     if not call then return end
     -- set a route to the location (not the gps marker)
     SetBlipRoute(blips[call.blipid], true)
     SetBlipRouteColour(blips[call.blipid], 60)
     repeat
         Wait(500)
-    until(#(GetEntityCoords(cache.ped) - GetBlipCoords(blips[call.blipid])) <= 50)
+    until (#(GetEntityCoords(cache.ped) - GetBlipCoords(blips[call.blipid])) <= 50)
         SetBlipRoute(blips[call.blipid], false)
 end
 
@@ -187,23 +189,23 @@ end
 --- Adds a call to the NUI
 ---@param Data table
 ---@param CallId number
-RegisterNetEvent('qbx-dispatch:client:AddCall', function(Data, CallId)
+RegisterNetEvent('qbx_dispatch:client:AddCall', function(Data, CallId)
     if DispatchDisabled then return end
     if not Data or not LocalPlayer.state.isLoggedIn then return end
     if Data.jobs and not CheckJob(Data.jobs, QBX.PlayerData.job) then return end
-    if Config.OnlyOnDuty and not QBX.PlayerData.job.onduty then return end
+    if config.onlyOnDuty and not QBX.PlayerData.job.onduty then return end
     if not Data.coords then return end
-    if Data.speed then Data.speed = (Config.UseMPH and math.ceil(Data.speed * 2.236936) .. " Mph") or (math.ceil(Data.speed * 3.6) .. " Km/h") end
+    if Data.speed then Data.speed = (config.useMPH and math.ceil(Data.speed * 2.236936) .. " Mph") or (math.ceil(Data.speed * 3.6) .. " Km/h") end
     Data.distance = math.round(#(GetEntityCoords(cache.ped) - Data.coords))
-    
+
     SendNUIMessage({
         type = "AddCall",
         id = CallId,
         data = Data,
     })
 
-    local sound = Config.TenCodes[Data.tencodeid].sound
-    if QBX.PlayerData.metadata.mutedispatch or not sound then return end
+    local sound = tenCodes[Data.tencodeid].sound
+    if LocalPlayer.state.dispatchMuted or not sound then return end
     if not sound.custom then PlaySound(-1, sound.name, sound.ref, false, false, true) return end
     TriggerServerEvent("InteractSound_SV:PlayOnSource", sound.name, sound.volume or 0.25) -- For Custom Sounds
 end)
@@ -212,10 +214,10 @@ end)
 ---@param coords vector3
 ---@param data table
 ---@param CallId number
-RegisterNetEvent("qbx-dispatch:client:AddBlip", function(coords, data, CallId)
+RegisterNetEvent("qbx_dispatch:client:AddBlip", function(coords, data, CallId)
     if DispatchDisabled then return end
     if not data?.jobs or not CheckJob(data?.jobs, QBX.PlayerData.job) then return end
-    if not (not Config.OnlyOnDuty or QBX.PlayerData.job.onduty) then return end
+    if not (not config.onlyOnDuty or QBX.PlayerData.job.onduty) then return end
     local alpha = 255
     local radiusAlpha = 128
     local blip, radius
@@ -266,14 +268,14 @@ RegisterNetEvent('CEventMeleeAction', function(_, ped)
 end)
 
 AddEventHandler('CEventShockingGunshotFired', function(_, ped, _)
-    if not Config.Events.shotsfired then return end
+    if not config.events.shotsfired then return end
     if shotsfiredAntiSpam then return end
     shotfired(ped)
 end)
 
 --- Removes a blip from the map
 ---@param CallId number
-RegisterNetEvent("qbx-dispatch:client:RemoveBlip", function(CallId)
+RegisterNetEvent("qbx_dispatch:client:RemoveBlip", function(CallId)
 	RemoveBlip(blips[CallId])
 	RemoveBlip(radius2[CallId])
     radiuses[CallId] = nil
@@ -281,7 +283,7 @@ RegisterNetEvent("qbx-dispatch:client:RemoveBlip", function(CallId)
 end)
 
 --- Clears all blips from the map
-RegisterNetEvent("qbx-dispatch:client:ClearBlips", function()
+RegisterNetEvent("qbx_dispatch:client:ClearBlips", function()
 	for _, v in pairs(blips) do
 		RemoveBlip(v)
 	end
@@ -294,31 +296,31 @@ RegisterNetEvent("qbx-dispatch:client:ClearBlips", function()
 end)
 
 --- Disables the dispatch
-RegisterNetEvent("qbx-dispatch:client:DisableDispatch", function()
+RegisterNetEvent("qbx_dispatch:client:DisableDispatch", function()
     DispatchDisabled = not DispatchDisabled
-    exports.qbx_core:Notify(DispatchDisabled and Lang:t('success.disableddispatch') or Lang:t('success.enableddispatch'), "success")
+    exports.qbx_core:Notify(DispatchDisabled and Lang:t('success.disabledDispatch') or Lang:t('success.enabledDispatch'), "success")
 end)
 
 --- Sends a message to the dispatch when someone send a message to 911 (NPWD)
-RegisterNetEvent('qbx-dispatch:NPWD:Text911', function(message)
+RegisterNetEvent('qbx_dispatch:NPWD:Text911', function(message)
     local msg = message
     if string.len(msg) <= 0 then exports.qbx_core:Notify(Lang:t('error.nomessage'), 'error') return end
-    if exports['qbx-policejob']:IsHandcuffed() then exports.qbx_core:Notify(Lang:t('error.handcuffed'), 'error') return end
+    if exports.qbx_policejob:IsHandcuffed() then exports.qbx_core:Notify(Lang:t('error.handcuffed'), 'error') return end
     if exports.npwd:isPhoneDisabled() then exports.qbx_core:Notify(Lang:t('error.disabledphone'), 'error') return end
 
-    local anonymous = (((Config.AllowAnonText and string.split(message, " ")[1] == "anon") and true) or false)
+    local anonymous = (((config.allowAnonText and string.split(message, " ")[1] == "anon") and true) or false)
     if anonymous then message = string.gsub(message, "anon ", "") end
     EmergencyCall(message, 911, anonymous)
 end)
 
 --- Sends a message to the dispatch when someone send a message to 912 (NPWD)
-RegisterNetEvent('qbx-dispatch:NPWD:Text912', function(message)
+RegisterNetEvent('qbx_dispatch:NPWD:Text912', function(message)
     local msg = message
     if string.len(msg) <= 0 then exports.qbx_core:Notify(Lang:t('error.nomessage'), 'error') return end
-    if exports['qbx-policejob']:IsHandcuffed() then exports.qbx_core:Notify(Lang:t('error.handcuffed'), 'error') return end
+    if exports.qbx_policejob:IsHandcuffed() then exports.qbx_core:Notify(Lang:t('error.handcuffed'), 'error') return end
     if exports.npwd:isPhoneDisabled() then exports.qbx_core:Notify(Lang:t('error.disabledphone'), 'error') return end
 
-    local anonymous = (((Config.AllowAnonText and string.split(message, " ")[1] == "anon") and true) or false)
+    local anonymous = (((config.allowAnonText and string.split(message, " ")[1] == "anon") and true) or false)
     if anonymous then message = string.gsub(message, "anon ", "") end
     EmergencyCall(message, 912, anonymous)
 end)
@@ -329,14 +331,14 @@ end)
 lib.addKeybind({
     name = 'acceptdispatch',
     description = Lang:t('general.acceptdispatchcall'),
-    defaultKey = Config.AcceptDispatchKey,
-    onPressed = acceptdispatch
+    defaultKey = config.acceptDispatchKey,
+    onPressed = acceptDispatch
 })
 
 lib.addKeybind({
     name = 'denydispatch',
     description = Lang:t('general.denydispatchcall'),
-    defaultKey = Config.DenyDispatchKey,
+    defaultKey = config.denyDispatchKey,
     onPressed = function()
         SendNUIMessage({type = 'RemoveCall'})
     end
