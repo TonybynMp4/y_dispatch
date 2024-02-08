@@ -167,9 +167,10 @@ local function acceptDispatch()
     -- set a route to the location (not the gps marker)
     SetBlipRoute(blips[call.blipid], true)
     SetBlipRouteColour(blips[call.blipid], 60)
+    local time = GetGameTimer()
     repeat
         Wait(500)
-    until (#(GetEntityCoords(cache.ped) - GetBlipCoords(blips[call.blipid])) <= 50)
+    until (#(GetEntityCoords(cache.ped) - GetBlipCoords(blips[call.blipid])) <= 50) or (GetGameTimer() - time >= 1000 * 60 * 15) -- arrived there or 15 minutes
         SetBlipRoute(blips[call.blipid], false)
 end
 
