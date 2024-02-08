@@ -4,7 +4,7 @@ game 'gta5'
 author 'Tonybyn_Mp4'
 description 'Dispatch resource for the Qbox framework'
 repository 'https://github.com/TonybynMp4/qbx_dispatch'
-version '1.4.0'
+version '1.4.0'1
 
 ox_lib 'locale'
 shared_scripts {
