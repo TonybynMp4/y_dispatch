@@ -1,4 +1,4 @@
-# qbx-dispatch
+# qbx_dispatch
 
 A dispatch system for FiveM using qbx-core.
 
