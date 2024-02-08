@@ -9,8 +9,8 @@ RegisterNUICallback('GetLocales', function(data, cb)
         justnow = locale('ui.justnow'),
         distance = locale('ui.distance'),
         automatic = locale('ui.automatic'),
-        accept = "[" .. config.acceptDispatchKey .. "] " .. locales('ui.accept'),
-        deny = "[" .. config.denyDispatchKey.. "] " .. locales('ui.deny')
+        accept = "[" .. config.acceptDispatchKey .. "] " .. locale('ui.accept'),
+        deny = "[" .. config.denyDispatchKey.. "] " .. locale('ui.deny')
     }
 
     cb(locales)
