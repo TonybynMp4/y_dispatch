@@ -68,7 +68,7 @@ local function speedradar(vehicle)
 end exports('speedradar', speedradar)
 
 local function DriveBy(vehicle)
-    local vehicle  = vehicle or cache.vehicle
+    vehicle = vehicle or cache.vehicle
     local vehdata = GetVehicleData(vehicle)
     local data =  {
         tencodeid = "driveby",
