@@ -1,0 +1,46 @@
+name: Create New Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        required: true
+
+jobs:
+  create-release:
+    name: Create New Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get App Token
+        uses: actions/create-github-app-token@v1.6.1
+        id: generate_token
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.PRIVATE_KEY }}
+
+      - name: Checkout Repository
+        uses: actions/checkout@v4.1.1
+        with:
+          token: ${{ steps.generate_token.outputs.token }}
+
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16.x
+
+      - name: Bump manifest version
+        run: node .github/actions/bump-manifest-version.js
+        env:
+          TGT_RELEASE_VERSION: ${{ inputs.version }}
+
+      - name: Push manifest change
+        uses: EndBug/add-and-commit@latest
+        with:
+          add: fxmanifest.lua
+          push: true
+          message: 'chore: bump manifest version to ${{ inputs.version }}'
+
+      - name: Push Git Tag
+        run: |
+          git tag ${{ inputs.version }}
+          git push origin ${{ inputs.version }}
