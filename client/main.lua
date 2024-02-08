@@ -31,7 +31,7 @@ end)
 function GetVehicleData(vehicle)
     local Data = {}
     Data.class = classes[GetVehicleClass(vehicle)]
-    Data.plate = GetVehicleNumberPlateText(vehicle)
+    Data.plate = qbx.getVehiclePlate(vehicle)
     Data.id = NetworkGetNetworkIdFromEntity(vehicle)
     Data.speed = GetEntitySpeed(vehicle)
     Data.name = GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(vehicle)))
@@ -54,21 +54,6 @@ end
 ---@return string
 function GetGender()
     return tostring(QBX.PlayerData.charinfo.gender)
-end
-
---- returns the heading of the player
----@return string
-function GetHeading()
-    local heading = GetEntityHeading(cache.ped)
-    if (heading >= 315 or heading < 45) then
-        return locale('general.north')
-    elseif (heading >= 45 and heading < 135) then
-        return locale('general.west')
-    elseif (heading >= 135 and heading < 225) then
-        return locale('general.south')
-    else
-        return locale('general.east')
-    end
 end
 
 local WeaponClasses = {
@@ -201,7 +186,7 @@ RegisterNetEvent('qbx_dispatch:client:AddCall', function(Data, CallId)
     if config.onlyOnDuty and not QBX.PlayerData.job.onduty then return end
     if not Data.coords then return end
     if Data.speed then Data.speed = (config.useMPH and math.ceil(Data.speed * 2.236936) .. " Mph") or (math.ceil(Data.speed * 3.6) .. " Km/h") end
-    Data.distance = math.round(#(GetEntityCoords(cache.ped) - Data.coords))
+    Data.distance = qbx.math.round(#(GetEntityCoords(cache.ped) - Data.coords))
 
     SendNUIMessage({
         type = "AddCall",
@@ -211,7 +196,7 @@ RegisterNetEvent('qbx_dispatch:client:AddCall', function(Data, CallId)
 
     local sound = tenCodes[Data.tencodeid].sound
     if LocalPlayer.state.dispatchMuted or not sound then return end
-    if not sound.custom then PlaySound(-1, sound.name, sound.ref, false, false, true) return end
+    if not sound.custom then qbx.playAudio({audioName = sound.name, audioRef = sound.ref}) return end
     TriggerServerEvent("InteractSound_SV:PlayOnSource", sound.name, sound.volume or 0.25) -- For Custom Sounds
 end)
 

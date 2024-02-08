@@ -18,7 +18,7 @@ local function VehicleTheft(vehicle)
         plate = vehdata.plate,
         type = 0,
         color = vehdata.color,
-        heading = GetHeading(),
+        heading = qbx.getCardinalDirection(),
         coords = GetEntityCoords(vehicle),
         title = tenCodes["vehicletheft"].title,
         jobs = tenCodes["vehicletheft"].jobs
@@ -38,7 +38,7 @@ local function CarJacking(vehicle)
         plate = vehdata.plate,
         type = 0,
         color = vehdata.color,
-        heading = GetHeading(),
+        heading = qbx.getCardinalDirection(),
         coords = GetEntityCoords(cache.vehicle),
         title = tenCodes["carjack"].title,
         jobs = tenCodes["carjack"].jobs
@@ -59,7 +59,7 @@ local function speedradar(vehicle)
         speed = vehdata.speed,
         type = 0,
         color = vehdata.color,
-        heading = GetHeading(),
+        heading = qbx.getCardinalDirection(),
         coords = GetEntityCoords(cache.ped),
         title = tenCodes["speedradar"].title,
         jobs = tenCodes["speedradar"].jobs
@@ -68,7 +68,7 @@ local function speedradar(vehicle)
 end exports('speedradar', speedradar)
 
 local function DriveBy(vehicle)
-    local vehicle  = vehicle or cache.vehicle
+    vehicle = vehicle or cache.vehicle
     local vehdata = GetVehicleData(vehicle)
     local data =  {
         tencodeid = "driveby",
@@ -84,7 +84,7 @@ local function DriveBy(vehicle)
         doors = vehdata.doors,
         type = 0,
         color = vehdata.color,
-        heading = GetHeading(),
+        heading = qbx.getCardinalDirection(),
         coords = GetEntityCoords(vehicle),
         title = tenCodes["driveby"].title,
         jobs = tenCodes["driveby"].jobs
@@ -345,7 +345,7 @@ local function CarBoosting(vehicle)
         tencode = tenCodes["carboosting"].tencode,
         tencodeid = "carboosting",
         location = GetLocation(GetEntityCoords(cache.ped)),
-        heading = GetHeading(),
+        heading = qbx.getCardinalDirection(),
         gender = GetGender(),
         model = vehData.name,
         class = vehdata.class,
