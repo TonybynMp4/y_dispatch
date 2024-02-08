@@ -22,11 +22,7 @@ RegisterServerEvent("qbx_dispatch:server:AddCall", function(info)
     }
 	calls[callId] = call
     TriggerClientEvent('qbx_dispatch:client:AddCall', -1, data, callId)
-    if not info.TenCode then
-        TriggerClientEvent("qbx_dispatch:client:AddBlip", -1, data.coords, tenCodes[data.tencodeid], callId)
-    else
-        TriggerClientEvent("qbx_dispatch:client:AddBlip", -1, data.coords, info.TenCode, callId)
-    end
+    TriggerClientEvent("qbx_dispatch:client:AddBlip", -1, data.coords, info.TenCode and info.TenCode or tenCodes[data.tencodeid], callId)
 end)
 
 lib.addCommand('mutedispatch', {help = locale('commands.mutedispatch')}, function(source, _)
