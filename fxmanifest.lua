@@ -14,7 +14,8 @@ shared_scripts {
 
 ui_page 'html/index.html'
 files {
-    'config/*.lua',
+    'config/client.lua',
+    'config/shared.lua',
     'locales/*.json',
     'html/index.html',
     'html/*.css',
