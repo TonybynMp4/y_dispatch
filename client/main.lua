@@ -56,21 +56,6 @@ function GetGender()
     return tostring(QBX.PlayerData.charinfo.gender)
 end
 
---- returns the heading of the player
----@return string
-function GetHeading()
-    local heading = GetEntityHeading(cache.ped)
-    if (heading >= 315 or heading < 45) then
-        return locale('general.north')
-    elseif (heading >= 45 and heading < 135) then
-        return locale('general.west')
-    elseif (heading >= 135 and heading < 225) then
-        return locale('general.south')
-    else
-        return locale('general.east')
-    end
-end
-
 local WeaponClasses = {
     [2685387236] = locale('WeaponClasses.melee'),
     [416676503] = locale('WeaponClasses.gun'),
