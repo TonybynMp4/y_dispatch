@@ -1,7 +1,7 @@
 local calls = {}
-local config = require 'config/server'
-local tenCodes = require 'config/shared'.tenCodes
-local dispatchJobs = require 'config/shared'.dispatchJobs
+local config = require 'config.server'
+local tenCodes = require 'config.shared'.tenCodes
+local dispatchJobs = require 'config.shared'.dispatchJobs
 
 if config.versionCheck then
 	lib.versionCheck('TonybynMp4/qbx_dispatch')
@@ -29,13 +29,13 @@ RegisterServerEvent("qbx_dispatch:server:AddCall", function(info)
     end
 end)
 
-lib.addCommand('mutedispatch', {help = Lang:t('commands.mutedispatch')}, function(source, _)
+lib.addCommand('mutedispatch', {help = locale('commands.mutedispatch')}, function(source, _)
     Player(source).state:set('dispatchMuted', not Player(source).state.dispatchMuted, true)
-    exports.qbx_core:Notify(source, Lang:t('success.dispatch' .. ((Player(source).state.dispatchMuted and 'Muted') or 'Unmuted')), 'inform')
+    exports.qbx_core:Notify(source, locale('success.dispatch' .. ((Player(source).state.dispatchMuted and 'Muted') or 'Unmuted')), 'inform')
     exports.qbx_core:Save(source)
 end)
 
-lib.addCommand('disabledispatch', {help = Lang:t('commands.disabledispatch')}, function(source, _)
+lib.addCommand('disabledispatch', {help = locale('commands.disabledispatch')}, function(source, _)
     local job = exports.qbx_core:GetPlayer(source).PlayerData.job
     if not dispatchJobs.Types[job.type] or not dispatchJobs.Jobs[job.name] then return end
 
