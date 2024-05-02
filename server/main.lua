@@ -70,7 +70,7 @@ end
 RegisterNetEvent('qbx_dispatch:server:RemoveCall', function()
     if not calls then return end
     for i = #calls, 1, -1 do
-        if calls[i].UnitsNotResponding[source] ~= true then
+        if not calls[i].UnitsNotResponding[source] then
             calls[i].UnitsNotResponding[source] = true
             break
         end
@@ -79,8 +79,14 @@ end)
 
 lib.callback.register('qbx_dispatch:server:GetLastCall', function(source)
     for i = #calls, 1, -1 do
+        -- Stop at the first call older than 30 seconds
+        if os.time() - calls[i].time/1000 < 30000 then
+            return false
+        end
+        -- Only return the call if you didn't ignore it
         if not calls[i].UnitsNotResponding[source] then
             return {blipid = calls[i].id}
         end
     end
+    return false
 end)
