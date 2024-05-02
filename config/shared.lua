@@ -42,9 +42,7 @@ return {
             },
             sound = {
                 ref = ref of the sound (https://pastebin.com/A8Ny8AHZ),
-                name = name of the sound (https://pastebin.com/A8Ny8AHZ or name of the sound's filename if custom),
-                custom = custom sound file (Interact-Sound)
-                volume = if custom sound, volume of the sounds (0.0 - 1.0) default 0.25
+                name = name of the sound (https://pastebin.com/A8Ny8AHZ),
             },
         }
      ]]

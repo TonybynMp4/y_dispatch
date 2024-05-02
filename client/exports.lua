@@ -408,6 +408,8 @@ local function CustomCall(data)
             sound = {
                 name = data.sound.name or "Lose_1st",
                 ref = data.sound.ref or "GTAO_FM_Events_Soundset"
-    }}})
+            }
+        }
+    })
 end
 exports('CustomCall', CustomCall)

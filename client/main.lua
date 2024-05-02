@@ -2,6 +2,7 @@ local classes = { locale('classes.compact'), locale('classes.sedan'), locale('cl
 local blips, radiuses, DispatchDisabled = {}, {}, false
 local config = require 'config.client'
 local tenCodes = require 'config.shared'.tenCodes
+local playerState = LocalPlayer.state
 
 -- Send Locales to NUI
 RegisterNUICallback('GetLocales', function(data, cb)
@@ -182,7 +183,7 @@ end
 ---@param CallId number
 RegisterNetEvent('qbx_dispatch:client:AddCall', function(Data, CallId)
     if DispatchDisabled then return end
-    if not Data or not LocalPlayer.state.isLoggedIn then return end
+    if not Data or not playerState.isLoggedIn then return end
     if Data.jobs and not CheckJob(Data.jobs, QBX.PlayerData.job) then return end
     if config.onlyOnDuty and not QBX.PlayerData.job.onduty then return end
     if not Data.coords then return end
@@ -196,9 +197,8 @@ RegisterNetEvent('qbx_dispatch:client:AddCall', function(Data, CallId)
     })
 
     local sound = tenCodes[Data.tencodeid].sound
-    if LocalPlayer.state.dispatchMuted or not sound then return end
-    if not sound.custom then qbx.playAudio({audioName = sound.name, audioRef = sound.ref}) return end
-    TriggerServerEvent("InteractSound_SV:PlayOnSource", sound.name, sound.volume or 0.25) -- For Custom Sounds
+    if playerState.dispatchMuted or not sound then return end
+    qbx.playAudio({audioName = sound.name, audioRef = sound.ref})
 end)
 
 --- Adds a blip to the map
