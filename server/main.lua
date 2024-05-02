@@ -80,7 +80,7 @@ end)
 lib.callback.register('qbx_dispatch:server:GetLastCall', function(source)
     for i = #calls, 1, -1 do
         -- Stop at the first call older than 30 seconds
-        if os.time() - calls[i].time/1000 < 30000 then
+        if os.time() - calls[i].time/1000 > 30000 then
             return false
         end
         -- Only return the call if you didn't ignore it
