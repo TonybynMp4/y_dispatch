@@ -182,11 +182,13 @@ end
 ---@param Data table
 ---@param CallId number
 RegisterNetEvent('qbx_dispatch:client:AddCall', function(Data, CallId)
-    if DispatchDisabled then return end
     if not Data or not playerState.isLoggedIn then return end
-    if Data.jobs and not CheckJob(Data.jobs, QBX.PlayerData.job) then return end
-    if config.onlyOnDuty and not QBX.PlayerData.job.onduty then return end
     if not Data.coords then return end
+
+    if DispatchDisabled then goto skipToSound end
+    if Data.jobs and not CheckJob(Data.jobs, QBX.PlayerData.job) then goto skipToSound end
+    if config.onlyOnDuty and not QBX.PlayerData.job.onduty then goto skipToSound end
+
     if Data.speed then Data.speed = (config.useMPH and math.ceil(Data.speed * 2.236936) .. " Mph") or (math.ceil(Data.speed * 3.6) .. " Km/h") end
     Data.distance = qbx.math.round(#(GetEntityCoords(cache.ped) - Data.coords))
 
@@ -196,9 +198,11 @@ RegisterNetEvent('qbx_dispatch:client:AddCall', function(Data, CallId)
         data = Data,
     })
 
+    ::skipToSound::
     local sound = tenCodes[Data.tencodeid].sound
-    if playerState.dispatchMuted or not sound then return end
-    qbx.playAudio({audioName = sound.name, audioRef = sound.ref})
+    if not sound then return end
+    if not sound.playOnPed and playerState.dispatchMuted then return end
+    qbx.playAudio({coords = sound.playOnPed and Data.coords, audioName = sound.name, audioRef = sound.ref})
 end)
 
 --- Adds a blip to the map
@@ -234,7 +238,7 @@ RegisterNetEvent("qbx_dispatch:client:AddBlip", function(coords, data, CallId)
     SetBlipAlpha(blip, alpha)
     SetBlipAsShortRange(blip, false)
     SetBlipCategory(blip, 2)
-    SetBlipColour(radius, colour)
+    SetBlipColour(radius, data.radiusColour or colour)
     SetBlipAlpha(radius, radiusAlpha)
     BeginTextCommandSetBlipName('STRING')
     AddTextComponentString(data.tencode .. ' - ' .. data.description)

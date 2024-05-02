@@ -1,5 +1,6 @@
 return {
-    dispatchJobs = { -- Jobs that uses the dispatch system
+    -- Jobs that uses the dispatch system
+    dispatchJobs = {
         Jobs = {
             police = true,
             sheriff = true,
@@ -30,8 +31,9 @@ return {
             },
             blip = {
                 radius = radius of the zone, ( 0 = no zone)
+                radiusColour = color of the blip, (https://docs.fivem.net/docs/game-references/blips/#blip-colors)
                 sprite = sprite of the blip, (https://docs.fivem.net/game-references/blips/)
-                color = color of the blip,
+                color = color of the blip, (https://docs.fivem.net/docs/game-references/blips/#blip-colors)
                 scale = scale of the blip,
                 length = 60 * time the blip will be displayed (in seconds),
                 offset = {
@@ -41,8 +43,9 @@ return {
                 flash = does the blip flash or not
             },
             sound = {
-                ref = ref of the sound (https://pastebin.com/A8Ny8AHZ),
-                name = name of the sound (https://pastebin.com/A8Ny8AHZ),
+                ref = soundset of the sound (https://wiki.rage.mp/index.php?title=Sounds),
+                name = name of the sound,
+                playOnPed = boolean -- plays the sound on the ped for everyone to hear
             },
         }
      ]]
@@ -188,6 +191,29 @@ return {
                 ref = "GTAO_FM_Events_Soundset",
             }
         },
+        ["backup"] = {
+            tencode = '10-20',
+            title = locale('title.backup'),
+            description = locale('tencodes.backup'),
+            jobs = { jobs = { 'police', 'sheriff' }, types = { 'leo' } },
+            blip = {
+                radius = 50.0,
+                sprite = 875,
+                color = 29,
+                scale = 1.5,
+                length = 60 * 2,
+                offset = {
+                    min = 5,
+                    max = 30
+                },
+                flash = true
+            },
+            sound = {
+                name = "security_scanner_beep_os",
+                ref = "dlc_xm_heists_fm_uc_sounds",
+                playOnPed = true
+            }
+        },
         ["pol99"] = {
             tencode = '10-99',
             title = locale('title.pol99'),
@@ -195,7 +221,7 @@ return {
             jobs = { jobs = { 'police', 'sheriff' }, types = { 'leo' } },
             blip = {
                 radius = 100.0,
-                sprite = 526,
+                sprite = 792,
                 color = 1,
                 scale = 1.5,
                 length = 60 * 2,
@@ -206,9 +232,9 @@ return {
                 flash = false
             },
             sound = {
-                name = "panic", -- Comes with qbox's Interact-Sound
-                custom = true,
-                volume = 0.2
+                name = "Fail",
+                ref = "dlc_xm_silo_laser_hack_sounds",
+                playOnPed = true
             }
         },
         ["ems99"] = {
@@ -218,7 +244,7 @@ return {
             jobs = { jobs = { 'police', 'sheriff', 'ambulance' }, types = { 'leo' } },
             blip = {
                 radius = 100.0,
-                sprite = 526,
+                sprite = 792,
                 color = 3,
                 scale = 1.5,
                 length = 60 * 2,
@@ -229,9 +255,9 @@ return {
                 flash = false
             },
             sound = {
-                name = "panic", -- Comes with qbox's Interact-Sound
-                custom = true,
-                volume = 0.2
+                name = "Fail",
+                ref = "dlc_xm_silo_laser_hack_sounds",
+                playOnPed = true
             }
         },
         ["911call"] = {

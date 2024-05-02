@@ -33,7 +33,8 @@
         "carboosting": "Car Boosting",
         "carjack": "Car Jacking",
         "drugrun": "Drug Run",
-        "explosion": "Explosion"
+        "explosion": "Explosion",
+        "backup": "Requesting backup"
     },
     "title": {
         "driveby": "Drive-By",
@@ -58,7 +59,8 @@
         "carboosting": "Car Boosting",
         "carjack": "Car Jacking",
         "drugrun": "Drug Run",
-        "explosion": "Explosion"
+        "explosion": "Explosion",
+        "backup": "Requesting backup"
     },
     "error": {
         "handcuffed": "You can't call the dispatch while handcuffed",

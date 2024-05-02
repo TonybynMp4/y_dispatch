@@ -33,7 +33,8 @@
         "carboosting": "Traffic de véhicule",
         "carjack": "Vol de véhicule",
         "drugrun": "Trafic de drogue",
-        "explosion": "Explosion"
+        "explosion": "Explosion",
+        "backup": "Demande de renforts"
     },
     "title": {
         "driveby": "Drive-By",
@@ -58,7 +59,8 @@
         "carboosting": "Traffic de véhicule",
         "carjack": "CarJacking",
         "drugrun": "Trafic de drogue",
-        "explosion": "Explosion"
+        "explosion": "Explosion",
+        "backup": "Demande de renforts"
     },
     "error": {
         "handcuffed": "Vous ne pouvez pas appeler la police lorsque vous êtes menotté",

@@ -182,6 +182,22 @@ local function Code99(servicetype)
 end
 exports('Code99', Code99)
 
+local function Backup()
+    local data = {
+        tencodeid = "backup",
+        tencode = tenCodes.backup.tencode,
+        location = GetLocation(GetEntityCoords(cache.ped)),
+        name = QBX.PlayerData.charinfo.lastname .. " " .. QBX.PlayerData.charinfo.firstname,
+        callsign = QBX.PlayerData.metadata.callsign,
+        type = 0,
+        coords = GetEntityCoords(cache.ped),
+        title = tenCodes.backup.title,
+        jobs = tenCodes.backup.jobs
+    }
+    TriggerServerEvent("qbx_dispatch:server:AddCall", data)
+end
+exports('Backup', Backup)
+
 local function DrugRun(vehicle)
     local vehdata = GetVehicleData(vehicle)
     local data = {
