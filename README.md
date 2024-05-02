@@ -24,8 +24,6 @@ Then
 - [ox_lib](https://github.com/overextended/ox_lib)
 - [ox_inventory](https://github.com/overextended/ox_inventory) (Used in gun related alerts to get the name of the weapon)
 
-- [interact-sound](https://github.com/Qbox-project/interact-sound) (Supported, not the only way to use sounds tho)
-
 ## Preview
 ![image](https://user-images.githubusercontent.com/97451137/235332585-22ba4f8f-bf4a-48dd-a4b6-df3dd5324c1b.png)
 
