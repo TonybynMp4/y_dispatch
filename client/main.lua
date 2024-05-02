@@ -202,7 +202,7 @@ RegisterNetEvent('qbx_dispatch:client:AddCall', function(Data, CallId)
     local sound = tenCodes[Data.tencodeid].sound
     if not sound then return end
     if not sound.playOnPed and playerState.dispatchMuted then return end
-    qbx.playAudio({coords = sound.playOnPed and Data.coords, audioName = sound.name, audioRef = sound.ref})
+    qbx.playAudio({source = sound.playOnPed and Data.coords, audioName = sound.name, audioRef = sound.ref})
 end)
 
 --- Adds a blip to the map
