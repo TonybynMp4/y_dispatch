@@ -18,7 +18,7 @@ local function VehicleTheft(vehicle)
         plate = vehdata.plate,
         type = 0,
         color = vehdata.color,
-        heading = GetHeading(),
+        heading = qbx.getCardinalDirection(),
         coords = GetEntityCoords(vehicle),
         title = tenCodes["vehicletheft"].title,
         jobs = tenCodes["vehicletheft"].jobs
@@ -38,7 +38,7 @@ local function CarJacking(vehicle)
         plate = vehdata.plate,
         type = 0,
         color = vehdata.color,
-        heading = GetHeading(),
+        heading = qbx.getCardinalDirection(),
         coords = GetEntityCoords(cache.vehicle),
         title = tenCodes["carjack"].title,
         jobs = tenCodes["carjack"].jobs
@@ -59,7 +59,7 @@ local function speedradar(vehicle)
         speed = vehdata.speed,
         type = 0,
         color = vehdata.color,
-        heading = GetHeading(),
+        heading = qbx.getCardinalDirection(),
         coords = GetEntityCoords(cache.ped),
         title = tenCodes["speedradar"].title,
         jobs = tenCodes["speedradar"].jobs
@@ -68,7 +68,7 @@ local function speedradar(vehicle)
 end exports('speedradar', speedradar)
 
 local function DriveBy(vehicle)
-    local vehicle  = vehicle or cache.vehicle
+    vehicle = vehicle or cache.vehicle
     local vehdata = GetVehicleData(vehicle)
     local data =  {
         tencodeid = "driveby",
@@ -84,7 +84,7 @@ local function DriveBy(vehicle)
         doors = vehdata.doors,
         type = 0,
         color = vehdata.color,
-        heading = GetHeading(),
+        heading = qbx.getCardinalDirection(),
         coords = GetEntityCoords(vehicle),
         title = tenCodes["driveby"].title,
         jobs = tenCodes["driveby"].jobs
@@ -181,6 +181,22 @@ local function Code99(servicetype)
     TriggerServerEvent("qbx_dispatch:server:AddCall", data)
 end
 exports('Code99', Code99)
+
+local function Backup()
+    local data = {
+        tencodeid = "backup",
+        tencode = tenCodes.backup.tencode,
+        location = GetLocation(GetEntityCoords(cache.ped)),
+        name = QBX.PlayerData.charinfo.lastname .. " " .. QBX.PlayerData.charinfo.firstname,
+        callsign = QBX.PlayerData.metadata.callsign,
+        type = 0,
+        coords = GetEntityCoords(cache.ped),
+        title = tenCodes.backup.title,
+        jobs = tenCodes.backup.jobs
+    }
+    TriggerServerEvent("qbx_dispatch:server:AddCall", data)
+end
+exports('Backup', Backup)
 
 local function DrugRun(vehicle)
     local vehdata = GetVehicleData(vehicle)
@@ -345,7 +361,7 @@ local function CarBoosting(vehicle)
         tencode = tenCodes["carboosting"].tencode,
         tencodeid = "carboosting",
         location = GetLocation(GetEntityCoords(cache.ped)),
-        heading = GetHeading(),
+        heading = qbx.getCardinalDirection(),
         gender = GetGender(),
         model = vehData.name,
         class = vehdata.class,
@@ -408,6 +424,8 @@ local function CustomCall(data)
             sound = {
                 name = data.sound.name or "Lose_1st",
                 ref = data.sound.ref or "GTAO_FM_Events_Soundset"
-    }}})
+            }
+        }
+    })
 end
 exports('CustomCall', CustomCall)

@@ -1,13 +1,19 @@
-local classes = { Lang:t('classes.compact'), Lang:t('classes.sedan'), Lang:t('classes.suv'), Lang:t('classes.coupe'), Lang:t('classes.muscle'), Lang:t('classes.sports_classic'), Lang:t('classes.sports'), Lang:t('classes.super'), Lang:t('classes.motorcycle'), Lang:t('classes.offroad'), Lang:t('classes.industrial'), Lang:t('classes.utility'), Lang:t('classes.van'), Lang:t('classes.service'), Lang:t('classes.military'), Lang:t('classes.truck') }
+local classes = { locale('classes.compact'), locale('classes.sedan'), locale('classes.suv'), locale('classes.coupe'), locale('classes.muscle'), locale('classes.sports_classic'), locale('classes.sports'), locale('classes.super'), locale('classes.motorcycle'), locale('classes.offroad'), locale('classes.industrial'), locale('classes.utility'), locale('classes.van'), locale('classes.service'), locale('classes.military'), locale('classes.truck') }
 local blips, radiuses, DispatchDisabled = {}, {}, false
-local config = require 'config/client'
-local tenCodes = require 'config/shared'.tenCodes
+local config = require 'config.client'
+local tenCodes = require 'config.shared'.tenCodes
+local playerState = LocalPlayer.state
 
 -- Send Locales to NUI
 RegisterNUICallback('GetLocales', function(data, cb)
-    local locales = json.decode(LoadResourceFile(GetCurrentResourceName(), "locales/" .. GetConvar("qb_locale", "en") .. ".json"))
-    locales.accept = "[" .. config.acceptDispatchKey .. "]" .. locales.accept
-    locales.deny = "[" .. config.denyDispatchKey.. "]" .. locales.deny
+    local locales = {
+        justnow = locale('ui.justnow'),
+        distance = locale('ui.distance'),
+        automatic = locale('ui.automatic'),
+        accept = "[" .. config.acceptDispatchKey .. "] " .. locale('ui.accept'),
+        deny = "[" .. config.denyDispatchKey.. "] " .. locale('ui.deny')
+    }
+
     cb(locales)
 end)
 
@@ -26,22 +32,22 @@ end)
 function GetVehicleData(vehicle)
     local Data = {}
     Data.class = classes[GetVehicleClass(vehicle)]
-    Data.plate = GetVehicleNumberPlateText(vehicle)
+    Data.plate = qbx.getVehiclePlate(vehicle)
     Data.id = NetworkGetNetworkIdFromEntity(vehicle)
     Data.speed = GetEntitySpeed(vehicle)
     Data.name = GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(vehicle)))
     Data.name = Data.name == 'NULL' and exports.qbx_core:GetVehiclesByName().Vehicles[model].name or Data.name
 
     local primary, secondary = GetVehicleColours(vehicle)
-    local color1, color2 = Lang:t('colors.' .. primary), Lang:t('colors.' .. secondary)
-    Data.color = ((color1 and color2) and (color2 .. " & " .. color1)) or (color1 and color1) or (color2 and color2) or Lang:t('general.unknown')
+    local color1, color2 = locale('colors.' .. primary), locale('colors.' .. secondary)
+    Data.color = ((color1 and color2) and (color2 .. " & " .. color1)) or (color1 and color1) or (color2 and color2) or locale('general.unknown')
 
     local doorcount = 0
     local doors = { 'door_dside_f', 'door_pside_f', 'door_dside_r', 'door_pside_r' }
     for i = 1, #doors do
         if GetEntityBoneIndexByName(vehicle, doors[i]) ~= -1 then doorcount = doorcount + 1 end
     end
-    Data.doors = doorcount >= 2 and Lang:t('general.' .. doorcount .. '_door')
+    Data.doors = doorcount >= 2 and locale('general.' .. doorcount .. '_door')
     return Data
 end
 
@@ -51,39 +57,24 @@ function GetGender()
     return tostring(QBX.PlayerData.charinfo.gender)
 end
 
---- returns the heading of the player
----@return string
-function GetHeading()
-    local heading = GetEntityHeading(cache.ped)
-    if (heading >= 315 or heading < 45) then
-        return Lang:t('general.north')
-    elseif (heading >= 45 and heading < 135) then
-        return Lang:t('general.west')
-    elseif (heading >= 135 and heading < 225) then
-        return Lang:t('general.south')
-    else
-        return Lang:t('general.east')
-    end
-end
-
 local WeaponClasses = {
-    [2685387236] = Lang:t('WeaponClasses.melee'),
-    [416676503] = Lang:t('WeaponClasses.gun'),
-    [-95776620] = Lang:t('WeaponClasses.submachinegun'),
-    [860033945] = Lang:t('WeaponClasses.shotgun'),
-    [970310034] = Lang:t('WeaponClasses.assaultrifle'),
-    [1159398588] = Lang:t('WeaponClasses.lightmachinegun'),
-    [3082541095] = Lang:t('WeaponClasses.sniper'),
-    [2725924767] = Lang:t('WeaponClasses.heavyweapon'),
-    [1548507267] = Lang:t('WeaponClasses.throwables'),
-    [4257178988] = Lang:t('WeaponClasses.misc'),
+    [2685387236] = locale('WeaponClasses.melee'),
+    [416676503] = locale('WeaponClasses.gun'),
+    [-95776620] = locale('WeaponClasses.submachinegun'),
+    [860033945] = locale('WeaponClasses.shotgun'),
+    [970310034] = locale('WeaponClasses.assaultrifle'),
+    [1159398588] = locale('WeaponClasses.lightmachinegun'),
+    [3082541095] = locale('WeaponClasses.sniper'),
+    [2725924767] = locale('WeaponClasses.heavyweapon'),
+    [1548507267] = locale('WeaponClasses.throwables'),
+    [4257178988] = locale('WeaponClasses.misc'),
 }
 
 --- Returns the Class of a weapon (e.g. Melee, Handguns, Shotguns, etc.)
 ---@param SelectedWeapon number
 ---@return string
 function GetWeaponClass(SelectedWeapon)
-    return WeaponClasses[GetWeapontypeGroup(SelectedWeapon)] or Lang:t('general.unknown')
+    return WeaponClasses[GetWeapontypeGroup(SelectedWeapon)] or locale('general.unknown')
 end
 
 --- Returns the street at coords
@@ -177,9 +168,10 @@ local function acceptDispatch()
     -- set a route to the location (not the gps marker)
     SetBlipRoute(blips[call.blipid], true)
     SetBlipRouteColour(blips[call.blipid], 60)
+    local time = GetGameTimer()
     repeat
         Wait(500)
-    until (#(GetEntityCoords(cache.ped) - GetBlipCoords(blips[call.blipid])) <= 50)
+    until (#(GetEntityCoords(cache.ped) - GetBlipCoords(blips[call.blipid])) <= 50) or (GetGameTimer() - time >= 1000 * 60 * 15) -- arrived there or 15 minutes
         SetBlipRoute(blips[call.blipid], false)
 end
 
@@ -190,13 +182,15 @@ end
 ---@param Data table
 ---@param CallId number
 RegisterNetEvent('qbx_dispatch:client:AddCall', function(Data, CallId)
-    if DispatchDisabled then return end
-    if not Data or not LocalPlayer.state.isLoggedIn then return end
-    if Data.jobs and not CheckJob(Data.jobs, QBX.PlayerData.job) then return end
-    if config.onlyOnDuty and not QBX.PlayerData.job.onduty then return end
+    if not Data or not playerState.isLoggedIn then return end
     if not Data.coords then return end
+
+    if DispatchDisabled then goto skipToSound end
+    if Data.jobs and not CheckJob(Data.jobs, QBX.PlayerData.job) then goto skipToSound end
+    if config.onlyOnDuty and not QBX.PlayerData.job.onduty then goto skipToSound end
+
     if Data.speed then Data.speed = (config.useMPH and math.ceil(Data.speed * 2.236936) .. " Mph") or (math.ceil(Data.speed * 3.6) .. " Km/h") end
-    Data.distance = math.round(#(GetEntityCoords(cache.ped) - Data.coords))
+    Data.distance = qbx.math.round(#(GetEntityCoords(cache.ped) - Data.coords))
 
     SendNUIMessage({
         type = "AddCall",
@@ -204,10 +198,11 @@ RegisterNetEvent('qbx_dispatch:client:AddCall', function(Data, CallId)
         data = Data,
     })
 
+    ::skipToSound::
     local sound = tenCodes[Data.tencodeid].sound
-    if LocalPlayer.state.dispatchMuted or not sound then return end
-    if not sound.custom then PlaySound(-1, sound.name, sound.ref, false, false, true) return end
-    TriggerServerEvent("InteractSound_SV:PlayOnSource", sound.name, sound.volume or 0.25) -- For Custom Sounds
+    if not sound then return end
+    if not sound.playOnPed and playerState.dispatchMuted then return end
+    qbx.playAudio({source = sound.playOnPed and Data.coords, audioName = sound.name, audioRef = sound.ref})
 end)
 
 --- Adds a blip to the map
@@ -243,7 +238,7 @@ RegisterNetEvent("qbx_dispatch:client:AddBlip", function(coords, data, CallId)
     SetBlipAlpha(blip, alpha)
     SetBlipAsShortRange(blip, false)
     SetBlipCategory(blip, 2)
-    SetBlipColour(radius, colour)
+    SetBlipColour(radius, data.radiusColour or colour)
     SetBlipAlpha(radius, radiusAlpha)
     BeginTextCommandSetBlipName('STRING')
     AddTextComponentString(data.tencode .. ' - ' .. data.description)
@@ -292,21 +287,21 @@ RegisterNetEvent("qbx_dispatch:client:ClearBlips", function()
 	end
     radiuses = {}
     blips = {}
-	exports.qbx_core:Notify(Lang:t('success.clearedblips'), "success")
+	exports.qbx_core:Notify(locale('success.clearedblips'), "success")
 end)
 
 --- Disables the dispatch
 RegisterNetEvent("qbx_dispatch:client:DisableDispatch", function()
     DispatchDisabled = not DispatchDisabled
-    exports.qbx_core:Notify(DispatchDisabled and Lang:t('success.disabledDispatch') or Lang:t('success.enabledDispatch'), "success")
+    exports.qbx_core:Notify(DispatchDisabled and locale('success.disabledDispatch') or locale('success.enabledDispatch'), "success")
 end)
 
 --- Sends a message to the dispatch when someone send a message to 911 (NPWD)
 RegisterNetEvent('qbx_dispatch:NPWD:Text911', function(message)
     local msg = message
-    if string.len(msg) <= 0 then exports.qbx_core:Notify(Lang:t('error.nomessage'), 'error') return end
-    if exports.qbx_policejob:IsHandcuffed() then exports.qbx_core:Notify(Lang:t('error.handcuffed'), 'error') return end
-    if exports.npwd:isPhoneDisabled() then exports.qbx_core:Notify(Lang:t('error.disabledphone'), 'error') return end
+    if string.len(msg) <= 0 then exports.qbx_core:Notify(locale('error.nomessage'), 'error') return end
+    if exports.qbx_policejob:IsHandcuffed() then exports.qbx_core:Notify(locale('error.handcuffed'), 'error') return end
+    if exports.npwd:isPhoneDisabled() then exports.qbx_core:Notify(locale('error.disabledphone'), 'error') return end
 
     local anonymous = (((config.allowAnonText and string.split(message, " ")[1] == "anon") and true) or false)
     if anonymous then message = string.gsub(message, "anon ", "") end
@@ -316,9 +311,9 @@ end)
 --- Sends a message to the dispatch when someone send a message to 912 (NPWD)
 RegisterNetEvent('qbx_dispatch:NPWD:Text912', function(message)
     local msg = message
-    if string.len(msg) <= 0 then exports.qbx_core:Notify(Lang:t('error.nomessage'), 'error') return end
-    if exports.qbx_policejob:IsHandcuffed() then exports.qbx_core:Notify(Lang:t('error.handcuffed'), 'error') return end
-    if exports.npwd:isPhoneDisabled() then exports.qbx_core:Notify(Lang:t('error.disabledphone'), 'error') return end
+    if string.len(msg) <= 0 then exports.qbx_core:Notify(locale('error.nomessage'), 'error') return end
+    if exports.qbx_policejob:IsHandcuffed() then exports.qbx_core:Notify(locale('error.handcuffed'), 'error') return end
+    if exports.npwd:isPhoneDisabled() then exports.qbx_core:Notify(locale('error.disabledphone'), 'error') return end
 
     local anonymous = (((config.allowAnonText and string.split(message, " ")[1] == "anon") and true) or false)
     if anonymous then message = string.gsub(message, "anon ", "") end
@@ -330,14 +325,14 @@ end)
 --- Accepting and denying calls
 lib.addKeybind({
     name = 'acceptdispatch',
-    description = Lang:t('general.acceptdispatchcall'),
+    description = locale('general.acceptdispatchcall'),
     defaultKey = config.acceptDispatchKey,
     onPressed = acceptDispatch
 })
 
 lib.addKeybind({
     name = 'denydispatch',
-    description = Lang:t('general.denydispatchcall'),
+    description = locale('general.denydispatchcall'),
     defaultKey = config.denyDispatchKey,
     onPressed = function()
         SendNUIMessage({type = 'RemoveCall'})

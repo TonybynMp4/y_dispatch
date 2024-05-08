@@ -183,6 +183,7 @@ function RemoveCall() {
     calls[0].classList.add("removing");
 
     setTimeout(() => {
+        if (calls.length == 0) return;
         calls[0].remove();
         UpdateCalls();
         fetch(`https://${GetParentResourceName()}/RemoveCall`, {
