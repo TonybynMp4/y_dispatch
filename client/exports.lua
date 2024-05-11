@@ -23,7 +23,7 @@ local function VehicleTheft(vehicle)
         title = tenCodes["vehicletheft"].title,
         jobs = tenCodes["vehicletheft"].jobs
     }
-    TriggerServerEvent("qbx_dispatch:server:AddCall", data)
+    TriggerServerEvent("y_dispatch:server:AddCall", data)
 end
 exports('VehicleTheft', VehicleTheft)
 
@@ -43,7 +43,7 @@ local function CarJacking(vehicle)
         title = tenCodes["carjack"].title,
         jobs = tenCodes["carjack"].jobs
     }
-    TriggerServerEvent("qbx_dispatch:server:AddCall", data)
+    TriggerServerEvent("y_dispatch:server:AddCall", data)
 end
 exports('CarJacking', CarJacking)
 
@@ -64,7 +64,7 @@ local function speedradar(vehicle)
         title = tenCodes["speedradar"].title,
         jobs = tenCodes["speedradar"].jobs
     }
-    TriggerServerEvent("qbx_dispatch:server:AddCall", data)
+    TriggerServerEvent("y_dispatch:server:AddCall", data)
 end exports('speedradar', speedradar)
 
 local function DriveBy(vehicle)
@@ -89,7 +89,7 @@ local function DriveBy(vehicle)
         title = tenCodes["driveby"].title,
         jobs = tenCodes["driveby"].jobs
     }
-    TriggerServerEvent("qbx_dispatch:server:AddCall", data)
+    TriggerServerEvent("y_dispatch:server:AddCall", data)
 end
 exports('DriveBy', DriveBy)
 
@@ -107,7 +107,7 @@ local function Shooting()
         title = tenCodes["shooting"].title,
         jobs = tenCodes["shooting"].jobs
     }
-    TriggerServerEvent("qbx_dispatch:server:AddCall", data)
+    TriggerServerEvent("y_dispatch:server:AddCall", data)
 end
 exports('Shooting', Shooting)
 
@@ -122,7 +122,7 @@ local function Fight()
         title = tenCodes["fight"].title,
         jobs = tenCodes["fight"].jobs
     }
-    TriggerServerEvent("qbx_dispatch:server:AddCall", data)
+    TriggerServerEvent("y_dispatch:server:AddCall", data)
 end
 exports('Fight', Fight)
 
@@ -137,7 +137,7 @@ local function InjuriedPerson()
         title = tenCodes["death"].title,
         jobs = tenCodes["death"].jobs
     }
-    TriggerServerEvent("qbx_dispatch:server:AddCall", data)
+    TriggerServerEvent("y_dispatch:server:AddCall", data)
 end
 exports('InjuriedPerson', InjuriedPerson)
 
@@ -155,7 +155,7 @@ function EmergencyCall(message, phonenumber, anonymous)
         title = tenCodes[phonenumber.."call"].title,
         jobs = tenCodes[phonenumber.."call"].jobs
     }
-    TriggerServerEvent("qbx_dispatch:server:AddCall", data)
+    TriggerServerEvent("y_dispatch:server:AddCall", data)
 end
 exports('EmergencyCall', EmergencyCall)
 
@@ -178,7 +178,7 @@ local function Code99(servicetype)
         title = tenCodes[service].title,
         jobs = tenCodes[service].jobs
     }
-    TriggerServerEvent("qbx_dispatch:server:AddCall", data)
+    TriggerServerEvent("y_dispatch:server:AddCall", data)
 end
 exports('Code99', Code99)
 
@@ -194,7 +194,7 @@ local function Backup()
         title = tenCodes.backup.title,
         jobs = tenCodes.backup.jobs
     }
-    TriggerServerEvent("qbx_dispatch:server:AddCall", data)
+    TriggerServerEvent("y_dispatch:server:AddCall", data)
 end
 exports('Backup', Backup)
 
@@ -214,7 +214,7 @@ local function DrugRun(vehicle)
         title = tenCodes["DrugRun"].title,
         jobs = tenCodes["DrugRun"].jobs
     }
-    TriggerServerEvent("qbx_dispatch:server:AddCall", data)
+    TriggerServerEvent("y_dispatch:server:AddCall", data)
 end exports('DrugRun', DrugRun)
 
 local function CornerSelling()
@@ -228,7 +228,7 @@ local function CornerSelling()
         title = tenCodes["suspicioushandoff"].title,
         jobs = tenCodes["suspicioushandoff"].jobs
     }
-    TriggerServerEvent("qbx_dispatch:server:AddCall", data)
+    TriggerServerEvent("y_dispatch:server:AddCall", data)
 end
 exports('CornerSelling', CornerSelling)
 
@@ -244,7 +244,7 @@ local function StoreRobbery(camId)
         title = tenCodes["storerobbery"].title,
         jobs = tenCodes["storerobbery"].jobs
     }
-    TriggerServerEvent("qbx_dispatch:server:AddCall", data)
+    TriggerServerEvent("y_dispatch:server:AddCall", data)
 end
 exports('StoreRobbery', StoreRobbery)
 
@@ -259,7 +259,7 @@ local function TruckRobbery(coords)
         title = tenCodes["TruckRobbery"].title,
         jobs = tenCodes["TruckRobbery"].jobs
     }
-    TriggerServerEvent("qbx_dispatch:server:AddCall", data)
+    TriggerServerEvent("y_dispatch:server:AddCall", data)
 end exports('TruckRobbery', TruckRobbery)
 
 local function FleecaBankRobbery(coords, camId)
@@ -275,12 +275,12 @@ local function FleecaBankRobbery(coords, camId)
         title = tenCodes["bankrobbery"].title,
         jobs = tenCodes["bankrobbery"].jobs
     }
-    TriggerServerEvent("qbx_dispatch:server:AddCall", data)
+    TriggerServerEvent("y_dispatch:server:AddCall", data)
 end
 exports('FleecaBankRobbery', FleecaBankRobbery)
 
 local function PaletoBankRobbery(camId)
-    TriggerServerEvent("qbx_dispatch:server:AddCall",{
+    TriggerServerEvent("y_dispatch:server:AddCall",{
         tencodeid = "paletobankrobbery",
         tencode = tenCodes["paletobankrobbery"].tencode,
         location = GetLocation(GetEntityCoords(cache.ped)),
@@ -306,7 +306,7 @@ local function PacificBankRobbery(camId)
         title = tenCodes["pacificbankrobbery"].title,
         jobs = tenCodes["pacificbankrobbery"].jobs
     }
-    TriggerServerEvent("qbx_dispatch:server:AddCall", data)
+    TriggerServerEvent("y_dispatch:server:AddCall", data)
 end
 exports('PacificBankRobbery', PacificBankRobbery)
 
@@ -322,7 +322,7 @@ local function JewelryRobbery(camId)
         title = tenCodes["JewelryRobbery"].title,
         jobs = tenCodes["JewelryRobbery"].jobs
     }
-    TriggerServerEvent("qbx_dispatch:server:AddCall", data)
+    TriggerServerEvent("y_dispatch:server:AddCall", data)
 end
 exports('JewelryRobbery', JewelryRobbery)
 
@@ -337,12 +337,12 @@ local function HouseRobbery()
         title = tenCodes["houserobbery"].title,
         jobs = tenCodes["houserobbery"].jobs
     }
-    TriggerServerEvent("qbx_dispatch:server:AddCall", data)
+    TriggerServerEvent("y_dispatch:server:AddCall", data)
 end
 exports('HouseRobbery', HouseRobbery)
 
 local function Explosion(coords)
-    TriggerServerEvent("qbx_dispatch:server:AddCall",{
+    TriggerServerEvent("y_dispatch:server:AddCall",{
         tencodeid = "explosion",
         tencode = tenCodes["explosion"].tencode,
         location = GetLocation(coords),
@@ -372,7 +372,7 @@ local function CarBoosting(vehicle)
         title = tenCodes["carboosting"].title,
         jobs = tenCodes["carboosting"].jobs
     }
-    TriggerServerEvent("qbx_dispatch:server:AddCall", Data)
+    TriggerServerEvent("y_dispatch:server:AddCall", Data)
 end
 exports('CarBoosting', CarBoosting)
 
@@ -381,7 +381,7 @@ local function CustomCall(data)
     local coords = data.coords or vec3(0.0, 0.0, 0.0)
     local jobs = data.job or { 'police' }
 
-    TriggerServerEvent("qbx_dispatch:server:AddCall", {
+    TriggerServerEvent("y_dispatch:server:AddCall", {
         data = {
             tencode = data.tencode or "NONE",
             tencodeid = data.tencodeid or nil,

@@ -1,4 +1,4 @@
-# qbx_dispatch
+# y_dispatch
 
 A dispatch system for FiveM using qbx_core.
 
@@ -6,12 +6,12 @@ A dispatch system for FiveM using qbx_core.
 * <> Code -> Download ZIP
 
 Either
-* Unzip qbx_dispatch into your resources folder (wherever you want)
-* Add 'ensure qbx_dispatch' to the server.cfg
+* Unzip y_dispatch into your resources folder (wherever you want)
+* Add 'ensure y_dispatch' to the server.cfg
 
 Or
 
-* Unzip qbx_dispatch into your [qbx] folder (will start automatically)
+* Unzip y_dispatch into your [qbx] folder (will start automatically)
 
 Then
 
@@ -31,7 +31,7 @@ Then
 
 To trigger an alert you would use an export (client/exports.lua) like this:
 ```lua
-    exports.qbx_dispatch:DriveBy()
+    exports.y_dispatch:DriveBy()
 ```
 
 You can add your own exports or use the CustomCall export to trigger customized alerts.

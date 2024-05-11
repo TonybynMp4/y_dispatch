@@ -19,7 +19,7 @@ end)
 
 -- waits for the call to be removed before changing the table
 RegisterNuiCallback('RemoveCall', function(_, cb)
-    TriggerServerEvent('qbx_dispatch:server:RemoveCall')
+    TriggerServerEvent('y_dispatch:server:RemoveCall')
     cb('ok')
 end)
 
@@ -106,7 +106,7 @@ local function fight(ped)
     if CheckJob(config.events.fight.jobwhitelist, QBX.PlayerData.job) and QBX.PlayerData.job.onduty then return end
 
     fightAntiSpam = true
-    exports.qbx_dispatch:Fight()
+    exports.y_dispatch:Fight()
     SetTimeout(30 * 1000, function() -- Wait 30 seconds to avoid spam.
         fightAntiSpam = false
     end)
@@ -122,9 +122,9 @@ local function shotfired(ped)
 
     shotsfiredAntiSpam = true
     if cache.vehicle then
-        exports.qbx_dispatch:DriveBy()
+        exports.y_dispatch:DriveBy()
     else
-        exports.qbx_dispatch:Shooting()
+        exports.y_dispatch:Shooting()
     end
     SetTimeout(30 * 1000, function() -- Wait 30 seconds to avoid spam.
         shotsfiredAntiSpam = false
@@ -163,7 +163,7 @@ end
 
 local function acceptDispatch()
     -- get the most recent call
-    local call = lib.callback.await('qbx_dispatch:server:GetLastCall')
+    local call = lib.callback.await('y_dispatch:server:GetLastCall')
     if not call then return end
     -- set a route to the location (not the gps marker)
     SetBlipRoute(blips[call.blipid], true)
@@ -181,7 +181,7 @@ end
 --- Adds a call to the NUI
 ---@param Data table
 ---@param CallId number
-RegisterNetEvent('qbx_dispatch:client:AddCall', function(Data, CallId)
+RegisterNetEvent('y_dispatch:client:AddCall', function(Data, CallId)
     if not Data or not playerState.isLoggedIn then return end
     if not Data.coords then return end
 
@@ -209,7 +209,7 @@ end)
 ---@param coords vector3
 ---@param data table
 ---@param CallId number
-RegisterNetEvent("qbx_dispatch:client:AddBlip", function(coords, data, CallId)
+RegisterNetEvent("y_dispatch:client:AddBlip", function(coords, data, CallId)
     if DispatchDisabled then return end
     if not data?.jobs or not CheckJob(data?.jobs, QBX.PlayerData.job) then return end
     if not (not config.onlyOnDuty or QBX.PlayerData.job.onduty) then return end
@@ -270,7 +270,7 @@ end)
 
 --- Removes a blip from the map
 ---@param CallId number
-RegisterNetEvent("qbx_dispatch:client:RemoveBlip", function(CallId)
+RegisterNetEvent("y_dispatch:client:RemoveBlip", function(CallId)
 	RemoveBlip(blips[CallId])
 	RemoveBlip(radius2[CallId])
     radiuses[CallId] = nil
@@ -278,7 +278,7 @@ RegisterNetEvent("qbx_dispatch:client:RemoveBlip", function(CallId)
 end)
 
 --- Clears all blips from the map
-RegisterNetEvent("qbx_dispatch:client:ClearBlips", function()
+RegisterNetEvent("y_dispatch:client:ClearBlips", function()
 	for _, v in pairs(blips) do
 		RemoveBlip(v)
 	end
@@ -291,13 +291,13 @@ RegisterNetEvent("qbx_dispatch:client:ClearBlips", function()
 end)
 
 --- Disables the dispatch
-RegisterNetEvent("qbx_dispatch:client:DisableDispatch", function()
+RegisterNetEvent("y_dispatch:client:DisableDispatch", function()
     DispatchDisabled = not DispatchDisabled
     exports.qbx_core:Notify(DispatchDisabled and locale('success.disabledDispatch') or locale('success.enabledDispatch'), "success")
 end)
 
 --- Sends a message to the dispatch when someone send a message to 911 (NPWD)
-RegisterNetEvent('qbx_dispatch:NPWD:Text911', function(message)
+RegisterNetEvent('y_dispatch:NPWD:Text911', function(message)
     local msg = message
     if string.len(msg) <= 0 then exports.qbx_core:Notify(locale('error.nomessage'), 'error') return end
     if exports.qbx_policejob:IsHandcuffed() then exports.qbx_core:Notify(locale('error.handcuffed'), 'error') return end
@@ -309,7 +309,7 @@ RegisterNetEvent('qbx_dispatch:NPWD:Text911', function(message)
 end)
 
 --- Sends a message to the dispatch when someone send a message to 912 (NPWD)
-RegisterNetEvent('qbx_dispatch:NPWD:Text912', function(message)
+RegisterNetEvent('y_dispatch:NPWD:Text912', function(message)
     local msg = message
     if string.len(msg) <= 0 then exports.qbx_core:Notify(locale('error.nomessage'), 'error') return end
     if exports.qbx_policejob:IsHandcuffed() then exports.qbx_core:Notify(locale('error.handcuffed'), 'error') return end
