@@ -22,6 +22,7 @@ RegisterServerEvent("y_dispatch:server:AddCall", function(info)
     }
 	calls[callId] = call
     TriggerClientEvent('y_dispatch:client:AddCall', -1, data, callId)
+    TriggerClientEvent('y_dispatch:client:PlaySound', -1, data.tencodeid, data.jobs, data.coords)
     TriggerClientEvent("y_dispatch:client:AddBlip", -1, data.coords, info.TenCode and info.TenCode or tenCodes[data.tencodeid], callId)
 end)
 

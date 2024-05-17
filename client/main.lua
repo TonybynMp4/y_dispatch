@@ -185,9 +185,9 @@ RegisterNetEvent('y_dispatch:client:AddCall', function(Data, CallId)
     if not Data or not playerState.isLoggedIn then return end
     if not Data.coords then return end
 
-    if DispatchDisabled then goto skipToSound end
-    if Data.jobs and not CheckJob(Data.jobs, QBX.PlayerData.job) then goto skipToSound end
-    if config.onlyOnDuty and not QBX.PlayerData.job.onduty then goto skipToSound end
+    if DispatchDisabled then return end
+    if Data.jobs and not CheckJob(Data.jobs, QBX.PlayerData.job) then return end
+    if config.onlyOnDuty and not QBX.PlayerData.job.onduty then return end
 
     if Data.speed then Data.speed = (config.useMPH and math.ceil(Data.speed * 2.236936) .. " Mph") or (math.ceil(Data.speed * 3.6) .. " Km/h") end
     Data.distance = qbx.math.round(#(GetEntityCoords(cache.ped) - Data.coords))
@@ -197,12 +197,21 @@ RegisterNetEvent('y_dispatch:client:AddCall', function(Data, CallId)
         id = CallId,
         data = Data,
     })
+end)
 
-    ::skipToSound::
-    local sound = tenCodes[Data.tencodeid].sound
+RegisterNetEvent('y_dispatch:client:PlaySound', function(tencodeid, jobs, coords)
+    local sound = tenCodes[tencodeid].sound
     if not sound then return end
-    if not sound.playOnPed and playerState.dispatchMuted then return end
-    qbx.playAudio({source = sound.playOnPed and Data.coords, audioName = sound.name, audioRef = sound.ref})
+
+    if not sound.playOnPed then
+        if playerState.dispatchMuted or DispatchDisabled then return end
+        if jobs then
+            if not CheckJob(jobs, QBX.PlayerData.job) then return end
+            if config.onlyOnDuty and not QBX.PlayerData.job.onduty then return end
+        end
+    end
+
+    qbx.playAudio({source = sound.playOnPed and coords, audioName = sound.name, audioRef = sound.ref})
 end)
 
 --- Adds a blip to the map
