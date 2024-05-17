@@ -16,10 +16,7 @@ return {
         },
         shotsfired = {
             enabled = true,
-            jobwhitelist = {
-                'police',
-                'sheriff',
-            },
+            jobwhitelist = {},
         },
     }
 }
