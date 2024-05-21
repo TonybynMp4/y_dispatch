@@ -89,7 +89,6 @@ local function DriveBy(vehicle)
         title = tenCodes["driveby"].title,
         jobs = tenCodes["driveby"].jobs
     }
-    lib.print.debug(data)
     TriggerServerEvent("y_dispatch:server:AddCall", data)
 end
 exports('DriveBy', DriveBy)
