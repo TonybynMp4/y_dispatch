@@ -78,9 +78,9 @@ local function DriveBy(vehicle)
         class = vehdata.class,
         plate = vehdata.plate,
         gender = GetGender(),
-        weapon = math.random() <= 0.5 and exports.ox_inventory:getCurrentWeapon().label,
+        weapon = math.random() <= 0.5 and exports.ox_inventory:getCurrentWeapon()?.label or locale("general.unknown"),
         weaponclass = GetWeaponClass(cache.weapon) or nil,
-        automatic = math.random() <= 0.5 and (automatics[GetWeapontypeGroup(cache.weapon)] or automatics[cache.weapon])or false,
+        automatic = math.random() <= 0.5 and (automatics[GetWeapontypeGroup(cache.weapon)] or automatics[cache.weapon]) or false,
         doors = vehdata.doors,
         type = 0,
         color = vehdata.color,
@@ -89,6 +89,7 @@ local function DriveBy(vehicle)
         title = tenCodes["driveby"].title,
         jobs = tenCodes["driveby"].jobs
     }
+    lib.print.debug(data)
     TriggerServerEvent("y_dispatch:server:AddCall", data)
 end
 exports('DriveBy', DriveBy)
@@ -99,7 +100,7 @@ local function Shooting()
         tencode = tenCodes["shooting"].tencode,
         location = GetLocation(GetEntityCoords(cache.ped)),
         gender = GetGender(),
-        weapon = math.random() <= 0.5 and exports.ox_inventory:getCurrentWeapon().label,
+        weapon = math.random() <= 0.5 and exports.ox_inventory:getCurrentWeapon()?.label or locale("general.unknown"),
         weaponclass = GetWeaponClass(cache.weapon) or nil,
         type = 0,
         automatic = math.random() <= 0.5 and automatics[GetWeapontypeGroup(cache.weapon)] or false,
