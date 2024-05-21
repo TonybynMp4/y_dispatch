@@ -267,12 +267,13 @@ RegisterNetEvent("y_dispatch:client:AddBlip", function(coords, data, CallId)
 end)
 
 RegisterNetEvent('CEventMeleeAction', function(_, ped)
+    if not config.events.fight.enabled then return end
     if fightAntiSpam then return end
     fight(ped)
 end)
 
 AddEventHandler('CEventShockingGunshotFired', function(_, ped, _)
-    if not config.events.shotsfired then return end
+    if not config.events.shotsfired.enabled then return end
     if shotsfiredAntiSpam then return end
     shotfired(ped)
 end)
