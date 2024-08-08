@@ -1,0 +1,47 @@
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/shadcn/ui/tabs";
+import GroupDispatch from "./dispatch/groupdispatch/Dispatch";
+import CallList from "./call/CallList";
+import BraceletList from "./dispatch/bracelets/BraceletList";
+import calls from "@/data/calls";
+import bracelets from "@/data/bracelets";
+
+type Props = {
+    isCivilian: boolean;
+    playerGroups: string[];
+    groupsLabels: { [key: string]: string };
+}
+
+function Dispatch({ isCivilian, playerGroups, groupsLabels }: Props) {
+    return (
+        <Tabs defaultValue="history" className="rounded-[1rem] w-full h-full bg-secondary/75">
+            <TabsList className="rounded-t-[1rem] h-10 w-full justify-evenly overflow-hidden">
+                <TabsTrigger className="rounded" value="history">Call History</TabsTrigger>
+                <TabsTrigger className="rounded" value="dispatch">Dispatch</TabsTrigger>
+                {
+                    isCivilian ? null :
+                    <>
+                        <TabsTrigger className="rounded" value="bolo">BOLO</TabsTrigger>
+                        <TabsTrigger className="rounded" value="bracelets">Bracelets</TabsTrigger>
+                    </>
+                }
+            </TabsList>
+            <TabsContent style={{height: "calc(100% - 3rem)"}} value="history">
+                <CallList showSearch={true} calls={calls} />
+            </TabsContent>
+            <TabsContent style={{height: "calc(100% - 3rem)"}} value="dispatch">
+                <GroupDispatch playerGroups={playerGroups} groupsLabels={groupsLabels} />
+            </TabsContent>
+            {
+                isCivilian ? null :
+            <>
+                <TabsContent style={{height: "calc(100% - 3rem)"}} value="bolo">Be On the LookOut</TabsContent>
+                <TabsContent style={{height: "calc(100% - 3rem)"}} value="bracelets">
+                    <BraceletList bracelets={bracelets} />
+                </TabsContent>
+            </>
+            }
+        </Tabs>
+    )
+}
+
+export default Dispatch

@@ -12,14 +12,10 @@ shared_scripts {
     '@qbx_core/modules/lib.lua'
 }
 
-ui_page 'html/index.html'
 files {
     'config/client.lua',
     'config/shared.lua',
     'locales/*.json',
-    'html/index.html',
-    'html/*.css',
-    'html/*.js',
 }
 
 client_scripts {
