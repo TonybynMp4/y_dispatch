@@ -1,11 +1,11 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/shadcn/ui/tabs";
-import GroupDispatch from "./dispatch/groupdispatch/Dispatch";
-import BraceletList from "./dispatch/bracelets/BraceletList";
+import DispatchTab from "./dispatch/dispatchTab/Dispatch";
+import BraceletList from "./dispatch/braceletsTab/BraceletList";
 import CallList from "./call/CallList";
 
 import calls from "@/data/calls";
 import bracelets from "@/data/bracelets";
-import BoloList from "./dispatch/bolo/boloList";
+import BoloList from "./dispatch/bolosTab/boloList";
 
 type Props = {
     isCivilian: boolean;
@@ -31,7 +31,7 @@ function Dispatch({ isCivilian, playerGroups, groupsLabels }: Props) {
                 <CallList showSearch={true} calls={calls} />
             </TabsContent>
             <TabsContent style={{height: "calc(100% - 3rem)"}} value="dispatch">
-                <GroupDispatch playerGroups={playerGroups} groupsLabels={groupsLabels} />
+                <DispatchTab playerGroups={playerGroups} groupsLabels={groupsLabels} />
             </TabsContent>
             {
                 isCivilian ? null :

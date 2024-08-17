@@ -43,19 +43,13 @@ type TDispatchUnit = {
 type TDispatchUnitActions = {
     type: 'addUnit' | 'removeUnit';
     unit?: TDispatchUnit;
-    id?: number;
+    id: number;
 }
 
 type TDispatchGroup = {
-    id: number;
+    id: string;
     label: string;
     units: TDispatchUnit[];
 }
 
-type TDispatchGroupsActions = {
-    type: 'CreateGroup' | 'DeleteGroup' | 'AddUnit' | 'RemoveUnit';
-    unit?: TDispatchUnit;
-    id?: number;
-}
-
-export type { TCall, TCallDetails, TBracelet, TDispatchUnit, TDispatchUnitActions, TDispatchGroup, TDispatchGroupsActions };
+export type { TCall, TCallDetails, TBracelet, TDispatchUnit, TDispatchUnitActions, TDispatchGroup };
