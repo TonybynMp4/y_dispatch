@@ -1,27 +1,11 @@
-local classes = { locale('classes.compact'), locale('classes.sedan'), locale('classes.suv'), locale('classes.coupe'), locale('classes.muscle'), locale('classes.sports_classic'), locale('classes.sports'), locale('classes.super'), locale('classes.motorcycle'), locale('classes.offroad'), locale('classes.industrial'), locale('classes.utility'), locale('classes.van'), locale('classes.service'), locale('classes.military'), locale('classes.truck') }
+local classes = { locale('classes.compact'), locale('classes.sedan'), locale('classes.suv'), locale('classes.coupe'),
+    locale('classes.muscle'), locale('classes.sports_classic'), locale('classes.sports'), locale('classes.super'), locale(
+'classes.motorcycle'), locale('classes.offroad'), locale('classes.industrial'), locale('classes.utility'), locale(
+'classes.van'), locale('classes.service'), locale('classes.military'), locale('classes.truck') }
 local blips, radiuses, DispatchDisabled = {}, {}, false
 local config = require 'config.client'
 local tenCodes = require 'config.shared'.tenCodes
 local playerState = LocalPlayer.state
-
--- Send Locales to NUI
-RegisterNUICallback('GetLocales', function(data, cb)
-    local locales = {
-        justnow = locale('ui.justnow'),
-        distance = locale('ui.distance'),
-        automatic = locale('ui.automatic'),
-        accept = "[" .. config.acceptDispatchKey .. "] " .. locale('ui.accept'),
-        deny = "[" .. config.denyDispatchKey.. "] " .. locale('ui.deny')
-    }
-
-    cb(locales)
-end)
-
--- waits for the call to be removed before changing the table
-RegisterNuiCallback('RemoveCall', function(_, cb)
-    TriggerServerEvent('y_dispatch:server:RemoveCall')
-    cb('ok')
-end)
 
 --#region Functions
 --#region Getter Functions
@@ -40,7 +24,8 @@ function GetVehicleData(vehicle)
 
     local primary, secondary = GetVehicleColours(vehicle)
     local color1, color2 = locale('colors.' .. primary), locale('colors.' .. secondary)
-    Data.color = ((color1 and color2) and (color2 .. " & " .. color1)) or (color1 and color1) or (color2 and color2) or locale('general.unknown')
+    Data.color = ((color1 and color2) and (color2 .. " & " .. color1)) or (color1 and color1) or (color2 and color2) or
+    locale('general.unknown')
 
     local doorcount = 0
     local doors = { 'door_dside_f', 'door_pside_f', 'door_dside_r', 'door_pside_r' }
@@ -95,8 +80,9 @@ end
 ---@param coords vector3
 ---@return string
 function GetLocation(coords)
-	return GetStreet(coords) .. ", " .. GetZone(coords)
+    return GetStreet(coords) .. ", " .. GetZone(coords)
 end
+
 --#endregion Getter Functions
 
 local fightAntiSpam = false
@@ -172,7 +158,7 @@ local function acceptDispatch()
     repeat
         Wait(500)
     until (#(GetEntityCoords(cache.ped) - GetBlipCoords(blips[call.blipid])) <= 50) or (GetGameTimer() - time >= 1000 * 60 * 15) -- arrived there or 15 minutes
-        SetBlipRoute(blips[call.blipid], false)
+    SetBlipRoute(blips[call.blipid], false)
 end
 
 --#endregion Functions
@@ -189,7 +175,8 @@ RegisterNetEvent('y_dispatch:client:AddCall', function(Data, CallId)
     if Data.jobs and not CheckJob(Data.jobs, QBX.PlayerData.job) then return end
     if config.onlyOnDuty and not QBX.PlayerData.job.onduty then return end
 
-    if Data.speed then Data.speed = (config.useMPH and math.ceil(Data.speed * 2.236936) .. " Mph") or (math.ceil(Data.speed * 3.6) .. " Km/h") end
+    if Data.speed then Data.speed = (config.useMPH and math.ceil(Data.speed * 2.236936) .. " Mph") or
+        (math.ceil(Data.speed * 3.6) .. " Km/h") end
     Data.distance = qbx.math.round(#(GetEntityCoords(cache.ped) - Data.coords))
 
     SendNUIMessage({
@@ -211,7 +198,7 @@ RegisterNetEvent('y_dispatch:client:PlaySound', function(tencodeid, jobs, coords
         end
     end
 
-    qbx.playAudio({source = sound.playOnPed and coords, audioName = sound.name, audioRef = sound.ref})
+    qbx.playAudio({ source = sound.playOnPed and coords, audioName = sound.name, audioRef = sound.ref })
 end)
 
 --- Adds a blip to the map
@@ -227,8 +214,10 @@ RegisterNetEvent("y_dispatch:client:AddBlip", function(coords, data, CallId)
     local blip, radius
     local sprite, colour, scale = data.blip.sprite or 161, data.blip.color or 84, data.blip.scale or 1.0
     if data.blip.offset then
-        local offsetx, offsety = math.random(data.blip.offset.min, data.blip.offset.max), math.random(data.blip.offset.min, data.blip.offset.max)
-        radius = data.blip.radius and AddBlipForRadius(coords.x + offsetx, coords.y + offsety, coords.z, data.blip.radius)
+        local offsetx, offsety = math.random(data.blip.offset.min, data.blip.offset.max),
+            math.random(data.blip.offset.min, data.blip.offset.max)
+        radius = data.blip.radius and
+        AddBlipForRadius(coords.x + offsetx, coords.y + offsety, coords.z, data.blip.radius)
         blip = AddBlipForCoord(coords.x + offsetx, coords.y + offsety, coords.z)
         blips[CallId] = blip
         radiuses[CallId] = radius
@@ -253,7 +242,7 @@ RegisterNetEvent("y_dispatch:client:AddBlip", function(coords, data, CallId)
     AddTextComponentString(data.tencode .. ' - ' .. data.description)
     EndTextCommandSetBlipName(blip)
     while radiusAlpha ~= 0 do
-        Wait(((data.blip.length and data.blip.length or 10) * 1000)/128)
+        Wait(((data.blip.length and data.blip.length or 10) * 1000) / 128)
         radiusAlpha = radiusAlpha - 1
         alpha = alpha - 1
         SetBlipAlpha(radius, radiusAlpha)
@@ -281,37 +270,47 @@ end)
 --- Removes a blip from the map
 ---@param CallId number
 RegisterNetEvent("y_dispatch:client:RemoveBlip", function(CallId)
-	RemoveBlip(blips[CallId])
-	RemoveBlip(radius2[CallId])
+    RemoveBlip(blips[CallId])
+    RemoveBlip(radius2[CallId])
     radiuses[CallId] = nil
     blips[CallId] = nil
 end)
 
 --- Clears all blips from the map
 RegisterNetEvent("y_dispatch:client:ClearBlips", function()
-	for _, v in pairs(blips) do
-		RemoveBlip(v)
-	end
-	for _, v in pairs(radiuses) do
-		RemoveBlip(v)
-	end
+    for _, v in pairs(blips) do
+        RemoveBlip(v)
+    end
+    for _, v in pairs(radiuses) do
+        RemoveBlip(v)
+    end
     radiuses = {}
     blips = {}
-	exports.qbx_core:Notify(locale('success.clearedblips'), "success")
+    exports.qbx_core:Notify(locale('success.clearedblips'), "success")
 end)
 
 --- Disables the dispatch
 RegisterNetEvent("y_dispatch:client:DisableDispatch", function()
     DispatchDisabled = not DispatchDisabled
-    exports.qbx_core:Notify(DispatchDisabled and locale('success.disabledDispatch') or locale('success.enabledDispatch'), "success")
+    exports.qbx_core:Notify(DispatchDisabled and locale('success.disabledDispatch') or locale('success.enabledDispatch'),
+        "success")
 end)
 
 --- Sends a message to the dispatch when someone send a message to 911 (NPWD)
 RegisterNetEvent('y_dispatch:NPWD:Text911', function(message)
     local msg = message
-    if string.len(msg) <= 0 then exports.qbx_core:Notify(locale('error.nomessage'), 'error') return end
-    if exports.qbx_policejob:IsHandcuffed() then exports.qbx_core:Notify(locale('error.handcuffed'), 'error') return end
-    if exports.npwd:isPhoneDisabled() then exports.qbx_core:Notify(locale('error.disabledphone'), 'error') return end
+    if string.len(msg) <= 0 then
+        exports.qbx_core:Notify(locale('error.nomessage'), 'error')
+        return
+    end
+    if exports.qbx_policejob:IsHandcuffed() then
+        exports.qbx_core:Notify(locale('error.handcuffed'), 'error')
+        return
+    end
+    if exports.npwd:isPhoneDisabled() then
+        exports.qbx_core:Notify(locale('error.disabledphone'), 'error')
+        return
+    end
 
     local anonymous = (((config.allowAnonText and string.split(message, " ")[1] == "anon") and true) or false)
     if anonymous then message = string.gsub(message, "anon ", "") end
@@ -321,9 +320,18 @@ end)
 --- Sends a message to the dispatch when someone send a message to 912 (NPWD)
 RegisterNetEvent('y_dispatch:NPWD:Text912', function(message)
     local msg = message
-    if string.len(msg) <= 0 then exports.qbx_core:Notify(locale('error.nomessage'), 'error') return end
-    if exports.qbx_policejob:IsHandcuffed() then exports.qbx_core:Notify(locale('error.handcuffed'), 'error') return end
-    if exports.npwd:isPhoneDisabled() then exports.qbx_core:Notify(locale('error.disabledphone'), 'error') return end
+    if string.len(msg) <= 0 then
+        exports.qbx_core:Notify(locale('error.nomessage'), 'error')
+        return
+    end
+    if exports.qbx_policejob:IsHandcuffed() then
+        exports.qbx_core:Notify(locale('error.handcuffed'), 'error')
+        return
+    end
+    if exports.npwd:isPhoneDisabled() then
+        exports.qbx_core:Notify(locale('error.disabledphone'), 'error')
+        return
+    end
 
     local anonymous = (((config.allowAnonText and string.split(message, " ")[1] == "anon") and true) or false)
     if anonymous then message = string.gsub(message, "anon ", "") end
@@ -345,7 +353,7 @@ lib.addKeybind({
     description = locale('general.denydispatchcall'),
     defaultKey = config.denyDispatchKey,
     onPressed = function()
-        SendNUIMessage({type = 'RemoveCall'})
+        SendNUIMessage({ type = 'RemoveCall' })
     end
 })
 ---
