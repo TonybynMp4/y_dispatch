@@ -1,21 +1,22 @@
-import { TCall } from "@/types";
+import { TCall, TRecentCallsAction } from "@/types";
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from "../shadcn/ui/context-menu";
 import CallCard from "./callCard";
 
 type CallProps = {
     call: TCall;
-    index: number;
     hasContextMenu?: boolean;
+    shouldAnimate?: boolean;
+    setCalls?: React.Dispatch<TRecentCallsAction>;
 }
 
-function Call({ hasContextMenu, call, index }: CallProps) {
+function Call({ hasContextMenu, call, shouldAnimate, setCalls }: CallProps) {
     return (
         <>
         {
             hasContextMenu ?
             <ContextMenu>
                 <ContextMenuTrigger>
-                    <CallCard call={call} index={index} />
+                    <CallCard shouldAnimate={shouldAnimate} call={call} setCalls={setCalls} />
                 </ContextMenuTrigger>
                 <ContextMenuContent>
                     <ContextMenuItem>Profile</ContextMenuItem>
@@ -23,7 +24,7 @@ function Call({ hasContextMenu, call, index }: CallProps) {
                     <ContextMenuItem>Team</ContextMenuItem>
                     <ContextMenuItem>Subscription</ContextMenuItem>
                 </ContextMenuContent>
-            </ContextMenu> : <CallCard call={call} index={index} />
+            </ContextMenu> : <CallCard shouldAnimate={shouldAnimate} call={call} setCalls={setCalls} />
         }
         </>
     )

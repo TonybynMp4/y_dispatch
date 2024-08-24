@@ -46,3 +46,17 @@ RegisterNuiCallback('RemoveCall', function(_, cb)
     TriggerServerEvent('y_dispatch:server:RemoveCall')
     cb('ok')
 end)
+
+---comment
+---@param _ any
+---@param cb function
+RegisterNuiCallback('getPlayerGroups', function(_, cb)
+    local groups = {
+        {name = QBX.PlayerData.job.name, label = PlayerData.job.label}
+    }
+    cb(groups)
+end)
+
+RegisterNuiCallback('getRecentCalls', function(_, cb)
+    cb()
+end)

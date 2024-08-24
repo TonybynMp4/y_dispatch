@@ -1,3 +1,10 @@
+type TPlayerGroup = {
+    name: string;
+    label: string;
+};
+
+type TPlayerGroups = TPlayerGroup[];
+
 type TCallDetails = {
     distance?: number;
     heading?: string;
@@ -21,10 +28,18 @@ type TCallDetails = {
 };
 
 type TCall = {
+    id: number;
     tenCode: string;
     title: string;
     callType: number;
+    animationDuration?: number;
     details: TCallDetails;
+}
+
+type TRecentCallsAction = {
+    type: 'addCall' | 'removeCall';
+    call?: TCall;
+    callId?: number;
 }
 
 type TBracelet = {
@@ -52,4 +67,4 @@ type TDispatchGroup = {
     units: TDispatchUnit[];
 }
 
-export type { TCall, TCallDetails, TBracelet, TDispatchUnit, TDispatchUnitActions, TDispatchGroup };
+export type { TPlayerGroup, TPlayerGroups, TCallDetails, TCall, TRecentCallsAction, TBracelet, TDispatchUnit, TDispatchUnitActions, TDispatchGroup }

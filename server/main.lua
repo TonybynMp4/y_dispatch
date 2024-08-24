@@ -9,7 +9,7 @@ end
 
 RegisterServerEvent("y_dispatch:server:AddCall", function(info)
     local data = not info.TenCode and info or info.data
-    data.time = os.time() * 1000
+    data.time = os.time()
     local callId = #calls + 1
     local call = {
         source = source,
@@ -81,13 +81,30 @@ end)
 lib.callback.register('y_dispatch:server:GetLastCall', function(source)
     for i = #calls, 1, -1 do
         -- Stop at the first call older than 30 seconds
-        if os.time() - calls[i].time/1000 > 30000 then
+        if os.time() - calls[i].time > 30000 then
             return false
         end
         -- Only return the call if you didn't ignore it
         if not calls[i].UnitsNotResponding[source] then
             return {blipid = calls[i].id}
         end
+    end
+    return false
+end)
+
+--- comment
+--- @param source any
+--- @return
+lib.callback.register('y_dispatch:server:GetRecentCalls', function(source)
+    local recentCalls = {}
+    local currentTimestamp = os.time()
+    for i = #calls, 1, -1 do
+        print(currentTimestamp, calls[i].time, currentTimestamp - calls[i].time, (currentTimestamp - calls[i].time) / (10^3))
+        if (currentTimestamp - calls[i].time) / (10^3) > 30 then
+            break
+        end
+
+        recentCalls[#recentCalls + 1] = {blipid = calls[i].id}
     end
     return false
 end)

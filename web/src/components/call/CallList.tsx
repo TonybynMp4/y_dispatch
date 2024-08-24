@@ -1,12 +1,15 @@
 import { TCall } from "@/types";
-import Call from "./Call"
+import { useEffect, useState } from "react";
+import { useNuiEvent } from "@/utils/useNuiEvent";
+import { fetchNui } from "@/utils/fetchNui";
 import { ScrollArea } from "@/components/shadcn/ui/scroll-area"
 import SearchBar from "../shadcn/searchbar";
-import { useState } from "react";
+import Call from "./Call"
+import testCalls from "@/data/calls"
+import { isEnvBrowser } from "@/utils/misc";
 
 type Props = {
     showSearch: boolean | undefined;
-    calls: TCall[];
 }
 
 function filterCalls(calls: TCall[], setCallsShown: Function, event: React.ChangeEvent<HTMLInputElement> | React.KeyboardEvent<HTMLInputElement>) {
@@ -25,9 +28,16 @@ function onKeyUp(calls: TCall[], setCallsShown: Function, event: React.KeyboardE
     }
 }
 
+function CallList({ showSearch }: Props) {
+    const [calls, setCalls] = useState<TCall[]>(isEnvBrowser() ? testCalls : [])
+    const [callsShown, setCallsShown] = useState<TCall[]>([])
 
-function CallList({ showSearch, calls }: Props) {
-    const [callsShown, setCallsShown] = useState(calls)
+    useNuiEvent<TCall>("addCall", (call) => setCalls([...calls, call]))
+
+    useEffect(() => {
+        if (!isEnvBrowser()) fetchNui<TCall[]>("getRecentCalls").then(setCalls)
+    }, [])
+
     return (
         <>
             {showSearch &&
@@ -36,7 +46,7 @@ function CallList({ showSearch, calls }: Props) {
             <ScrollArea className="p-2 pr-4" style={{ height: "calc(100% - 2em - 0.5rem)" }}>
                 {
                     callsShown.map((call, index) => (
-                        <Call hasContextMenu={true} key={index} call={call} index={calls.indexOf(call)} />
+                        <Call hasContextMenu={true} key={index} call={call} />
                     ))
                 }
             </ScrollArea>

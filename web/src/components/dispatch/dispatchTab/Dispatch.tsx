@@ -1,20 +1,17 @@
+import { TPlayerGroups } from '@/types';
 import { useState } from 'react';
-
 import ActionBar from './actionBar';
-type groupsLabels = {
-    [key: string]: string
-}
+
 type Props = {
-    playerGroups: string[],
-    groupsLabels: groupsLabels
+    playerGroups: TPlayerGroups;
 }
 
-function DispatchTab({ playerGroups, groupsLabels }: Props) {
-    const [currentGroup, setCurrentGroup] = useState(playerGroups[0]);
+function DispatchTab({ playerGroups }: Props) {
+    const [currentGroup, setCurrentGroup] = useState(playerGroups[0].name);
 
     return (
         <>
-            <ActionBar groupsLabels={groupsLabels} currentGroup={currentGroup} setCurrentGroup={setCurrentGroup} />
+            <ActionBar playerGroups={playerGroups} currentGroup={currentGroup} setCurrentGroup={setCurrentGroup} />
         </>
     )
 };
