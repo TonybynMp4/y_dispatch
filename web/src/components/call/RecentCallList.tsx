@@ -15,6 +15,7 @@ function recentCallsReducer(state: TCall[], action: TRecentCallsAction): TCall[]
 
             return [...state, action.call];
         case 'removeCall':
+            console.log("Removing call", action, action.callId);
             if (!action.callId) return state;
 
             return state.filter((call) => call.id !== action.callId);

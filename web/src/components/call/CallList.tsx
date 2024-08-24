@@ -35,7 +35,7 @@ function CallList({ showSearch }: Props) {
     useNuiEvent<TCall>("addCall", (call) => setCalls([...calls, call]))
 
     useEffect(() => {
-        if (!isEnvBrowser()) fetchNui<TCall[]>("getRecentCalls").then(setCalls)
+        if (!isEnvBrowser()) fetchNui<TCall[]>("getAllCalls").then(setCalls)
     }, [])
 
     return (

@@ -60,3 +60,9 @@ end)
 RegisterNuiCallback('getRecentCalls', function(_, cb)
     cb()
 end)
+
+RegisterNuiCallback('getAllCalls', function(_, cb)
+    local calls = lib.callback.await('y_dispatch:server:GetCalls')
+
+    cb(calls)
+end)

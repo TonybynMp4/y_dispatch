@@ -18,6 +18,7 @@ function DispatchContainer() {
     const [showDispatch, setShowDispatch] = useState(false)
     const [playerGroups, setPlayerGroups] = useState<TPlayerGroups>(isBrowser ? testPlayerGroups : [])
 
+    console.log("DispatchContainer", {isBrowser, showDispatch, playerGroups})
     if (isBrowser) document.body.classList.add("bg-background");
 
     useNuiEvent<boolean>("showDispatch", setShowDispatch);
@@ -28,7 +29,7 @@ function DispatchContainer() {
         if (!showDispatch) return;
 
         const keyHandler = (e: KeyboardEvent) => {
-            if (["Backspace", "Escape"].includes(e.code)) {
+            if (["Escape"].includes(e.code)) {
                 if (!isBrowser) fetchNui("hideDispatch");
                 else setShowDispatch(!showDispatch);
             }

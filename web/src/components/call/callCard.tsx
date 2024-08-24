@@ -12,21 +12,27 @@ type Props = {
 }
 
 function CallCard({ call, shouldAnimate, setCalls }: Props) {
-    const [animation, setAnimation] = useState<string>("");
+    const [animation, setAnimation] = useState<string>(shouldAnimate ? "animate-slideIn" : "");
     let typeStyle = "bg-secondary/50";
 
     useEffect(() => {
         if (shouldAnimate && setCalls) {
-            setAnimation("animate-slideIn");
-            const timeout = setTimeout(() => {
-                setAnimation("animate-slideOut");
-                setTimeout(() => {
-                    setCalls({ type: 'removeCall', call: call });
-                }, 1000);
-            }, call.animationDuration || 5000);
+            const enterTimeout = setTimeout(() => {
+                setAnimation("");
+
+                const lifeTimeout = setTimeout(() => {
+                    setAnimation("animate-slideOut");
+
+                    const removeTimeout = setTimeout(() => {
+                        setCalls({ type: 'removeCall', callId: call.id });
+                        clearTimeout(removeTimeout);
+                    }, 1000);
+                    clearTimeout(lifeTimeout);
+                }, call.animationDuration || 5000);
+            }, 1000);
 
             return () => {
-                clearTimeout(timeout);
+                clearTimeout(enterTimeout);
             }
         }
 
@@ -45,7 +51,7 @@ function CallCard({ call, shouldAnimate, setCalls }: Props) {
     }
 
     return (
-        <Card className={cn(typeStyle, "rounded-[0.75rem] mb-4", animation)}>
+        <Card className={cn(typeStyle, animation, "rounded-[0.75rem] mb-4")}>
             <CardHeader className="p-4 pb-1">
                 <div className="align-middle flex">
                     <div>

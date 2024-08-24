@@ -79,7 +79,7 @@ module.exports = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         'slideIn': 'slide 1s ease-in-out',
-        'slideOut': 'slide 1s ease-in-out reverse',
+        'slideOut': 'slide 1s ease-in reverse',
       },
     },
   },
