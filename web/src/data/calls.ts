@@ -10,10 +10,25 @@ const testCalls: TCall[] = [
             distance: 3842,
             location: 'Fort Zancudo Approach Road',
             heading: 'North-West',
-            phone: '123-456-7890',
-            weapon: 'Pistol',
-            automatic: 'Automatic',
-            weaponclass: 'Class 2',
+            vehicle: {
+                speed: '194.5 Km/h',
+                model: 'Sultan',
+                class: 'Sport',
+                color: 'Red',
+                plate: 'ABC123',
+                doors: '2 Doors',
+            },
+            person: {
+                name: 'John Doe',
+                callsign: '224',
+                gender: 'Homme',
+                phone: '123-456-7890',
+            },
+            weapon: {
+                weaponName: 'Pistol',
+                weaponclass: 'Class 2',
+            },
+            information: 'Vehicle theft in progress. Suspects are armed and dangerous. Use caution.'
         }
     },
     {
@@ -34,12 +49,14 @@ const testCalls: TCall[] = [
         callType: 2,
         details: {
             location: 'Strawberry Ave',
-            speed: '194.5 Km/h',
-            model: 'Sultan',
-            class: 'Sport',
-            color: 'Red',
-            plate: 'ABC123',
-            doors: '2 Doors',
+            vehicle: {
+                speed: '194.5 Km/h',
+                model: 'Sultan',
+                class: 'Sport',
+                color: 'Red',
+                plate: 'ABC123',
+                doors: '2 Doors',
+            }
         }
     },
     {
@@ -49,8 +66,10 @@ const testCalls: TCall[] = [
         callType: 0,
         details: {
             location: 'Strawberry Ave',
-            name: 'John Doe',
-            gender: 'Male',
+            person: {
+                name: 'John Doe',
+                gender: 'Male',
+            },
             information: 'Please help, someone is constantly shouting at his wife or something i don\'t fucking know.'
 
         }
@@ -62,7 +81,9 @@ const testCalls: TCall[] = [
         callType: 0,
         details: {
             location: 'Strawberry Ave',
-            callsign: '224',
+            person: {
+                callsign: '224',
+            }
         }
     },
     {
@@ -72,27 +93,10 @@ const testCalls: TCall[] = [
         callType: 0,
         details: {
             location: 'Strawberry Ave',
-            phone: '098-765-4321',
-        }
-    },
-    {
-        id: 7,
-        title: 'Suspicious vehicle',
-        tenCode: '10-28',
-        callType: 0,
-        details: {
-            location: 'Strawberry Ave',
-            phone: '321-654-0987',
-        }
-    },
-    {
-        id: 8,
-        title: 'Suspicious vehicle',
-        tenCode: '10-28',
-        callType: 0,
-        details: {
-            location: 'Strawberry Ave',
-            phone: '890-123-4567',
+            person: {
+                phone: '098-765-4321',
+                callsign: '224',
+            }
         }
     },
 ]

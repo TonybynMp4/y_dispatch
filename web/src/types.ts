@@ -8,22 +8,26 @@ type TPlayerGroups = TPlayerGroup[];
 type TCallDetails = {
     distance?: number;
     heading?: string;
-    phone?: string;
     location?: string;
-    speed?: string;
     camId?: string;
-    weapon?: string;
-    automatic?: string;
-    weaponclass?: string;
-    model?: string;
-    class?: string;
-    color?: string;
-    plate?: string;
-    doors?: string;
-    callsign?: string;
-    name?: string;
-    number?: string;
-    gender?: string;
+    weapon?: {
+        weaponName?: string;
+        weaponclass?: string;
+    };
+    vehicle?: {
+        model?: string;
+        class?: string;
+        color?: string;
+        plate?: string;
+        doors?: string;
+        speed?: string;
+    }
+    person?: {
+        callsign?: string;
+        name?: string;
+        gender?: string;
+        phone?: string;
+    }
     information?: string;
 };
 
@@ -36,10 +40,12 @@ type TCall = {
     details: TCallDetails;
 }
 
-type TRecentCallsAction = {
-    type: 'addCall' | 'removeCall';
+type TCallsAction = {
+    type: 'addCall' | 'removeCall' | 'updateCall' | 'setCalls';
     call?: TCall;
+    calls?: TCall[];
     callId?: number;
+    newPriority?: number;
 }
 
 type TBracelet = {
@@ -67,4 +73,4 @@ type TDispatchGroup = {
     units: TDispatchUnit[];
 }
 
-export type { TPlayerGroup, TPlayerGroups, TCallDetails, TCall, TRecentCallsAction, TBracelet, TDispatchUnit, TDispatchUnitActions, TDispatchGroup }
+export type { TPlayerGroup, TPlayerGroups, TCallDetails, TCall, TCallsAction, TBracelet, TDispatchUnit, TDispatchUnitActions, TDispatchGroup }

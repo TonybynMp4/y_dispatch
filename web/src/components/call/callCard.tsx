@@ -1,22 +1,23 @@
-import CallDetails from "./Details";
+import CallDetails from "./details";
 import { Badge } from "../shadcn/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../shadcn/ui/card";
-import { TCall, TRecentCallsAction } from "@/types";
+import { TCall } from "@/types";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
+import { useCallsDispatch } from "./callsContext";
 
 type Props = {
     call: TCall;
     shouldAnimate?: boolean;
-    setCalls?: React.Dispatch<TRecentCallsAction>;
 }
 
-function CallCard({ call, shouldAnimate, setCalls }: Props) {
+function CallCard({ call, shouldAnimate }: Props) {
+    const callsDispatch = useCallsDispatch();
     const [animation, setAnimation] = useState<string>(shouldAnimate ? "animate-slideIn" : "");
     let typeStyle = "bg-secondary/50";
 
     useEffect(() => {
-        if (shouldAnimate && setCalls) {
+        if (shouldAnimate && callsDispatch) {
             const enterTimeout = setTimeout(() => {
                 setAnimation("");
 
@@ -24,7 +25,7 @@ function CallCard({ call, shouldAnimate, setCalls }: Props) {
                     setAnimation("animate-slideOut");
 
                     const removeTimeout = setTimeout(() => {
-                        setCalls({ type: 'removeCall', callId: call.id });
+                        callsDispatch({ type: 'removeCall', callId: call.id });
                         clearTimeout(removeTimeout);
                     }, 1000);
                     clearTimeout(lifeTimeout);
@@ -39,6 +40,8 @@ function CallCard({ call, shouldAnimate, setCalls }: Props) {
     }, [])
 
     switch (call.callType) {
+        case 0:
+            break;
         case 1:
             typeStyle = "bg-green-500/40";
             break;

@@ -4,8 +4,10 @@ import { isEnvBrowser } from "@/utils/misc"
 import { fetchNui } from "@/utils/fetchNui"
 import { useEffect, useState } from "react"
 import Dispatch from "./Dispatch"
-import RecentCallList from "./call/RecentCallList"
+import RecentCallList from "./call/recentCallList"
 import { Switch } from "./shadcn/ui/switch"
+import { CallsProvider } from "./call/callsContext"
+import testCalls from "@/data/calls"
 
 const testPlayerGroups: TPlayerGroups = [
     {name: "police", label: "LSPD"},
@@ -53,7 +55,10 @@ function DispatchContainer() {
                     showDispatch ?
                         <Dispatch isCivilian={false} playerGroups={playerGroups} />
                         :
-                        <RecentCallList />
+                        <CallsProvider Calls={isEnvBrowser() ? testCalls : []}>
+                            <RecentCallList />
+                        </CallsProvider>
+
                 }
             </main>
         </>

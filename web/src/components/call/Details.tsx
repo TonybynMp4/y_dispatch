@@ -27,80 +27,80 @@ function Details({ details }: TCallDetailsProps) {
         {details.camId &&
             <p><Cctv height="1em" className={iconClassNames} />{details.camId}</p>
         }
-        {(details.speed || details.plate) &&
+        {(details.vehicle) &&
             <p className="flex">
-                { details.speed &&
+                { details.vehicle.speed &&
                     <span className="basis-1/2">
-                        <Gauge height="1em" color="white" className={iconClassNames} />{details.speed}
+                        <Gauge height="1em" color="white" className={iconClassNames} />{details.vehicle.speed}
                     </span>
                 }
-                {details.plate &&
+                {details.vehicle.plate &&
                     <span className="basis-1/2">
-                        <Keyboard height="1em" color="white" className={iconClassNames} />{details.plate}
+                        <Keyboard height="1em" color="white" className={iconClassNames} />{details.vehicle.plate}
                     </span>
                 }
             </p>
         }
-        {(details.weapon || details.weaponclass) &&
+        {(details.vehicle) &&
             <p className="flex">
-                { details.weapon &&
-                    <span className="basis-1/2">
-                        <Icon height="1em" stroke="white" className={iconClassNames} iconNode={crosshair2} />{details.weapon}
+                { details.vehicle.model &&
+                    <span className="basis-1/4">
+                        <CarFront height="1em" stroke="white" className={iconClassNames} />{details.vehicle.model}
                     </span>
                 }
-                {details.weaponclass &&
-                    <span className="basis-1/2">
-                        <ChartNoAxesGantt height="1em" color="white" className={iconClassNames} />{details.weaponclass}
+                {details.vehicle.color &&
+                    <span className="basis-1/4">
+                        <Palette height="1em" stroke="white" className={iconClassNames} />{details.vehicle.color}
+                    </span>
+                }
+                {details.vehicle.doors &&
+                    <span className="basis-1/4">
+                        <DoorClosed height="1em" stroke="white" className={iconClassNames} />{details.vehicle.doors}
+                    </span>
+                }
+                {details.vehicle.class &&
+                    <span className="basis-1/4">
+                        <FileQuestion height="1em" color="white" className={iconClassNames} />{details.vehicle.class}
                     </span>
                 }
             </p>
         }
-        {(details.model || details.class || details.color || details.doors) &&
+        {(details.weapon) &&
             <p className="flex">
-                { details.model &&
-                    <span className="basis-1/4">
-                        <CarFront height="1em" stroke="white" className={iconClassNames} />{details.model}
+                { details.weapon.weaponName &&
+                    <span className="basis-1/2">
+                        <Icon height="1em" stroke="white" className={iconClassNames} iconNode={crosshair2} />{details.weapon.weaponName}
                     </span>
                 }
-                {details.color &&
-                    <span className="basis-1/4">
-                        <Palette height="1em" stroke="white" className={iconClassNames} />{details.color}
-                    </span>
-                }
-                {details.doors &&
-                    <span className="basis-1/4">
-                        <DoorClosed height="1em" stroke="white" className={iconClassNames} />{details.doors}
-                    </span>
-                }
-                {details.class &&
-                    <span className="basis-1/4">
-                        <FileQuestion height="1em" color="white" className={iconClassNames} />{details.class}
+                {details.weapon.weaponclass &&
+                    <span className="basis-1/2">
+                        <ChartNoAxesGantt height="1em" color="white" className={iconClassNames} />{details.weapon.weaponclass}
                     </span>
                 }
             </p>
         }
-        {(details.name || details.callsign) &&
+        {(details.person) &&
             <p className="flex">
-                {details.callsign &&
+                {details.person.callsign &&
                     <span className="basis-1/3">
-                        <Contact2 height="1em" className={iconClassNames} />{details.callsign}
+                        <Contact2 height="1em" className={iconClassNames} />{details.person.callsign}
                     </span>
                 }
-                {details.name &&
+                {details.person.name &&
                     <span className="basis-1/3">
-                        <IdCard height="1em" className={iconClassNames} />{details.name}
+                        <IdCard height="1em" className={iconClassNames} />{details.person.name}
                     </span>
                 }
-                {details.gender &&
+                {details.person.gender &&
                     <span className="basis-1/3">
-                        <PersonStanding height="1em" className={iconClassNames} />{details.gender}
+                        <PersonStanding height="1em" className={iconClassNames} />{details.person.gender}
                     </span>
                 }
             </p>
         }
-        {details.phone &&
+        {details.person?.phone &&
             <p>
-                <Phone height="1em" className={iconClassNames} />{details.phone}
+                <Phone height="1em" className={iconClassNames} />{details.person.phone}
             </p>
         }
         {details.information &&
@@ -109,21 +109,5 @@ function Details({ details }: TCallDetailsProps) {
         </>
     )
 }
-
-/*
-        if (data.callsign) {
-            callInnerHTML += `<div class="information"><span class="fas fa-id-card-clip" style="margin-right: .5vh;"></span> ${data.callsign}</div>`
-        }
-
-        if (typeof data.gender == 'number') {
-            const icon = data.gender === 1 && "fas fa-venus" || "fas fa-mars"
-            const gender = data.gender === 1 && 'Female' || 'Male'
-            callInnerHTML += `<div class="information"><span class="${icon}" style="margin-right: .5vh;"></span> ${gender}</div>`
-        }
-
-        if (data.information) {
-            callInnerHTML += `<div class="information"><span class="fas fa-comment-dots" style="margin-right: .5vh;"></span> ${data.information}</div>`
-        }
-*/
 
 export default Details
