@@ -1,4 +1,4 @@
-local tenCodes = require('config.shared').tenCodes
+local calls = require('config.dispatchCalls')
 
 local automatics = {
     -95776620,
@@ -7,23 +7,22 @@ local automatics = {
     584646201,
 }
 
-local function VehicleTheft(vehicle)
-    local vehdata = GetVehicleData(vehicle)
-    local data = {
-        tencodeid = "vehicletheft",
-        tencode = tenCodes["vehicletheft"].tencode,
-        location = GetLocation(GetEntityCoords(vehicle)),
-        model = vehdata.name,
-        class = vehdata.class,
-        plate = vehdata.plate,
-        type = 0,
-        color = vehdata.color,
-        heading = qbx.getCardinalDirection(),
-        coords = GetEntityCoords(vehicle),
-        title = tenCodes["vehicletheft"].title,
-        jobs = tenCodes["vehicletheft"].jobs
-    }
-    TriggerServerEvent("y_dispatch:server:AddCall", data)
+local function VehicleTheft(source, vehicle)
+    local details = lib.callback.await('y_dispatch:server:GetCallDetails', source, {
+        location = true,
+        vehicle = {
+            model = true,
+            class = true,
+            plate = true,
+            color = true
+        }
+    })
+
+    ---@type dispatchCall
+    local call = calls.vehicletheft
+    call.details = details
+
+    AddCall(call)
 end
 exports('VehicleTheft', VehicleTheft)
 
