@@ -1,30 +1,9 @@
-local calls = {}
 local config = require 'config.server'
-local tenCodes = require 'config.shared'.tenCodes
 local dispatchJobs = require 'config.shared'.dispatchJobs
 
 if config.versionCheck then
 	lib.versionCheck('TonybynMp4/y_dispatch')
 end
-
-RegisterServerEvent("y_dispatch:server:AddCall", function(info)
-    local data = not info.TenCode and info or info.data
-    data.time = os.time()
-    local callId = #calls + 1
-    local call = {
-        source = source,
-        id = callId,
-        UnitsResponding = {},
-        UnitsNotResponding = {},
-        DispatcherResponses = {},
-        time = data.time,
-        data = data
-    }
-	calls[callId] = call
-    TriggerClientEvent('y_dispatch:client:AddCall', -1, data, callId)
-    TriggerClientEvent('y_dispatch:client:PlaySound', -1, data.tencodeid, data.jobs, data.coords)
-    TriggerClientEvent("y_dispatch:client:AddBlip", -1, data.coords, info.TenCode and info.TenCode or tenCodes[data.tencodeid], callId)
-end)
 
 lib.addCommand('mutedispatch', {help = locale('commands.mutedispatch')}, function(source, _)
     Player(source).state:set('dispatchMuted', not Player(source).state.dispatchMuted, true)
@@ -37,21 +16,6 @@ lib.addCommand('disabledispatch', {help = locale('commands.disabledispatch')}, f
     if not dispatchJobs.Types[job.type] or not dispatchJobs.Jobs[job.name] then return end
 
     TriggerClientEvent('y_dispatch:client:DisableDispatch', source)
-end)
-
-exports('GetCalls', function() return calls end)
-
-lib.callback.register('y_dispatch:server:addUnit', function(_, id, unitid, unit)
-    if not calls[id] then return end
-    calls[id].UnitsResponding[unitid] = unit
-    return calls[id].UnitsResponding
-end)
-
-lib.callback.register('y_dispatch:server:removeUnit', function(_, id, unitid)
-    if not calls[id] then return end
-    if not calls[id].UnitsResponding[unit] then return end
-    calls[id].UnitsResponding[unitid] = nil
-    return calls[id].UnitsResponding
 end)
 
 if config.useNpwd and GetResourceState('npwd') == 'started' then
@@ -67,44 +31,3 @@ if config.useNpwd and GetResourceState('npwd') == 'started' then
         end
     end)
 end
-
-RegisterNetEvent('y_dispatch:server:RemoveCall', function()
-    if not calls then return end
-    for i = #calls, 1, -1 do
-        if not calls[i].UnitsNotResponding[source] then
-            calls[i].UnitsNotResponding[source] = true
-            break
-        end
-    end
-end)
-
-lib.callback.register('y_dispatch:server:GetLastCall', function(source)
-    for i = #calls, 1, -1 do
-        -- Stop at the first call older than 30 seconds
-        if os.time() - calls[i].time > 30000 then
-            return false
-        end
-        -- Only return the call if you didn't ignore it
-        if not calls[i].UnitsNotResponding[source] then
-            return {blipid = calls[i].id}
-        end
-    end
-    return false
-end)
-
---- comment
---- @param source any
---- @return
-lib.callback.register('y_dispatch:server:GetRecentCalls', function(source)
-    local recentCalls = {}
-    local currentTimestamp = os.time()
-    for i = #calls, 1, -1 do
-        print(currentTimestamp, calls[i].time, currentTimestamp - calls[i].time, (currentTimestamp - calls[i].time) / (10^3))
-        if (currentTimestamp - calls[i].time) / (10^3) > 30 then
-            break
-        end
-
-        recentCalls[#recentCalls + 1] = {blipid = calls[i].id}
-    end
-    return false
-end)
