@@ -1,90 +1,13 @@
 local classes = { locale('classes.compact'), locale('classes.sedan'), locale('classes.suv'), locale('classes.coupe'),
-    locale('classes.muscle'), locale('classes.sports_classic'), locale('classes.sports'), locale('classes.super'), locale(
-'classes.motorcycle'), locale('classes.offroad'), locale('classes.industrial'), locale('classes.utility'), locale(
-'classes.van'), locale('classes.service'), locale('classes.military'), locale('classes.truck') }
+    locale('classes.muscle'), locale('classes.sports_classic'), locale('classes.sports'), locale('classes.super'),
+    locale('classes.motorcycle'), locale('classes.offroad'), locale('classes.industrial'), locale('classes.utility'),
+    locale('classes.van'), locale('classes.service'), locale('classes.military'), locale('classes.truck') }
 local blips, radiuses, DispatchDisabled = {}, {}, false
 local config = require 'config.client'
 local tenCodes = require 'config.shared'.tenCodes
 local playerState = LocalPlayer.state
 
 --#region Functions
---#region Getter Functions
-
---- returns the vehicle's data ( model, class, name, plate, NetId, speed, color, n° of doors)
----@param vehicle number
----@return table
-function GetVehicleData(vehicle)
-    local Data = {}
-    Data.class = classes[GetVehicleClass(vehicle)]
-    Data.plate = qbx.getVehiclePlate(vehicle)
-    Data.id = NetworkGetNetworkIdFromEntity(vehicle)
-    Data.speed = GetEntitySpeed(vehicle)
-    Data.name = GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(vehicle)))
-    Data.name = Data.name == 'NULL' and exports.qbx_core:GetVehiclesByName().Vehicles[model].name or Data.name
-
-    local primary, secondary = GetVehicleColours(vehicle)
-    local color1, color2 = locale('colors.' .. primary), locale('colors.' .. secondary)
-    Data.color = ((color1 and color2) and (color2 .. " & " .. color1)) or (color1 and color1) or (color2 and color2) or
-    locale('general.unknown')
-
-    local doorcount = 0
-    local doors = { 'door_dside_f', 'door_pside_f', 'door_dside_r', 'door_pside_r' }
-    for i = 1, #doors do
-        if GetEntityBoneIndexByName(vehicle, doors[i]) ~= -1 then doorcount = doorcount + 1 end
-    end
-    Data.doors = doorcount >= 2 and locale('general.' .. doorcount .. '_door')
-    return Data
-end
-
---- returns the player's gender
----@return string
-function GetGender()
-    return tostring(QBX.PlayerData.charinfo.gender)
-end
-
-local WeaponClasses = {
-    [2685387236] = locale('WeaponClasses.melee'),
-    [416676503] = locale('WeaponClasses.gun'),
-    [-95776620] = locale('WeaponClasses.submachinegun'),
-    [860033945] = locale('WeaponClasses.shotgun'),
-    [970310034] = locale('WeaponClasses.assaultrifle'),
-    [1159398588] = locale('WeaponClasses.lightmachinegun'),
-    [3082541095] = locale('WeaponClasses.sniper'),
-    [2725924767] = locale('WeaponClasses.heavyweapon'),
-    [1548507267] = locale('WeaponClasses.throwables'),
-    [4257178988] = locale('WeaponClasses.misc'),
-}
-
---- Returns the Class of a weapon (e.g. Melee, Handguns, Shotguns, etc.)
----@param SelectedWeapon number
----@return string
-function GetWeaponClass(SelectedWeapon)
-    return WeaponClasses[GetWeapontypeGroup(SelectedWeapon)] or locale('general.unknown')
-end
-
---- Returns the street at coords
----@param coords vector3
----@return string
-function GetStreet(coords)
-    return GetStreetNameFromHashKey(GetStreetNameAtCoord(coords.x, coords.y, coords.z))
-end
-
---- Returns the zone at coords
----@param coords vector3
----@return string
-function GetZone(coords)
-    return GetLabelText(GetNameOfZone(coords.x, coords.y, coords.z))
-end
-
---- Returns the location (street + zone) at coords
----@param coords vector3
----@return string
-function GetLocation(coords)
-    return GetStreet(coords) .. ", " .. GetZone(coords)
-end
-
---#endregion Getter Functions
-
 local fightAntiSpam = false
 local function fight(ped)
     if ped ~= cache.ped then return end
@@ -212,12 +135,13 @@ RegisterNetEvent("y_dispatch:client:AddBlip", function(coords, data, CallId)
     local alpha = 255
     local radiusAlpha = 128
     local blip, radius
-    local sprite, colour, scale = data.blip.sprite or 161, data.blip.color or 84, data.blip.scale or 1.0
+    local sprite, color, scale = data.blip.sprite or 161, data.blip.color or 84, data.blip.scale or 1.0
+
+    --TODO: AddBlipForRadius and AddBlipForCoord do the "same" thing, you can supposedly add the sprite to the radius.
+    -- simplify it into just blips and use the correct native depending on data.blip.offset
     if data.blip.offset then
-        local offsetx, offsety = math.random(data.blip.offset.min, data.blip.offset.max),
-            math.random(data.blip.offset.min, data.blip.offset.max)
         radius = data.blip.radius and
-        AddBlipForRadius(coords.x + offsetx, coords.y + offsety, coords.z, data.blip.radius)
+            AddBlipForRadius(coords.x + offsetx, coords.y + offsety, coords.z, data.blip.radius)
         blip = AddBlipForCoord(coords.x + offsetx, coords.y + offsety, coords.z)
         blips[CallId] = blip
         radiuses[CallId] = radius
@@ -228,15 +152,26 @@ RegisterNetEvent("y_dispatch:client:AddBlip", function(coords, data, CallId)
         radiuses[CallId] = radius
     end
 
+    -- TODO: TEST WTF DOES THAT DOOOO??????
+    -- PulseBlip(blip)
+    -- SetBlipBright(blip, true)
+    -- SetBlipCategory(blip, 2)
+    --SetBlipFade(blip, 1, 1) -- could replace dumb alpha while loops????
+    -- SetBlipSecondaryColour(blip, r, g, b)
+
+    -- TODO: difference?
+    -- SetBlipFlashesAlternate(blip, true)
+    -- SetBlipFlashes(blip, true)
+
     SetBlipFlashes(blip, data.blip.flash or false)
     SetBlipSprite(blip, sprite)
     SetBlipHighDetail(blip, true)
     SetBlipScale(blip, scale)
-    SetBlipColour(blip, colour)
+    SetBlipColour(blip, color)
     SetBlipAlpha(blip, alpha)
     SetBlipAsShortRange(blip, false)
     SetBlipCategory(blip, 2)
-    SetBlipColour(radius, data.radiusColour or colour)
+    SetBlipColour(radius, data.radiusColor or color)
     SetBlipAlpha(radius, radiusAlpha)
     BeginTextCommandSetBlipName('STRING')
     AddTextComponentString(data.tencode .. ' - ' .. data.description)
