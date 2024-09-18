@@ -42,7 +42,9 @@ function Call({ hasContextMenu, call, shouldAnimate }: CallProps) {
                                 </ContextMenuSubContent>
                             </ContextMenuSub>
                         </ContextMenuContent>
-                    </ContextMenu> : <CallCard shouldAnimate={shouldAnimate} call={call} />
+                    </ContextMenu>
+                    :
+                    <CallCard shouldAnimate={shouldAnimate} call={call} />
             }
         </>
     )

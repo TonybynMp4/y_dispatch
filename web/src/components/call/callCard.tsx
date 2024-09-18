@@ -26,22 +26,17 @@ function CallCard({ call, shouldAnimate }: Props) {
 
                     const removeTimeout = setTimeout(() => {
                         callsDispatch({ type: 'removeCall', callId: call.id });
-                        clearTimeout(removeTimeout);
-                    }, 1000);
-                    clearTimeout(lifeTimeout);
-                }, call.animationDuration || 5000);
+                        return () => clearTimeout(removeTimeout);
+                    }, 900);
+                    return () => clearTimeout(lifeTimeout);
+                }, call.animationDuration ? call.animationDuration : 5000);
             }, 1000);
 
-            return () => {
-                clearTimeout(enterTimeout);
-            }
+            return () => clearTimeout(enterTimeout);
         }
-
     }, [])
 
     switch (call.callType) {
-        case 0:
-            break;
         case 1:
             typeStyle = "bg-green-500/40";
             break;

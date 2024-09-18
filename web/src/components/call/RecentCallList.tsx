@@ -1,8 +1,5 @@
 import { TCall } from "@/types";
-import { useEffect } from "react";
 import { useNuiEvent } from "@/utils/useNuiEvent";
-import { fetchNui } from "@/utils/fetchNui";
-import { isEnvBrowser } from "@/utils/misc";
 import Call from "./call"
 import { useCalls, useCallsDispatch } from "./callsContext";
 
@@ -15,14 +12,6 @@ function RecentCallList({ }: Props) {
     useNuiEvent<TCall>("addCall", (call) => {
         setRecentCalls({ type: 'addCall', call: call});
     })
-
-    useEffect(() => {
-        if (!isEnvBrowser()) fetchNui<TCall[]>("getRecentCalls").then((calls) => {
-            calls.forEach((call) => {
-                setRecentCalls({ type: 'addCall', call: call });
-            })
-        })
-    }, [])
 
     return (
         <>

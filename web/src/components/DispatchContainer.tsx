@@ -20,7 +20,6 @@ function DispatchContainer() {
     const [showDispatch, setShowDispatch] = useState(false)
     const [playerGroups, setPlayerGroups] = useState<TPlayerGroups>(isBrowser ? testPlayerGroups : [])
 
-    console.log("DispatchContainer", {isBrowser, showDispatch, playerGroups})
     if (isBrowser) document.body.classList.add("bg-background");
 
     useNuiEvent<boolean>("showDispatch", setShowDispatch);
