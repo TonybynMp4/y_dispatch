@@ -68,7 +68,7 @@ module.exports = {
         },
         "slide": {
             from: {
-                transform: 'translateX(150%)'
+                transform: 'translateX(100%)'
             },
             to: {
                 transform: 'translateX(0)'
