@@ -13,27 +13,29 @@ type Props = {
 
 function CallCard({ call, shouldAnimate }: Props) {
     const callsDispatch = useCallsDispatch();
-    const [animation, setAnimation] = useState<string>(shouldAnimate ? "animate-slideIn" : "");
+    const [animation, setAnimation] = useState(shouldAnimate ? "animate-slideIn" : "");
     let typeStyle = "bg-secondary/50";
 
     useEffect(() => {
         if (shouldAnimate && callsDispatch) {
+
             const enterTimeout = setTimeout(() => {
                 setAnimation("");
-
-                const lifeTimeout = setTimeout(() => {
-                    setAnimation("animate-slideOut");
-
-                    const removeTimeout = setTimeout(() => {
-                        callsDispatch({ type: 'removeCall', callId: call.id });
-                        return () => clearTimeout(removeTimeout);
-                    }, 900);
-                    return () => clearTimeout(lifeTimeout);
-                }, call.animationDuration ? call.animationDuration : 5000);
             }, 1000);
 
-            return () => clearTimeout(enterTimeout);
+            const durationTimeout = setTimeout(() => {
+                setAnimation("animate-slideOut");
+                setTimeout(() => {
+                    callsDispatch({ type: 'removeCall', callId: call.id });
+                }, 1000);
+            }, (call.callDuration || 2500));
+
+            return () => {
+                clearTimeout(enterTimeout);
+                clearTimeout(durationTimeout);
+            }
         }
+
     }, [])
 
     switch (call.callType) {

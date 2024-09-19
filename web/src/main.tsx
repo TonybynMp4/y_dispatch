@@ -4,7 +4,7 @@ import DispatchContainer from './components/DispatchContainer.tsx'
 import './style.css'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <DispatchContainer />
-  </StrictMode>,
+    <StrictMode>
+        <DispatchContainer />
+   </StrictMode>,
 )

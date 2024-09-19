@@ -6,7 +6,7 @@ const testCalls: TCall[] = [
         title: 'Vol de véhicule à main armée',
         tenCode: '10-62',
         callType: 0,
-        animationDuration: 7500,
+        callDuration: 7500,
         details: {
             distance: 3842,
             location: 'Fort Zancudo Approach Road',
@@ -48,7 +48,7 @@ const testCalls: TCall[] = [
         title: 'Suspicious vehicle',
         tenCode: '10-28',
         callType: 2,
-        animationDuration: 3000,
+        callDuration: 3000,
         details: {
             location: 'Strawberry Ave',
             vehicle: {

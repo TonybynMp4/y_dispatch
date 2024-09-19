@@ -7,7 +7,6 @@ import Dispatch from "./Dispatch"
 import RecentCallList from "./call/recentCallList"
 import { Switch } from "./shadcn/ui/switch"
 import { CallsProvider } from "./call/callsContext"
-import testCalls from "@/data/calls"
 
 const testPlayerGroups: TPlayerGroups = [
     {name: "police", label: "LSPD"},
@@ -54,7 +53,7 @@ function DispatchContainer() {
                     showDispatch ?
                         <Dispatch isCivilian={false} playerGroups={playerGroups} />
                         :
-                        <CallsProvider Calls={isEnvBrowser() ? testCalls : []}>
+                        <CallsProvider Calls={[]}>
                             <RecentCallList />
                         </CallsProvider>
 

@@ -36,7 +36,7 @@ type TCall = {
     tenCode: string;
     title: string;
     callType: number;
-    animationDuration?: number;
+    callDuration?: number;
     details: TCallDetails;
 }
 
