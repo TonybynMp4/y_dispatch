@@ -66,18 +66,38 @@
 --- @field blip? jobCallBlip
 --- @field sound? dispatchCallSound
 --- @field details dispatchCallDetails
+--- @field jobs dispatchCallJobs
 
 --- @class tempCallData : jobCallData
 --- @field blip? dispatchCallBlip
 
 ---@class jobCall
 ---@field source integer
----@field internalId integer Id used to identify the call no matter what job it's in
 ---@field time integer
 ---@field data jobCallData
+---@field hidden? boolean
 ---@field unitsIgnoring integer[]
 
 
 --- @class dispatchCall : jobCallData
 --- @field jobs dispatchCallJobs | string[]
 --- @field blip dispatchCallBlip
+
+
+---@class BOLO
+---@field id integer
+---@field type integer 0 = person, 1 = vehicle
+---@field target string
+---@field description string
+---@field priority integer 0 = low, 1 = medium, 2 = high
+---@field active boolean
+
+---@class dispatchJobRights
+---@field dispatch boolean
+---@field bolos? boolean
+---@field bracelets? boolean
+---@field panic? boolean
+
+---@class dispatchJobs
+---@field jobs table<string, dispatchJobRights>
+---@field types table<string, dispatchJobRights>
