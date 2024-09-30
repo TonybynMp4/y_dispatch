@@ -9,7 +9,8 @@ version '1.5.3'
 ox_lib 'locale'
 shared_scripts {
     '@ox_lib/init.lua',
-    '@qbx_core/modules/lib.lua'
+    '@qbx_core/modules/lib.lua',
+    'types.lua',
 }
 
 ui_page 'web/build/index.html'
@@ -25,10 +26,12 @@ files {
 
 client_scripts {
     '@qbx_core/modules/playerdata.lua',
-    'client/*.lua'
+    'client/*.lua',
+    'client/nui/*.lua',
 }
 
 server_scripts {
+    'server/exports/*.lua',
     'server/*.lua'
 }
 
