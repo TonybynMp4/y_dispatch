@@ -3,7 +3,7 @@ import { useNuiEvent } from "@/utils/useNuiEvent"
 import { isEnvBrowser } from "@/utils/misc"
 import { fetchNui } from "@/utils/fetchNui"
 import { useEffect, useState } from "react"
-import Dispatch from "./Dispatch"
+import Dispatch from "./dispatch"
 import RecentCallList from "./call/recentCallList"
 import { Switch } from "./shadcn/ui/switch"
 import { CallsProvider } from "./call/callsContext"
@@ -48,7 +48,7 @@ function DispatchContainer() {
                 isBrowser &&
                 <Switch checked={showDispatch} onCheckedChange={() => setShowDispatch(!showDispatch)} />
             }
-            <main className={"w-[20vw] min-w-[330px] h-[95vh] absolute top-[2.5vh] right-[1vw] "}>
+            <main className={"w-[30vw] min-w-[330px] h-[95vh] absolute top-[2.5vh] right-[1vw] "}>
                 {
                     showDispatch ?
                         <Dispatch isCivilian={false} playerGroups={playerGroups} />
