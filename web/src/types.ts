@@ -58,19 +58,48 @@ type TDispatchUnit = {
     id: number;
     name: string;
     callsign?: string;
-    assignedGroup?: number;
+    squadId?: number;
+    squadIndex?: number;
 }
 
 type TDispatchUnitActions = {
-    type: 'addUnit' | 'removeUnit';
-    unit?: TDispatchUnit;
     id: number;
+    type: 'addUnit' | 'moveUnit' | 'removeUnit' | 'updateIndex';
+    unitId?: number;
+    squadId?: number;
 }
 
-type TDispatchGroup = {
-    id: string;
+type TDispatchSquad = {
+    id: number;
     label: string;
-    units: TDispatchUnit[];
+    status?: number;
 }
 
-export type { TPlayerGroup, TPlayerGroups, TCallDetails, TCall, TCallsAction, TBracelet, TDispatchUnit, TDispatchUnitActions, TDispatchGroup }
+type TDispatchSquadActions = {
+    type: 'addSquad' | 'removeSquad' | 'setStatus' | 'setLabel' | 'updateSquadOrder';
+    squadId: number;
+    status?: number;
+    label?: string;
+}
+
+type TBOLO = {
+    id: number;
+    target: string;
+    description: string;
+    priority: number; // 0 = low, 1 = medium, 2 = high
+    type: number; // 0 = person, 1 = vehicle
+}
+
+export type {
+    TPlayerGroup,
+    TPlayerGroups,
+    TCallDetails,
+    TCall,
+    TCallsAction,
+    TBracelet,
+    TDispatchUnit,
+    TDispatchUnitActions,
+    TDispatchSquad,
+    TDispatchSquadActions,
+    TBOLO
+}
