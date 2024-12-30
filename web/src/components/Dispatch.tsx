@@ -34,8 +34,8 @@ function Dispatch({ isCivilian, playerGroups }: Props) {
     }, [])
 
     return (
-        <Tabs defaultValue="history" className="rounded-[1rem] w-full h-full bg-secondary/75">
-            <TabsList className="rounded-t-[1rem] h-10 w-full justify-evenly overflow-hidden">
+        <Tabs defaultValue="history" className="rounded-[1rem] w-full h-full bg-secondary/20">
+            <TabsList className="rounded-t-[1rem] h-10 w-full justify-evenly bg-secondary/50">
                 <TabsTrigger className="rounded" value="history">
                     <p className="hidden 2xl:block">
                         Call History

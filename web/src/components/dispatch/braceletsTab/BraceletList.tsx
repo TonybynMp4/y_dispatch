@@ -14,8 +14,8 @@ function BraceletList({ bracelets }: Props) {
 
     return (
         <>
-            <SearchBar placeHolder="Search" className="mb-2" inputClassName="h-[2em] my-0" onkeyup={(e) => onKeyUp(bracelets, setBraceletsShown, e)} onchange={(e) => filterBracelets(bracelets, setBraceletsShown, e)} />
-            <ScrollArea className="p-2 pr-4" style={{height: "calc(100% - 2em - 0.5rem)"}}>
+            <SearchBar placeHolder="Search" className="mx-4 h-[3rem] mb-2" inputClassName="h-[2em] my-0" onkeyup={(e) => onKeyUp(bracelets, setBraceletsShown, e)} onchange={(e) => filterBracelets(bracelets, setBraceletsShown, e)} />
+            <ScrollArea className="ml-4 mr-1 pr-3" style={{height: "calc(100% - 3em - 1rem)"}}>
                 {
                     !bracelets || braceletsShown.length === 0 ? <h1 className="mt-8 text-center text-2xl">No active bracelets</h1> :
                     braceletsShown.map((bracelet, index) => (
