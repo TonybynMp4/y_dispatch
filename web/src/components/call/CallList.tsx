@@ -28,11 +28,11 @@ function CallList({ }: Props) {
 
     return (
         <>
-            <SearchBar searchRef={searchRef} className="mb-2" inputClassName="h-[2em] my-0" placeHolder="Search" onkeyup={(e) => onKeyUp(calls, setCallsShown, e)} onchange={(e) => filterCalls(calls, setCallsShown, e)} />
-            <ScrollArea className="p-2 pr-4" style={{ height: "calc(100% - 2em - 0.5rem)" }}>
+            <SearchBar searchRef={searchRef} className="mx-4 mb-2" inputClassName="h-[2em] my-0" placeHolder="Search" onkeyup={(e) => onKeyUp(calls, setCallsShown, e)} onchange={(e) => filterCalls(calls, setCallsShown, e)} />
+            <ScrollArea className="ml-4 mr-1 pr-3" style={{ height: "calc(100% - 2em - 1rem)" }}>
                 {
                     callsShown.map((call, index) => (
-                        <Call hasContextMenu={true} key={index} call={call} />
+                        <Call hasContextMenu={true} key={call.id} call={call} />
                     ))
                 }
             </ScrollArea>
