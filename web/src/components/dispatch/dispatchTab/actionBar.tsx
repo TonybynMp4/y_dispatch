@@ -13,14 +13,14 @@ type Props = {
 }
 
 function getCommandItems(playerGroups: TPlayerGroups, currentGroup: string, setCurrentGroup: Function, setOpen: Function) {
-    return playerGroups.map((group: TPlayerGroup) => {
+    return playerGroups ? playerGroups.map((group: TPlayerGroup) => {
         return (
             <CommandItem key={group.name} onSelect={() => { setCurrentGroup(group.name); setOpen(false); }}>
                 {currentGroup === group.name ? <Check className="h-4 w-4 mr-2" /> : <span className="w-4 mr-2" />}
                 {group.label}
             </CommandItem>
     )
-    })
+    }) : null;
 }
 
 const playerCallsigns: { [key: string]: string } = {
@@ -36,14 +36,14 @@ function ActionBar({ playerGroups, currentGroup, setCurrentGroup }: Props) {
             <Popover open={open} onOpenChange={setOpen}>
                 <PopoverTrigger asChild>
                     <Button variant="outline" role="combobox" aria-expanded={open} className="ml-4 w-[8em] rounded-[0.5em] justify-between">
-                        {playerGroups.find((group) => group.name === currentGroup)?.label || 'No groups'}
+                        {playerGroups ? playerGroups.find((group) => group.name === currentGroup)?.label : 'No groups'}
                         <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-[200px] p-0">
+                <PopoverContent className="w-[200px] p-0" align='start'>
                     <Command>
                         <CommandList>
-                            <CommandEmpty>No framework found.</CommandEmpty>
+                            <CommandEmpty>No group found.</CommandEmpty>
                             <CommandGroup>
                                 {getCommandItems(playerGroups, currentGroup, setCurrentGroup, setOpen)}
                             </CommandGroup>
