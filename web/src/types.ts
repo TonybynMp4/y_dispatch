@@ -1,3 +1,11 @@
+type TLocale = { [key: string]: string };
+
+type TDispatchPermissions = {
+    dispatch: boolean,
+    bolo: boolean,
+    bracelet: boolean
+}
+
 type TPlayerGroup = {
     name: string;
     label: string;
@@ -90,7 +98,15 @@ type TBOLO = {
     type: number; // 0 = person, 1 = vehicle
 }
 
+type TBoloAction = {
+    type: 'addBolo' | 'setBolos' | 'removeBolo' | 'updateBolo';
+    bolo?: TBOLO;
+    bolos?: TBOLO[];
+}
+
 export type {
+    TLocale,
+    TDispatchPermissions,
     TPlayerGroup,
     TPlayerGroups,
     TCallDetails,
@@ -101,5 +117,6 @@ export type {
     TDispatchUnitActions,
     TDispatchSquad,
     TDispatchSquadActions,
-    TBOLO
+    TBOLO,
+    TBoloAction,
 }
