@@ -22,6 +22,7 @@ files {
     'config/client.lua',
     'config/shared.lua',
     'locales/*.json',
+    'modules/utils.lua',
 }
 
 client_scripts {

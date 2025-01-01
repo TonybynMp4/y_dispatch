@@ -6,7 +6,7 @@ RegisterNuiCallback('getAllBOLOs', function(_, cb)
 end)
 
 RegisterNuiCallback('addBolo', function(bolo, cb)
-    local newBolo = lib.callback.await('y_dispatch:server:addBolo', bolo)
+    local newBolo = lib.callback.await('y_dispatch:server:createBolo', bolo)
     if not newBolo then return cb({}) end
 
     cb(newBolo)
