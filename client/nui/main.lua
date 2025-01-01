@@ -1,4 +1,5 @@
 local config = require 'config.client'
+local Utils = require 'modules.utils'
 
 ---@param action string The action you wish to target
 ---@param data any The data you wish to send along with this action
@@ -14,13 +15,13 @@ SendReactMessage('setupLocales', {
 })
 
 ---@param shouldShow boolean
----@param permission? table
-local function toggleDispatch(shouldShow, permission)
+---@param permissions? table | false
+local function toggleDispatch(shouldShow, permissions)
     if shouldShow and (IsNuiFocused() or not LocalPlayer.state.isLoggedIn) then
         return
     end
     SetNuiFocus(shouldShow, shouldShow)
-    SendReactMessage('showDispatch', {show = shouldShow, permission = permission})
+    SendReactMessage('showDispatch', {show = shouldShow, permissions = permissions})
 end
 
 lib.addKeybind({
@@ -33,26 +34,13 @@ lib.addKeybind({
             return
         end
 
-        toggleDispatch(true, GetPlayerPermissions(QBX.PlayerData.job).dispatch)
+        toggleDispatch(true, Utils.GetPlayerDispatchPermissions(QBX.PlayerData.job))
     end
 })
 
 RegisterNUICallback('hideDispatch', function(_, cb)
     toggleDispatch(false)
     cb({})
-end)
-
--- Send Locales to NUI
-RegisterNUICallback('GetLocales', function(data, cb)
-    local locales = {
-        justnow = locale('ui.justnow'),
-        distance = locale('ui.distance'),
-        automatic = locale('ui.automatic'),
-        accept = "[" .. config.acceptDispatchKey .. "] " .. locale('ui.accept'),
-        deny = "[" .. config.denyDispatchKey .. "] " .. locale('ui.deny')
-    }
-
-    cb(locales)
 end)
 
 -- waits for the call to be removed before changing the table
