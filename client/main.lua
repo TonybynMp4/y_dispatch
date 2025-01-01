@@ -1,7 +1,3 @@
-local classes = { locale('classes.compact'), locale('classes.sedan'), locale('classes.suv'), locale('classes.coupe'),
-    locale('classes.muscle'), locale('classes.sports_classic'), locale('classes.sports'), locale('classes.super'),
-    locale('classes.motorcycle'), locale('classes.offroad'), locale('classes.industrial'), locale('classes.utility'),
-    locale('classes.van'), locale('classes.service'), locale('classes.military'), locale('classes.truck') }
 local blips, radiuses, DispatchDisabled = {}, {}, false
 local config = require 'config.client'
 local tenCodes = require 'config.shared'.tenCodes

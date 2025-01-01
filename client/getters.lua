@@ -1,4 +1,4 @@
-local WeaponClasses = {
+local WEAPON_CLASSES, VEHICLE_CLASSES = {
     [2685387236] = locale('WeaponClasses.melee'),
     [416676503] = locale('WeaponClasses.gun'),
     [-95776620] = locale('WeaponClasses.submachinegun'),
@@ -9,13 +9,22 @@ local WeaponClasses = {
     [2725924767] = locale('WeaponClasses.heavyweapon'),
     [1548507267] = locale('WeaponClasses.throwables'),
     [4257178988] = locale('WeaponClasses.misc'),
+}, {
+    locale('classes.compact'), locale('classes.sedan'),
+    locale('classes.suv'), locale('classes.coupe'),
+    locale('classes.muscle'), locale('classes.sports_classic'),
+    locale('classes.sports'), locale('classes.super'),
+    locale('classes.motorcycle'), locale('classes.offroad'),
+    locale('classes.industrial'), locale('classes.utility'),
+    locale('classes.van'), locale('classes.service'),
+    locale('classes.military'), locale('classes.truck')
 }
 
 --- Returns the Class of a weapon (e.g. Melee, Handguns, Shotguns, etc.)
 ---@param SelectedWeapon number
 ---@return string
 function GetWeaponClass(SelectedWeapon)
-    return WeaponClasses[GetWeapontypeGroup(SelectedWeapon)] or locale('general.unknown')
+    return WEAPON_CLASSES[GetWeapontypeGroup(SelectedWeapon)] or locale('general.unknown')
 end
 
 --- Returns the street at coords
@@ -62,7 +71,7 @@ lib.callback.register('y_dispatch:server:GetCallDetails', function(source, optio
         local vehicle = cache.vehicle
         callDetails.vehicle = {}
         if options.vehicle.class then
-            callDetails.class = classes[GetVehicleClass(vehicle)]
+            callDetails.class = VEHICLE_CLASSES[GetVehicleClass(vehicle)]
         end
         if options.vehicle.plate then
             callDetails.plate = qbx.getVehiclePlate(vehicle)
@@ -72,7 +81,8 @@ lib.callback.register('y_dispatch:server:GetCallDetails', function(source, optio
         end
         if options.vehicle.model then
             local modelName = GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(vehicle)))
-            callDetails.name = modelName == 'NULL' and exports.qbx_core:GetVehiclesByName().Vehicles[model].name or modelName
+            callDetails.name = modelName == 'NULL' and exports.qbx_core:GetVehiclesByName().Vehicles[model].name or
+            modelName
         end
         if options.vehicle.color then
             local primary, secondary = GetVehicleColours(vehicle)
