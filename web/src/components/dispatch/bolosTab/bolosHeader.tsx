@@ -1,33 +1,35 @@
 import SearchBar from '@/components/shadcn/searchbar';
-import { filterBolos, onKeyUp } from './boloFilter';
+import { filterBolos } from './boloFilter';
 import { Button } from '@/components/shadcn/ui/button';
 import { ArrowDown10, ArrowDownAZ, ArrowDownZA, UserRoundPlus } from 'lucide-react';
-import { useRef, useState } from 'react';
-import { Input } from '@/components/shadcn/ui/input';
 import { Separator } from '@/components/shadcn/ui/separator';
 import { CollapsibleTrigger } from '@/components/shadcn/ui/collapsible';
+import { useEffect, useState } from 'react';
 
 type Props = {
     setFilteredBolos: Function;
-    setBolos: Function;
     bolos: any;
     sortDirection: string | null;
     setSortDirection: Function;
 }
 
-function Header({
+function BolosHeader({
     setFilteredBolos,
-    setBolos,
     bolos,
     sortDirection,
     setSortDirection
 }: Props) {
+    const [search, setSearch] = useState<string>('')
+
+    useEffect(() => {
+        filterBolos(bolos, setFilteredBolos, search)
+    }, [search, bolos])
 
     return (
         <div className="h-[5rem]">
             <h1 className="text-xl mb-2 text-center font-bold">BOLO List</h1>
             <div className="flex items-center align-middle px-4 gap-4 h-[2rem]">
-                <Button className="bg-transparent h-min w-min m-0 p-0 hover:bg-transparent" onClick={() =>
+                <Button className="bg-transparent w-[3rem] h-[2rem] m-0 p-0 hover:bg-muted" onClick={() =>
                     setSortDirection(sortDirection === "asc" ? "desc" : sortDirection === "desc" ? null : "asc")
                 }>
                     {sortDirection === "asc" ? (
@@ -39,14 +41,20 @@ function Header({
                     )}
                 </Button>
                 <Separator orientation="vertical" />
-                <CollapsibleTrigger>
-                    <UserRoundPlus size={24} className='cursor-pointer text-foreground'/>
+                <CollapsibleTrigger asChild>
+                    <Button className="bg-transparent w-[3rem] h-[2rem] m-0 p-0 hover:bg-muted">
+                        <UserRoundPlus size={24} className='cursor-pointer text-foreground'/>
+                    </Button>
                 </CollapsibleTrigger>
                 <Separator orientation="vertical" />
-                <SearchBar placeHolder="Search" className="w-full" inputClassName="h-[2rem] my-0 " onkeyup={(e) => onKeyUp(bolos, setFilteredBolos, e)} onchange={(e) => filterBolos(bolos, setFilteredBolos, e)} />
+                <SearchBar placeHolder="Search" className="w-full" inputClassName="h-[2rem] my-0 " onkeyup={
+                    (e: React.KeyboardEvent<HTMLInputElement>) => (e.key === 'Enter') && setSearch((e.target as HTMLInputElement).value)
+                } onchange={
+                    (e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)
+                } />
             </div>
         </div>
     )
 }
 
-export default Header
+export default BolosHeader
