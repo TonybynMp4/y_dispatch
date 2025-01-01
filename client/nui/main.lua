@@ -9,9 +9,18 @@ function SendReactMessage(action, data)
     })
 end
 
-local function toggleDispatch(shouldShow)
+SendReactMessage('setupLocales', {
+    locale = lib.GetLocales().ui
+})
+
+---@param shouldShow boolean
+---@param permission? table
+local function toggleDispatch(shouldShow, permission)
+    if shouldShow and (IsNuiFocused() or not LocalPlayer.state.isLoggedIn) then
+        return
+    end
     SetNuiFocus(shouldShow, shouldShow)
-    SendReactMessage('showDispatch', shouldShow)
+    SendReactMessage('showDispatch', {show = shouldShow, permission = permission})
 end
 
 lib.addKeybind({
@@ -19,7 +28,12 @@ lib.addKeybind({
     description = locale('general.showDispatch'),
     defaultKey = config.showDispatchKey,
     onPressed = function()
-        toggleDispatch(true)
+        -- prevent dispatch from opening if another resource is using NUI
+        if IsNuiFocused() then
+            return
+        end
+
+        toggleDispatch(true, GetPlayerPermissions(QBX.PlayerData.job).dispatch)
     end
 })
 
@@ -47,7 +61,6 @@ RegisterNuiCallback('RemoveCall', function(_, cb)
     cb('ok')
 end)
 
----comment
 ---@param _ any
 ---@param cb function
 RegisterNuiCallback('getPlayerGroups', function(_, cb)
@@ -58,7 +71,8 @@ RegisterNuiCallback('getPlayerGroups', function(_, cb)
 end)
 
 RegisterNuiCallback('getRecentCalls', function(_, cb)
-    cb()
+    local calls = lib.callback.await('y_dispatch:server:GetRecentCalls')
+    cb(calls)
 end)
 
 RegisterNuiCallback('getAllCalls', function(_, cb)
