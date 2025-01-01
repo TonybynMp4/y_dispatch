@@ -7,22 +7,19 @@ type Props = {
 }
 
 function BoloItem({ bolo }: Props) {
-    let typeStyle = "bg-green-500/40";
+    let typeStyle = "border-secondary/40";
 
     switch (bolo.priority) {
         case 1:
-            typeStyle = "bg-green-500/40";
+            typeStyle = "border-orange-400/50";
             break;
         case 2:
-            typeStyle = "bg-orange-600/40";
-            break;
-        case 3:
-            typeStyle = "bg-destructive/75";
+            typeStyle = "border-destructive";
             break;
     }
 
     return (
-        <Card className={typeStyle + " rounded-[0.75rem] mb-2"}>
+        <Card className={typeStyle + " border-2 bg-secondary/40 rounded-[0.75rem] mb-2"}>
             <CardHeader className="p-2 pt-4 pb-0">
                 <CardTitle className="ml-2 text-l flex items-center gap-2">
                     {
@@ -40,7 +37,7 @@ function BoloItem({ bolo }: Props) {
             </CardHeader>
             <CardContent className="p-4 pt-1">
                 {
-                    bolo.description
+                    bolo.description || "No information provided."
                 }
             </CardContent>
         </Card>
