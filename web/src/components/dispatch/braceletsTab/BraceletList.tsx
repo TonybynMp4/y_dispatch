@@ -4,13 +4,15 @@ import SearchBar from "@/components/shadcn/searchbar";
 import { ScrollArea } from "@/components/shadcn/ui/scroll-area"
 import { filterBracelets, onKeyUp } from "./braceletFilter";
 import BraceletCard from "./BraceletCard"
+import { isEnvBrowser } from "@/utils/misc";
+import debugBracelets from "@/data/bracelets";
 
 type Props = {
-    bracelets: TBracelet[];
 }
 
-function BraceletList({ bracelets }: Props) {
-    const [braceletsShown, setBraceletsShown] = useState(bracelets)
+function BraceletList({ }: Props) {
+    const bracelets: TBracelet[] = isEnvBrowser() ? debugBracelets : [];
+    const [braceletsShown, setBraceletsShown] = useState(bracelets);
 
     return (
         <>
