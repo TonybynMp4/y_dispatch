@@ -1,43 +1,37 @@
 import { TCall } from "@/types";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { ScrollArea } from "@/components/shadcn/ui/scroll-area"
 import SearchBar from "../shadcn/searchbar";
 import Call from "./call"
 import { useCalls } from "./callsContext";
-import { filterCalls } from "@/utils/filterCalls";
+import { filterCalls } from "./filterCalls";
 
 type Props = {
 }
 
-function onKeyUp(calls: TCall[], setCallsShown: Function, event: React.KeyboardEvent<HTMLInputElement>) {
-    if (event.key === 'Enter') {
-        filterCalls(calls, setCallsShown, event)
-    }
-}
-
 function CallList({ }: Props) {
-    const searchRef = useRef<HTMLInputElement>(null)
     const calls = useCalls();
-    const [callsShown, setCallsShown] = useState<TCall[]>(calls)
+    const [callsShown, setCallsShown] = useState<TCall[]>(calls);
+    const [search, setSearch] = useState<string>('')
 
     useEffect(() => {
-        if (searchRef.current) {
-            filterCalls(calls, setCallsShown, { target: searchRef.current } as React.ChangeEvent<HTMLInputElement>)
-        }
-    }, [calls])
+        filterCalls(calls, setCallsShown, search)
+    }, [calls, search]);
 
     return (
         <>
-            <SearchBar searchRef={searchRef} className="mx-4 mb-2" inputClassName="h-[2em] my-0" placeHolder="Search" onkeyup={(e) => onKeyUp(calls, setCallsShown, e)} onchange={(e) => filterCalls(calls, setCallsShown, e)} />
+            <SearchBar className="mx-4 mb-2" inputClassName="h-[2em] my-0" placeHolder="Search" onkeyup={
+                (e: React.KeyboardEvent<HTMLInputElement>) => (e.key === 'Enter') && setSearch((e.target as HTMLInputElement).value)
+            } onchange={(e) => setSearch(e.target.value)} />
             <ScrollArea className="ml-4 mr-1 pr-3" style={{ height: "calc(100% - 2em - 1rem)" }}>
                 {
-                    callsShown.map((call, index) => (
+                    callsShown.map((call) => (
                         <Call hasContextMenu={true} key={call.id} call={call} />
                     ))
                 }
             </ScrollArea>
         </>
-    )
+    );
 }
 
 export default CallList
