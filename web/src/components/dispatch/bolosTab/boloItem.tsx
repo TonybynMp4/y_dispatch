@@ -23,10 +23,10 @@ function BoloItem({ bolo }: Props) {
             <CardHeader className="p-2 pt-4 pb-0">
                 <CardTitle className="ml-2 text-l flex items-center gap-2">
                     {
-                        bolo.type === 0 ?
-                        <UserIcon/>
-                        :
+                        bolo.type ?
                         <CarIcon/>
+                        :
+                        <UserIcon/>
                     }
                     {
                         bolo.target

@@ -84,7 +84,7 @@ type Props = {
 };
 
 function BoloForm({ setBolos, setIsOpen }: Props) {
-    const formRef = useRef(null);
+    const formRef = useRef<HTMLFormElement>(null);
     return (
         <form ref={formRef}
             action={async (FormData) => onSubmit(FormData, setBolos, setIsOpen)}
