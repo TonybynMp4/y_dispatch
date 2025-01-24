@@ -2,8 +2,8 @@ type TLocale = { [key: string]: string };
 
 type TDispatchPermissions = {
     dispatch: boolean,
-    bolo: boolean,
-    bracelet: boolean
+    bolos: boolean,
+    bracelets: boolean
 }
 
 type TPlayerGroup = {
@@ -71,7 +71,6 @@ type TDispatchUnit = {
 }
 
 type TDispatchUnitActions = {
-    id: number;
     type: 'addUnit' | 'moveUnit' | 'removeUnit' | 'updateIndex';
     unitId?: number;
     squadId?: number;
