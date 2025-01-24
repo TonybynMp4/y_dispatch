@@ -13,7 +13,6 @@ import { isEnvBrowser } from "@/utils/misc";
 import { useNuiEvent } from "@/utils/useNuiEvent";
 import { fetchNui } from "@/utils/fetchNui";
 
-import bracelets from "@/data/bracelets";
 import testCalls from "@/data/calls";
 import { GalleryVerticalEndIcon, LocateFixedIcon, NotebookTextIcon, UserRoundSearchIcon } from "lucide-react";
 
@@ -34,7 +33,7 @@ function Dispatch({ dispatchPermissions, playerGroups }: Props) {
     }, [])
 
     return (
-        <Tabs defaultValue="history" className="rounded-[1rem] w-full h-full bg-secondary/20">
+        <Tabs defaultValue="history" className="rounded-[1rem] w-full h-full bg-secondary">
             <TabsList className="rounded-t-[1rem] h-10 w-full justify-evenly bg-secondary/50">
                 <TabsTrigger className="rounded" value="history">
                     <p className="hidden 2xl:block">
@@ -52,7 +51,7 @@ function Dispatch({ dispatchPermissions, playerGroups }: Props) {
                         </TabsTrigger>
                 }
                 {
-                    !dispatchPermissions.bolo ? null :
+                    !dispatchPermissions.bolos ? null :
                         <TabsTrigger className="rounded" value="bolo">
                             <p className="hidden 2xl:block">
                                 BOLO
@@ -61,7 +60,7 @@ function Dispatch({ dispatchPermissions, playerGroups }: Props) {
                         </TabsTrigger>
                 }
                 {
-                    !dispatchPermissions.bracelet ? null :
+                    !dispatchPermissions.bracelets ? null :
                         <TabsTrigger className="rounded" value="bracelets">
                             <p className="hidden 2xl:block">
                                 Bracelets
@@ -82,15 +81,15 @@ function Dispatch({ dispatchPermissions, playerGroups }: Props) {
                     </TabsContent>
             }
             {
-                !dispatchPermissions.bolo ? null :
+                !dispatchPermissions.bolos ? null :
                     <TabsContent style={{ height: "calc(100% - 3rem)" }} value="bolo">
                         <BoloList />
                     </TabsContent>
             }
             {
-                !dispatchPermissions.bracelet ? null :
+                !dispatchPermissions.bracelets ? null :
                     <TabsContent style={{ height: "calc(100% - 3rem)" }} value="bracelets">
-                        <BraceletList bracelets={bracelets} />
+                        <BraceletList />
                     </TabsContent>
             }
         </Tabs>

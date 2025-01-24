@@ -8,8 +8,8 @@ const testPlayerGroups: TPlayerGroups = [
 
 const debugPermissions: TDispatchPermissions = {
     dispatch: true,
-    bolo: true,
-    bracelet: true
+    bolos: true,
+    bracelets: true
 }
 
 export { testPlayerGroups, debugPermissions }

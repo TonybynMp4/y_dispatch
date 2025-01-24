@@ -19,7 +19,7 @@ function DispatchContainer() {
     const isBrowser = isEnvBrowser();
     const [showDispatch, setShowDispatch] = useState(false)
     const [playerGroups, setPlayerGroups] = useState<TPlayerGroups>(isBrowser ? testPlayerGroups : [])
-    const [dispatchPermissions, setPermissions] = useState<TDispatchPermissions>(isBrowser ? debugPermissions : {dispatch: false, bolo: false, bracelet: false})
+    const [dispatchPermissions, setPermissions] = useState<TDispatchPermissions>(isBrowser ? debugPermissions : {dispatch: false, bolos: false, bracelets: false})
 
     if (isBrowser) document.body.classList.add("bg-background");
 
@@ -28,8 +28,8 @@ function DispatchContainer() {
 
         if (permissions) setPermissions({
             dispatch: permissions.dispatch || false,
-            bolo: permissions.bolo || false,
-            bracelet: permissions.bracelet || false
+            bolos: permissions.bolos || false,
+            bracelets: permissions.bracelets || false
         });
 
         setShowDispatch(true);
