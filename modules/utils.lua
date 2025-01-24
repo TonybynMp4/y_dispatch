@@ -23,12 +23,10 @@ local function GetPlayerDispatchPermissions(playerJobs)
             end
         end
     else
-        if dispatchJobs[playerJobs] then
-            permissions.dispatch = true
-            permissions.bolos = dispatchJobs[playerJobs].bolos
-            permissions.bracelets = dispatchJobs[playerJobs].bracelets
-            permissions.panic = dispatchJobs[playerJobs].panic
-        end
+        local jobName = playerJobs.name
+        local jobType = playerJobs.type
+
+        permissions = dispatchJobs.jobs[jobName] and dispatchJobs.types[jobType]
     end
 
     return permissions
